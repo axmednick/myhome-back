@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Announcement\AnnouncementController;
+use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\GlobalDataController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +30,7 @@ Route::prefix('global')->group(function (){
 });
 
 Route::prefix('announcement')->group(function (){
-
+    Route::post('/image-upload',[FileUploadController::class,'temporaryFile']);
     Route::post('/store',[AnnouncementController::class,'store']);
 
 });

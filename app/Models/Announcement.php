@@ -40,4 +40,8 @@ class Announcement extends Model implements HasMedia
     {
         return $this->hasMany(AnnouncementRentalClientTypes::class);
     }
+
+    public function metroStations(){
+        return $this->hasMany(AnnouncementMetroStation::class);
+    }
 }
