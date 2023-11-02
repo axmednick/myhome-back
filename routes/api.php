@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Announcement\AnnouncementController;
+use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\GlobalDataController;
 use Illuminate\Http\Request;
@@ -17,17 +18,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('global')->group(function (){
+Route::controller(UserAuthController::class)->prefix('auth')->group(function(){
+    Route::post('register', 'register');
+    Route::post('login', 'login');
+    Route::get('user', 'user')->middleware('auth:sanctum');
+});
+
    Route::get('announcement-types',[GlobalDataController::class,'announcementTypes']);
    Route::get('property-types',[GlobalDataController::class,'propertyTypes']);
    Route::get('apartment-types',[GlobalDataController::class,'apartmentTypes']);
    Route::get('cities',[GlobalDataController::class,'cities']);
    Route::get('city/{id}/regions',[GlobalDataController::class,'regions']);
-   Route::get('region/{id}/villages',[GlobalDataController::class,'regions']);
+   Route::get('region/{id}/villages',[GlobalDataController::class,'villages']);
    Route::get('rental-client-types',[GlobalDataController::class,'clientTypeForRents']);
    Route::get('metro-stations',[GlobalDataController::class,'metroStations']);
 
-});
 
 Route::prefix('announcement')->group(function (){
     Route::post('/image-upload',[FileUploadController::class,'temporaryFile']);

@@ -18,7 +18,7 @@ class AnnouncementController extends Controller
 
 
 
-        if (!auth()->check()) {
+        if (!auth('sanctum')->check()) {
             $user = User::create([
                 'phone' => $request->phone,
                 'name' => $request->name,
@@ -27,9 +27,9 @@ class AnnouncementController extends Controller
             ]);
         } else {
 
-            $user = auth()->user();
+            $user = auth('sanctum')->user();
         }
-
+        dd($request->all());
 
         $announcement = Announcement::create([
             'announcement_type_id' => $request->announcement_type,
