@@ -42,10 +42,9 @@ class ApartmentType extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
-            NovaTabTranslatable::make([
+
                 Text::make('name')
-            ])
+
         ];
     }
 

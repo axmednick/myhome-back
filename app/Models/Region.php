@@ -10,4 +10,8 @@ class Region extends Model
 {
     use HasFactory,HasTranslations;
     protected $translatable = ['name'];
+
+    public function villages(){
+        return $this->hasMany(Village::class);
+    }
 }

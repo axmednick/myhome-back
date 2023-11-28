@@ -7,6 +7,7 @@ use App\Http\Resources\ApartmentTypeResource;
 use App\Http\Resources\CityResource;
 use App\Http\Resources\MetrostationsResource;
 use App\Http\Resources\PropertyTypeResource;
+use App\Http\Resources\RegionsAndVillageResource;
 use App\Http\Resources\RentalClientTypesResource;
 use App\Models\AnnouncementRentalClientTypes;
 use App\Models\AnnouncementType;
@@ -47,5 +48,9 @@ class GlobalDataController extends Controller
     }
     public function villages($regionId){
         return CityResource::collection(Village::where('region_id',$regionId)->get());
+    }
+
+    public function allRegions(){
+        return  RegionsAndVillageResource::collection(Region::all());
     }
 }

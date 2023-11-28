@@ -32,10 +32,14 @@ Route::controller(UserAuthController::class)->prefix('auth')->group(function(){
    Route::get('region/{id}/villages',[GlobalDataController::class,'villages']);
    Route::get('rental-client-types',[GlobalDataController::class,'clientTypeForRents']);
    Route::get('metro-stations',[GlobalDataController::class,'metroStations']);
+   Route::get('/all-regions',[GlobalDataController::class,'allRegions']);
 
 
 Route::prefix('announcement')->group(function (){
     Route::post('/image-upload',[FileUploadController::class,'temporaryFile']);
     Route::post('/store',[AnnouncementController::class,'store']);
+    Route::get('/list',[AnnouncementController::class,'announcements']);
+    Route::get('/item/{id}',[AnnouncementController::class,'detail']);
+
 
 });

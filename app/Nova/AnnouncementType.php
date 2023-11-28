@@ -43,9 +43,8 @@ class AnnouncementType extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            NovaTabTranslatable::make([
+
                 Text::make('name')
-            ])
         ];
     }
 

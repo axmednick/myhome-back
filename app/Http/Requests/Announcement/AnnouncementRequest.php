@@ -28,10 +28,7 @@ class AnnouncementRequest extends FormRequest
             'announcement_type' => 'required|in:1,2',
             'property_type' => 'required|in:1,2,3,4,5,6,7',
             'apartment_type' => 'required|in:1,2',
-            'house_area' => 'required_if:property_type,1,2,3,4,5,6,7',
-            'area' => 'required_if:property_type,1,2,3,4,5,6',
-            'email'=>'required',
-            'is_repaired'=>'required_if:property_type,1,2,3,4,6,7'
+
         ];
 
 

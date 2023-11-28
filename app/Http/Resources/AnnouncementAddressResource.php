@@ -15,7 +15,6 @@ class AnnouncementAddressResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'=>$this->id,
             'city'=>CityResource::make($this->city),
             'region'=>CityResource::make($this->region),
             'village'=>CityResource::make($this->village)

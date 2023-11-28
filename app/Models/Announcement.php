@@ -13,17 +13,17 @@ class Announcement extends Model implements HasMedia
 
     protected $guarded = ['id'];
 
-    public function announcementType()
+    public function announcement_type()
     {
         return $this->belongsTo(AnnouncementType::class);
     }
-    public function propertyType()
+    public function property_type()
     {
         return $this->belongsTo(PropertyType::class);
     }
-    public function apartmentType()
+    public function apartment_type()
     {
-        return $this->belongsTo(AnnouncementType::class);
+        return $this->belongsTo(ApartmentType::class);
     }
 
     public function user()
@@ -36,12 +36,12 @@ class Announcement extends Model implements HasMedia
         return $this->hasOne(AnnouncementAddress::class);
     }
 
-    public function rentalClientTypes()
+    public function rental_client_types()
     {
         return $this->hasMany(AnnouncementRentalClientTypes::class);
     }
 
-    public function metroStations(){
+    public function metro_stations(){
         return $this->hasMany(AnnouncementMetroStation::class);
     }
 }
