@@ -33,6 +33,7 @@ Route::controller(UserAuthController::class)->prefix('auth')->group(function(){
    Route::get('rental-client-types',[GlobalDataController::class,'clientTypeForRents']);
    Route::get('metro-stations',[GlobalDataController::class,'metroStations']);
    Route::get('/all-regions',[GlobalDataController::class,'allRegions']);
+   Route::get('/all-villages',[GlobalDataController::class,'allVillages']);
 
 
 Route::prefix('announcement')->group(function (){

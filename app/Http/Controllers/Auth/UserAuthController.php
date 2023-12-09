@@ -55,6 +55,7 @@ class UserAuthController extends Controller
 
     public function user(Request $request)
     {
+
         return \auth('sanctum')->user();
     }
 }

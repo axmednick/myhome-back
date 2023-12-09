@@ -11,6 +11,7 @@
         "laravel/framework": "^10.10",
         "laravel/nova": "~4.0",
         "laravel/sanctum": "^3.3",
+        "laravel/socialite": "^5.10",
         "laravel/tinker": "^2.8",
         "mostafaznv/nova-ckeditor": "^5.2",
         "spatie/laravel-medialibrary": "*",

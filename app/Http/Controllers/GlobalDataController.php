@@ -9,6 +9,7 @@ use App\Http\Resources\MetrostationsResource;
 use App\Http\Resources\PropertyTypeResource;
 use App\Http\Resources\RegionsAndVillageResource;
 use App\Http\Resources\RentalClientTypesResource;
+use App\Http\Resources\VillageResource;
 use App\Models\AnnouncementRentalClientTypes;
 use App\Models\AnnouncementType;
 use App\Models\ApartmentType;
@@ -52,5 +53,8 @@ class GlobalDataController extends Controller
 
     public function allRegions(){
         return  RegionsAndVillageResource::collection(Region::all());
+    }
+    public function allVillages(){
+        return  VillageResource::collection(Village::all());
     }
 }
