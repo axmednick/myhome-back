@@ -55,6 +55,6 @@ class GlobalDataController extends Controller
         return  RegionsAndVillageResource::collection(Region::all());
     }
     public function allVillages(){
-        return  VillageResource::collection(Village::all());
+        return  VillageResource::collection(Village::orderBy('region_id')->get());
     }
 }

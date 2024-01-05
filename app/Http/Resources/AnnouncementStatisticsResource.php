@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Favorite;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class VillageResource extends JsonResource
+class AnnouncementStatisticsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +16,9 @@ class VillageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-          'id'=>$this->id,
-          'name'=>$this->name,
-            'region_id'=>$this->region_id
+            'view_count' => $this->view_count,
+            'phone_visible_count' => $this->phone_visible_count,
+            'favorites_count' => Favorite::where('announcement_id', $this->announcement_id)->count()
         ];
     }
 }

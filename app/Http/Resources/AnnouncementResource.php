@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Helpers\DateHelper;
+use App\Models\Favorite;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
 
@@ -32,8 +33,8 @@ class AnnouncementResource extends JsonResource
             'house_area' => $this->house_area,
             'description' => $this->description,
             'price' => number_format($this->price, 0, ',', ' '),
-            'price_per_square'=>round($this->price/$this->house_area),
-
+            'price_per_square' => round($this->price / $this->house_area),
+            'user_id' => $this->user_id,
             'address' => AnnouncementAddressResource::make($this->address),
             'images' => ImageResource::collection($this->getMedia('image')),
             'main_image' => $this->getFirstMediaUrl('image'),
@@ -42,10 +43,13 @@ class AnnouncementResource extends JsonResource
             'title' => $this->title(),
             'short_details' => $this->shortDetails(),
             'date' => $date,
-            'created_at'=>$this->created_at,
-            'updated_at'=>$this->updated_at,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             "formatted_date" => DateHelper::formatCreatedAt($this->created_at),
-            'view_count'=>15
+            'view_count' => 15,
+            'is_active' => $this->is_active,
+            'is_favorite'=>Favorite::where('announcement_id', $this->announcement_id)
+                ->where('user_id',auth('sanctum')->id())->exists(),
 
         ];
     }
@@ -71,29 +75,47 @@ class AnnouncementResource extends JsonResource
         $title = " ";
         if ($this->address->village) {
             $title .= $this->address->village->name . ' qəsəbəsi';
-        }
-        elseif ($this->address->region) {
+        } elseif ($this->address->region) {
             $title .= $this->address->region->name . ' rayonu';
-        }
-        elseif ($this->address->city) {
+        } elseif ($this->address->city) {
             $title .= $this->address->city->name . ' şəhəri';
         }
 
-        if ($this->house_area){$title.=" ".$this->house_area."m²";}
-        elseif ($this->house_area){$title.=" ".$this->area."m²";}
+        if ($this->house_area) {
+            $title .= " " . $this->house_area . "m²";
+        } elseif ($this->house_area) {
+            $title .= " " . $this->area . "m²";
+        }
 
-        if ($this->property_type_id==1){ $title.=" mənzil";}
-        if ($this->property_type_id==2){ $title.=" həyət evi";}
-        if ($this->property_type_id==3){ $title.=" villa";}
-        if ($this->property_type_id==4){ $title.=" bağ evi";}
-        if ($this->property_type_id==5){ $title.=" torpaq";}
-        if ($this->property_type_id==6){ $title.=" ofis";}
-        if ($this->property_type_id==7){ $title.=" obyekt";}
+        if ($this->property_type_id == 1) {
+            $title .= " mənzil";
+        }
+        if ($this->property_type_id == 2) {
+            $title .= " həyət evi";
+        }
+        if ($this->property_type_id == 3) {
+            $title .= " villa";
+        }
+        if ($this->property_type_id == 4) {
+            $title .= " bağ evi";
+        }
+        if ($this->property_type_id == 5) {
+            $title .= " torpaq";
+        }
+        if ($this->property_type_id == 6) {
+            $title .= " ofis";
+        }
+        if ($this->property_type_id == 7) {
+            $title .= " obyekt";
+        }
 
 
-
-        if ($this->announcement_type_id==1){ $title.=" satılır";}
-        if ($this->announcement_type_id==2){ $title.=" kirayə verilir";}
+        if ($this->announcement_type_id == 1) {
+            $title .= " satılır";
+        }
+        if ($this->announcement_type_id == 2) {
+            $title .= " kirayə verilir";
+        }
 
 
         return $title;

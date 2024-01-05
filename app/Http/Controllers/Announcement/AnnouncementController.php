@@ -7,6 +7,7 @@ use App\Http\Requests\Announcement\AnnouncementRequest;
 use App\Http\Resources\AnnouncementResource;
 use App\Models\Announcement;
 use App\Models\User;
+use App\Services\AnnouncementService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -14,6 +15,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AnnouncementController extends Controller
 {
+    protected $announcementService;
+
+    public function __construct(AnnouncementService $announcementService)
+    {
+        $this->announcementService = $announcementService;
+    }
+
     public function store(AnnouncementRequest $request)
     {
         if (!auth('sanctum')->check()) {
@@ -102,12 +110,23 @@ class AnnouncementController extends Controller
 
     public function announcements(Request $request){
 
-
         $announcements = Announcement::query();
+
+        $announcements = $this->announcementService->searchAnnouncements($request);
+
 
 
         return AnnouncementResource::collection($announcements->orderBy('id','desc')->paginate(12));
 
+    }
+
+
+    public function userAnnouncements($id=null){
+
+
+        $announcements = $this->announcementService->announcementsByUser($id ? $id : auth('sanctum')->id());
+
+        return AnnouncementResource::collection($announcements->paginate(12));
     }
 
 
