@@ -29,7 +29,7 @@ class AnnouncementController extends Controller
                 'phone' => $request->phone,
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make(Str::random(8))
+                'password' => $request->password
             ]);
         } else {
 
@@ -54,7 +54,8 @@ class AnnouncementController extends Controller
             'user_id' => $user->id,
             'price' => $request->price,
             'is_repaired' => $request->is_repair,
-            'document_id'=>$request->property_document
+            'document_id'=>$request->property_document,
+            'rental_type' => $request->rental_type,
         ]);
 
 
