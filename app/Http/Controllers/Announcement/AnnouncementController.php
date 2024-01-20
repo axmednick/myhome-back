@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Announcement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Announcement\AnnouncementRequest;
 use App\Http\Resources\AnnouncementResource;
+use App\Http\Resources\MetrostationsResource;
 use App\Models\Announcement;
+use App\Models\MetroStation;
 use App\Models\User;
 use App\Services\AnnouncementService;
 use Illuminate\Http\Request;
@@ -136,5 +138,11 @@ class AnnouncementController extends Controller
         $announcement  = Announcement::findOrFail($id);
 
         return AnnouncementResource::make($announcement);
+    }
+
+    public function nearbyMetroStations(){
+        $metroStations =  MetroStation::limit(3)->get();
+        return MetrostationsResource::collection($metroStations);
+
     }
 }
