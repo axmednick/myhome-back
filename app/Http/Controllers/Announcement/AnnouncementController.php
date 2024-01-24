@@ -56,6 +56,7 @@ class AnnouncementController extends Controller
             'is_repaired' => $request->is_repair,
             'document_id' => $request->property_document,
             'rental_type' => $request->rental_type,
+            'looking_roommate' => $request->looking_roommate,
         ]);
 
 
