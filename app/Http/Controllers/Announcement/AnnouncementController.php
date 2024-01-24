@@ -103,7 +103,7 @@ class AnnouncementController extends Controller
 
         foreach ($request->media_ids as $media) {
 
-            $media = Media::where('model_id', $media['id'])->update([
+            $media = Media::where('model_id', $media)->update([
                 'model_type' => 'App\Models\Announcement',
                 'model_id' => $announcement->id
             ]);
