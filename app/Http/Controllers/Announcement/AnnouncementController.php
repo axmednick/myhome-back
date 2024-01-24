@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Services\AnnouncementService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -26,8 +27,20 @@ class AnnouncementController extends Controller
         $this->announcementService = $announcementService;
     }
 
-    public function store(AnnouncementRequest $request)
+    public function store(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'announcement_type' => 'required|in:1,2',
+            'property_type' => 'required|in:1,2,3,4,5,6,7',
+            'apartment_type' => 'required|in:1,2',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
         if (!auth('sanctum')->check()) {
             $user = User::create([
                 'phone' => $request->phone,
