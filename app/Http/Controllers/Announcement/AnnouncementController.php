@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Announcement\AnnouncementRequest;
 use App\Http\Resources\AnnouncementResource;
 use App\Http\Resources\MetrostationsResource;
+use App\Http\Resources\SuppliesResource;
 use App\Models\Announcement;
 use App\Models\MetroStation;
+use App\Models\Supply;
 use App\Models\User;
 use App\Services\AnnouncementService;
 use Illuminate\Http\Request;
@@ -155,15 +157,6 @@ class AnnouncementController extends Controller
     public function supplies()
     {
 
-        return response()->json(['data'=>[
-            [
-                'id' => 1,
-                'name' => 'Internet'
-            ],
-            [
-                'id' => 2,
-                'name' => 'Kombi'
-            ]
-        ]]);
+        return SuppliesResource::collection(Supply::all());
     }
 }
