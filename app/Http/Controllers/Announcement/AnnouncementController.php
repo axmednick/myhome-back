@@ -64,7 +64,9 @@ class AnnouncementController extends Controller
             'village_id' => $request->village,
             'lat' => $request->lat,
             'lng' => $request->lng,
-            'address' => $request->address
+            'address' => $request->address,
+            'credit_possible'=>$request->credit_possible,
+            'in_credit'=>$request->in_credit,
         ]);
 
 
@@ -74,6 +76,14 @@ class AnnouncementController extends Controller
                 'client_type_for_rent_id' => $client_type_for_rent['id']
             ]);
 
+        }
+
+        if ($request->has('supplies')){
+            foreach ($request->get('supplies') as $supply){
+                $announcement->supplies()->create([
+                    'supply_id'=>$supply['id']
+                ]);
+            }
         }
 
 

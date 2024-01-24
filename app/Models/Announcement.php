@@ -46,4 +46,8 @@ class Announcement extends Model implements HasMedia
     public function metro_stations(){
         return $this->hasMany(AnnouncementMetroStation::class);
     }
+
+    public function supplies(){
+        return $this->hasMany(AnnouncementSupply::class);
+    }
 }
