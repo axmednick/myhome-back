@@ -39,10 +39,6 @@ class AnnouncementController extends Controller
         }
 
 
-
-
-
-
         $announcement = Announcement::create([
             'announcement_type_id' => $request->announcement_type,
             'property_type_id' => $request->property_type,
@@ -56,11 +52,9 @@ class AnnouncementController extends Controller
             'user_id' => $user->id,
             'price' => $request->price,
             'is_repaired' => $request->is_repair,
-            'document_id'=>$request->property_document,
+            'document_id' => $request->property_document,
             'rental_type' => $request->rental_type,
         ]);
-
-
 
 
         $announcement->address()->create([
@@ -70,14 +64,14 @@ class AnnouncementController extends Controller
             'village_id' => $request->village,
             'lat' => $request->lat,
             'lng' => $request->lng,
-            'address'=>$request->address
+            'address' => $request->address
         ]);
 
 
         foreach ($request->client_types_for_rent as $client_type_for_rent) {
 
             $announcement->rental_client_types()->create([
-                'client_type_for_rent_id' =>     $client_type_for_rent['id']
+                'client_type_for_rent_id' => $client_type_for_rent['id']
             ]);
 
         }
@@ -93,14 +87,13 @@ class AnnouncementController extends Controller
 
         }
 
-        foreach ($request->media as $media){
+        foreach ($request->media as $media) {
 
             $media = Media::where('model_id', $media['id'])->update([
                 'model_type' => 'App\Models\Announcement',
                 'model_id' => $announcement->id
             ]);
         }
-
 
 
         return response()->json([
@@ -111,20 +104,21 @@ class AnnouncementController extends Controller
     }
 
 
-    public function announcements(Request $request){
+    public function announcements(Request $request)
+    {
 
         $announcements = Announcement::query();
 
         $announcements = $this->announcementService->searchAnnouncements($request);
 
 
-
-        return AnnouncementResource::collection($announcements->orderBy('id','desc')->paginate(12));
+        return AnnouncementResource::collection($announcements->orderBy('id', 'desc')->paginate(12));
 
     }
 
 
-    public function userAnnouncements($id=null){
+    public function userAnnouncements($id = null)
+    {
 
 
         $announcements = $this->announcementService->announcementsByUser($id ? $id : auth('sanctum')->id());
@@ -133,16 +127,33 @@ class AnnouncementController extends Controller
     }
 
 
-    public function detail($id){
+    public function detail($id)
+    {
 
-        $announcement  = Announcement::findOrFail($id);
+        $announcement = Announcement::findOrFail($id);
 
         return AnnouncementResource::make($announcement);
     }
 
-    public function nearbyMetroStations(){
-        $metroStations =  MetroStation::limit(3)->get();
+    public function nearbyMetroStations()
+    {
+        $metroStations = MetroStation::limit(3)->get();
         return MetrostationsResource::collection($metroStations);
 
+    }
+
+    public function supplies()
+    {
+
+        return response()->json(['data'=>[
+            [
+                'id' => 1,
+                'name' => 'Internet'
+            ],
+            [
+                'id' => 2,
+                'name' => 'Kombi'
+            ]
+        ]]);
     }
 }

@@ -62,6 +62,7 @@ Route::prefix('announcement')->group(function (){
     Route::get('/list',[AnnouncementController::class,'announcements']);
     Route::get('/item/{id}',[AnnouncementController::class,'detail']);
     Route::get('/nearby-metro-stations',[AnnouncementController::class,'nearbyMetroStations']);
+    Route::get('/supplies',[AnnouncementController::class,'supplies']);
 
 
 });
