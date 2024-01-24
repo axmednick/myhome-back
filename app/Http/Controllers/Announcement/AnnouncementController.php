@@ -74,8 +74,10 @@ class AnnouncementController extends Controller
 
         foreach ($request->client_types_for_rent as $client_type_for_rent) {
 
+
+
             $announcement->rental_client_types()->create([
-                'client_type_for_rent_id' => $client_type_for_rent['id']
+                'client_type_for_rent_id' => $client_type_for_rent
             ]);
 
         }
@@ -83,7 +85,7 @@ class AnnouncementController extends Controller
         if ($request->has('supplies')){
             foreach ($request->get('supplies') as $supply){
                 $announcement->supplies()->create([
-                    'supply_id'=>$supply['id']
+                    'supply_id'=>$supply
                 ]);
             }
         }
