@@ -42,6 +42,18 @@ class AnnouncementController extends Controller
         }
 
         if (!auth('sanctum')->check()) {
+
+            $userValidator = Validator::make($request->all(), [
+                'phone' => 'required|unique:users',
+                'name' => 'required',
+                'email' => 'required|email|unique:users',
+                'password' => 'required',
+            ]);
+
+            if ($userValidator->fails()) {
+                return response()->json(['errors' => $userValidator->errors()], 422);
+            }
+
             $user = User::create([
                 'phone' => $request->phone,
                 'name' => $request->name,
