@@ -50,7 +50,8 @@ class AnnouncementController extends Controller
                 'phone' => 'required|unique:users',
                 'name' => 'required',
                 'email' => 'required|email|unique:users',
-                'password' => 'required',
+                'password' =>'required',
+                'user_type'=>$request->user_type
             ]);
 
             if ($userValidator->fails()) {
