@@ -17,7 +17,7 @@ class UserAuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
-            'c_password' => 'required|same:password',
+
             'phone' => 'unique:users'
         ]);
 
