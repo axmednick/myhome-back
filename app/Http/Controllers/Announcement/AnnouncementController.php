@@ -8,6 +8,7 @@ use App\Http\Resources\AnnouncementResource;
 use App\Http\Resources\MetrostationsResource;
 use App\Http\Resources\SuppliesResource;
 use App\Models\Announcement;
+use App\Models\AnnouncementRentalClientTypes;
 use App\Models\MetroStation;
 use App\Models\Supply;
 use App\Models\User;
@@ -104,8 +105,11 @@ class AnnouncementController extends Controller
 
         if ($request->has('client_types_for_rent') && is_array($request->client_types_for_rent)) {
             foreach ($request->client_types_for_rent as $client_type_for_rent) {
-                $announcement->rental_client_types()->create([
-                    'client_type_for_rent_id' => $client_type_for_rent
+
+                AnnouncementRentalClientTypes::create([
+                    'client_type_for_rent_id' => $client_type_for_rent,
+                    'announcement_id'=>$announcement->id
+
                 ]);
 
             }
