@@ -107,8 +107,6 @@ class AnnouncementController extends Controller
             foreach ($request->client_types_for_rent as $client_type_for_rent) {
 
 
-
-                return $request->client_types_for_rent;
                 AnnouncementRentalClientTypes::create([
                     'client_type_for_rent_id' => $client_type_for_rent,
                     'announcement_id'=>$announcement->id
