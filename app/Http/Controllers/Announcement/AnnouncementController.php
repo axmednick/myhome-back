@@ -111,7 +111,7 @@ class AnnouncementController extends Controller
 
 
 
-            if ($request->has('supplies')) {
+            if ($request->has('supplies') && is_array($request->supplies)) {
                 foreach ($request->get('supplies') as $supply) {
                     $announcement->supplies()->create([
                         'supply_id' => $supply
@@ -121,7 +121,7 @@ class AnnouncementController extends Controller
 
 
 
-        if ($request->has('metroStations')) {
+        if ($request->has('metroStations') && is_array($request->metroStations)) {
 
             foreach ($request->metroStations as $metroStation) {
                 $announcement->metro_stations()->create([
