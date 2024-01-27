@@ -98,23 +98,25 @@ class AnnouncementController extends Controller
         ]);
 
 
-        foreach ($request->client_types_for_rent as $client_type_for_rent) {
-
-
-
-            $announcement->rental_client_types()->create([
-                'client_type_for_rent_id' => $client_type_for_rent
-            ]);
-
-        }
-
-        if ($request->has('supplies')){
-            foreach ($request->get('supplies') as $supply){
-                $announcement->supplies()->create([
-                    'supply_id'=>$supply
+        if ($request->has('client_types_for_rent')) {
+            foreach ($request->client_types_for_rent as $client_type_for_rent) {
+                $announcement->rental_client_types()->create([
+                    'client_type_for_rent_id' => $client_type_for_rent
                 ]);
+
             }
         }
+
+
+
+            if ($request->has('supplies')) {
+                foreach ($request->get('supplies') as $supply) {
+                    $announcement->supplies()->create([
+                        'supply_id' => $supply
+                    ]);
+                }
+            }
+
 
 
         if ($request->has('metroStations')) {
