@@ -30,6 +30,8 @@ class AnnouncementController extends Controller
     public function store(Request $request)
     {
 
+        return response()->json(['data'=>$request->all()]);
+
         $validator = Validator::make($request->all(), [
             'announcement_type' => 'required|in:1,2',
             'property_type' => 'required|in:1,2,3,4,5,6,7',
