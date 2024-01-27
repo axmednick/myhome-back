@@ -98,7 +98,7 @@ class AnnouncementController extends Controller
         ]);
 
 
-        if ($request->has('client_types_for_rent')) {
+        if ($request->has('client_types_for_rent') && is_array($request->client_types_for_rent)) {
             foreach ($request->client_types_for_rent as $client_type_for_rent) {
                 $announcement->rental_client_types()->create([
                     'client_type_for_rent_id' => $client_type_for_rent
