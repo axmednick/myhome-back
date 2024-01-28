@@ -13,6 +13,8 @@ class UserAuthController extends Controller
 {
     public function register(Request $request)
     {
+
+        return $request->all();
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users',
