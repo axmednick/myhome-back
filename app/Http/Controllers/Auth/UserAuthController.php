@@ -15,15 +15,17 @@ class UserAuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
             'password' => 'required',
             'user_type'=>$request->user_type,
-            'phone' => 'unique:users'
+            'phone' => 'required'
         ]);
 
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
+
+
 
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
