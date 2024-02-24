@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Announcement;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Announcement\AnnouncementRequest;
+use App\Http\Requests\ApartmentRequest;
+use App\Http\Requests\HouseRequest;
+use App\Http\Requests\LandRequest;
+use App\Http\Requests\OfficeRequest;
 use App\Http\Resources\AnnouncementResource;
 use App\Http\Resources\MetrostationsResource;
 use App\Http\Resources\SuppliesResource;
@@ -31,20 +35,26 @@ class AnnouncementController extends Controller
     public function store(Request $request)
     {
 
+        if ($request->property_type == 1) {
+            $validator = Validator::make($request->all(), (new ApartmentRequest)->rules());
+        }
+        if ($request->property_type == 2 || $request->property_type == 3 || $request->property_type == 4) {
+            $validator = Validator::make($request->all(), (new HouseRequest)->rules());
+        }
+        if ($request->property_type == 5) {
+            $validator = Validator::make($request->all(), (new LandRequest)->rules());
+        }
+        if ($request->property_type == 6 && $request->property_type == 7) {
+            $validator = Validator::make($request->all(), (new OfficeRequest)->rules());
+        }
 
-
-        $validator = Validator::make($request->all(), [
-            'announcement_type' => 'required|in:1,2',
-            'property_type' => 'required|in:1,2,3,4,5,6,7',
-            'apartment_type' => 'required|in:1,2',
-        ]);
 
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        if (!auth('sanctum')->check()) {
+       if (!auth('sanctum')->check()) {
 
             $userValidator = Validator::make($request->all(), [
                 'phone' => 'required|unique:users',
