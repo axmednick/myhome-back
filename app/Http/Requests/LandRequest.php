@@ -26,7 +26,7 @@ class LandRequest extends FormRequest
             'property_type' => 'required|in:1,2,3,4,5,6,7',
             'apartment_type' => 'required|in:1,2',
             'price' => 'required',
-            'area' => 'required',
+                'area' => 'required',
         ];
     }
 }
