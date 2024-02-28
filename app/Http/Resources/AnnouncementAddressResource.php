@@ -17,7 +17,9 @@ class AnnouncementAddressResource extends JsonResource
         return [
             'city'=>CityResource::make($this->city),
             'region'=>CityResource::make($this->region),
-            'village'=>CityResource::make($this->village)
+            'village'=>CityResource::make($this->village),
+            'lat'=>$this->lat,
+            'lng'=>$this->lng
         ];
     }
 }
