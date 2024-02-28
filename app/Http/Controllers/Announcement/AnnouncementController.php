@@ -150,7 +150,7 @@ class AnnouncementController extends Controller
 
         }
 
-        if ($request->has('media_ids')  && is_array($request->metroStations)) {
+        if ($request->has('media_ids') ) {
             foreach ($request->media_ids as $media) {
 
                 $media = Media::where('model_id', $media)->update([
