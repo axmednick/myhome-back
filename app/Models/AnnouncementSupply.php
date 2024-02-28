@@ -9,4 +9,8 @@ class AnnouncementSupply extends Model
 {
     use HasFactory;
     protected $guarded=['id'];
+
+    public function supply(){
+        return $this->belongsTo(Supply::class);
+    }
 }
