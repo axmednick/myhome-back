@@ -9,4 +9,8 @@ class AnnouncementRentalClientTypes extends Model
 {
     use HasFactory;
     protected $guarded=['id'];
+
+    public function type(){
+        return $this->belongsTo(ClientTypeForRent::class);
+    }
 }
