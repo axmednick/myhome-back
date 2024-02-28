@@ -50,7 +50,9 @@ class AnnouncementResource extends JsonResource
             'is_active' => $this->is_active,
             'is_favorite'=>Favorite::where('announcement_id', $this->announcement_id)
                 ->where('user_id',auth('sanctum')->id())->exists(),
-            'supplies'=>SuppliesResource::collection($this->supplies)
+            'supplies'=>SuppliesResource::collection($this->supplies),
+            'client_types_for_rent'=>RentalClientTypesResource::collection($this->rental_client_types),
+            'looking_roommate'=>$this->looking_roommate
 
         ];
     }
