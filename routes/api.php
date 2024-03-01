@@ -32,7 +32,7 @@ Route::prefix('user')->group(function (){
    Route::get('/announcements/{id?}',[AnnouncementController::class,'userAnnouncements']);
    Route::middleware('auth:sanctum')->group(function (){
        Route::prefix('announcement')->group(function (){
-           Route::post('toggle-is-active/{id}',[UserAnnouncementController::class,'toggleIsActive']);
+           Route::get('toggle-is-active/{id}',[UserAnnouncementController::class,'toggleIsActive']);
            Route::delete('delete/{id}',[UserAnnouncementController::class,'deleteAnnouncement']);
            Route::get('statistics/{id}',[UserAnnouncementController::class,'announcementStatistics']);
            Route::get('/toggle-favorite/{id}',[FavoriteController::class,'toggleFavorite']);
