@@ -55,7 +55,8 @@ class AnnouncementResource extends JsonResource
             'looking_roommate'=>$this->looking_roommate,
             'credit_possible'=>$this->credit_possible,
             'in_credit'=>$this->in_credit,
-            'metro_stations'=>AnnouncementMetroStationsResource::collection($this->metro_stations)
+            'metro_stations'=>AnnouncementMetroStationsResource::collection($this->metro_stations),
+            'status'=>$this->status
 
         ];
     }
