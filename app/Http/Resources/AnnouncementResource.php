@@ -54,7 +54,8 @@ class AnnouncementResource extends JsonResource
             'client_types_for_rent'=>RentalClientTypesResource::collection($this->rental_client_types),
             'looking_roommate'=>$this->looking_roommate,
             'credit_possible'=>$this->credit_possible,
-            'in_credit'=>$this->in_credit
+            'in_credit'=>$this->in_credit,
+            'metro_stations'=>AnnouncementMetroStationsResource::collection($this->metro_stations)
 
         ];
     }

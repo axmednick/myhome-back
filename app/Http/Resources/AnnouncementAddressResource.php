@@ -21,7 +21,7 @@ class AnnouncementAddressResource extends JsonResource
             'village'=>CityResource::make($this->village),
             'lat'=>$this->lat,
             'lng'=>$this->lng,
-            'metro_stations'=>AnnouncementMetroStationsResource::collection($this->metro_stations)
+
 
         ];
     }
