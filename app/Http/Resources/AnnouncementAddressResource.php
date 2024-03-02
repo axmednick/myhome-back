@@ -15,11 +15,13 @@ class AnnouncementAddressResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'address'=>$this->address,
             'city'=>CityResource::make($this->city),
             'region'=>CityResource::make($this->region),
             'village'=>CityResource::make($this->village),
             'lat'=>$this->lat,
-            'lng'=>$this->lng
+            'lng'=>$this->lng,
+
         ];
     }
 }
