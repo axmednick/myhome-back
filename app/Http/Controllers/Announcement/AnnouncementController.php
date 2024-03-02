@@ -99,6 +99,8 @@ class AnnouncementController extends Controller
             'document_id' => $request->property_document,
             'rental_type' => $request->rental_type,
             'looking_roommate' => $request->looking_roommate,
+            'credit_possible'=>$request->credit_possible,
+            'in_credit'=>$request->in_credit,
         ]);
 
 
@@ -110,8 +112,7 @@ class AnnouncementController extends Controller
             'lat' => $request->lat,
             'lng' => $request->lng,
             'address' => $request->address,
-            'credit_possible'=>$request->credit_possible,
-            'in_credit'=>$request->in_credit,
+
         ]);
 
 

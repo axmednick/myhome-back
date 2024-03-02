@@ -52,7 +52,9 @@ class AnnouncementResource extends JsonResource
                 ->where('user_id',auth('sanctum')->id())->exists(),
             'supplies'=>AnnouncementSuppliesResource::collection($this->supplies),
             'client_types_for_rent'=>RentalClientTypesResource::collection($this->rental_client_types),
-            'looking_roommate'=>$this->looking_roommate
+            'looking_roommate'=>$this->looking_roommate,
+            'credit_possible'=>$this->credit_possible,
+            'in_credit'=>$this->in_credit
 
         ];
     }
