@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class AnnouncementMetroStation extends Model
 {
     use HasFactory;
+
+    public function metro_station(){
+        return $this->belongsTo(MetroStation::class);
+    }
 }
