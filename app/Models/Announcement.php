@@ -44,7 +44,7 @@ class Announcement extends Model implements HasMedia
     }
 
     public function metro_stations(){
-        return $this->hasMany(AnnouncementMetroStation::class);
+        return $this->hasMany(AnnouncementMetroStation::class,'announcement_id');
     }
 
     public function supplies(){
