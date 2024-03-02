@@ -141,9 +141,9 @@ class AnnouncementController extends Controller
 
 
 
-        if ($request->has('metroStations') && is_array($request->metroStations)) {
+        if ($request->has('metro_stations') && is_array($request->metro_stations)) {
 
-            foreach ($request->metroStations as $metroStation) {
+            foreach ($request->metro_stations as $metroStation) {
                 $announcement->metro_stations()->create([
                     'metro_station_id' => $metroStation
                 ]);
