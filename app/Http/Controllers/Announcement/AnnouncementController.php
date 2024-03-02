@@ -183,7 +183,7 @@ class AnnouncementController extends Controller
     }
 
 
-    public function userAnnouncements($id = null,Request $request)
+    public function userAnnouncements(Request $request,$id = null)
     {
 
 
