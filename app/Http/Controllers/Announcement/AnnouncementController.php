@@ -183,11 +183,15 @@ class AnnouncementController extends Controller
     }
 
 
-    public function userAnnouncements($id = null)
+    public function userAnnouncements($id = null,Request $request)
     {
 
 
         $announcements = $this->announcementService->announcementsByUser($id ? $id : auth('sanctum')->id());
+
+        if ($request->status){
+            $announcements->where('status',$request->status);
+        }
 
         return AnnouncementResource::collection($announcements->paginate(12));
     }
