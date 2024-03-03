@@ -18,7 +18,8 @@ class AnnouncementStatisticsResource extends JsonResource
         return [
             'view_count' => $this->view_count,
             'phone_visible_count' => $this->phone_visible_count,
-            'favorites_count' => Favorite::where('announcement_id', $this->announcement_id)->count()
+            'favorites_count' => Favorite::where('announcement_id', $this->announcement_id)->count(),
+            'shared_count'=>55
         ];
     }
 }

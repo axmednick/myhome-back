@@ -13,6 +13,7 @@ use App\Http\Resources\MetrostationsResource;
 use App\Http\Resources\SuppliesResource;
 use App\Models\Announcement;
 use App\Models\AnnouncementRentalClientTypes;
+use App\Models\Favorite;
 use App\Models\MetroStation;
 use App\Models\Supply;
 use App\Models\User;
@@ -192,6 +193,16 @@ class AnnouncementController extends Controller
         if ($request->status){
             $announcements->where('status',$request->status);
         }
+
+        return AnnouncementResource::collection($announcements->paginate(12));
+    }
+
+    public function favorites(Request $request)
+    {
+        $favorite_announcement_ids = Favorite::where('user_id', auth('sanctum')->id())->pluck('announcement_id');
+
+
+        $announcements = Announcement::whereIn('id', $favorite_announcement_ids);
 
         return AnnouncementResource::collection($announcements->paginate(12));
     }
