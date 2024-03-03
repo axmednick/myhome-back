@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\GlobalDataController;
+use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\UserAnnouncementController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +29,7 @@ Route::controller(UserAuthController::class)->prefix('auth')->group(function(){
 
 
 Route::prefix('user')->group(function (){
-
+    Route::post('profile-update',[ProfileController::class,'profileUpdate']);
    Route::get('/announcements/{id?}',[AnnouncementController::class,'userAnnouncements']);
    Route::get('/favorites',[AnnouncementController::class,'userAnnouncements']);
    Route::middleware('auth:sanctum')->group(function (){
