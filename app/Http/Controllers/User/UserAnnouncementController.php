@@ -14,7 +14,7 @@ class UserAnnouncementController extends Controller
         if ($announcement->user_id!=auth('sanctum')->id()){
             return response()->json('error',403);
         }
-        $announcement->status = $announcement->status==1 ? 0 : 1;
+        $announcement->status = $announcement->status==1 ? 3 : 1;
         $announcement->save();
     }
 
