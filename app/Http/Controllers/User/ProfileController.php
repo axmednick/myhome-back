@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -39,6 +40,6 @@ class ProfileController extends Controller
         $user->phone = $request->phone;
         $user->save();
 
-        return response()->json(['status'=>true]);
+        return response()->json(['status'=>true,'user'=>User::find($user->id)]);
     }
 }
