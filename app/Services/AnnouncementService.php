@@ -81,7 +81,7 @@ class AnnouncementService
 
     public function announcementsByUser($userId){
 
-        $announcements = Announcement::where('user_id',$userId);
+        $announcements = Announcement::where('user_id',$userId)->query();
 
         return $announcements;
     }

@@ -188,10 +188,11 @@ class AnnouncementController extends Controller
     {
 
 
-        $announcements = $this->announcementService->announcementsByUser($id ? $id : auth('sanctum')->id());
+        $announcements = Announcement::where('user_id',auth('sanctum')->id());
 
         if ($request->status){
-            $announcements->where('status',$request->status);
+
+            $announcements->where('status',1);
         }
 
         return AnnouncementResource::collection($announcements->paginate(12));
