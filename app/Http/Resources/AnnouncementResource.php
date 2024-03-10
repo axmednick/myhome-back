@@ -56,7 +56,8 @@ class AnnouncementResource extends JsonResource
             'credit_possible'=>$this->credit_possible,
             'in_credit'=>$this->in_credit,
             'metro_stations'=>AnnouncementMetroStationsResource::collection($this->metro_stations),
-            'status'=>$this->status
+            'status'=>$this->status,
+            'document_id'=>$this->document_id
 
         ];
     }
