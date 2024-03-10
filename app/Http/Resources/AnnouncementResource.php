@@ -48,7 +48,7 @@ class AnnouncementResource extends JsonResource
             "formatted_date" => DateHelper::formatCreatedAt($this->created_at),
             'view_count' => 15,
             'is_active' => $this->is_active,
-            'is_favorite'=>Favorite::where('announcement_id', $this->announcement_id)
+            'is_favorite'=>Favorite::where('announcement_id', $this->id)
                 ->where('user_id',auth('sanctum')->id())->exists(),
             'supplies'=>AnnouncementSuppliesResource::collection($this->supplies),
             'client_types_for_rent'=>RentalClientTypesResource::collection($this->rental_client_types),
