@@ -26,10 +26,11 @@ class AnnouncementService
 
         if ($request->room_ids) {
 
-            if ($request->room_ids == "5+") {
-                return  $request->room_ids;
+            if ($request->room_ids == "more") {
+
                 $announcements->where('room_count', '>', 5);
             } else {
+
                 $announcements->whereIn('room_count', $request->room_ids);
             }
         }
