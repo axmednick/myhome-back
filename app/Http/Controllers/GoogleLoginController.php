@@ -10,15 +10,15 @@ use App\Providers\RouteServiceProvider;
 
 class GoogleLoginController extends Controller
 {
-    public function redirectToGoogle()
+    public function redirect($driver)
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver($driver)->redirect();
     }
 
 
-    public function handleGoogleCallback()
+    public function handleCallback($driver)
     {
-        $googleUser = Socialite::driver('google')->stateless()->user();
+        $googleUser = Socialite::driver($driver)->stateless()->user();
 
         $user = User::where('email', $googleUser->email)->first();
         if(!$user)
