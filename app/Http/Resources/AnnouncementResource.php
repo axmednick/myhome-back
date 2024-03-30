@@ -36,7 +36,7 @@ class AnnouncementResource extends JsonResource
             'price_per_square' => $this->house_area!=0 ?  round($this->price / $this->house_area) : 0,
             'user_id' => $this->user_id,
             'address' => AnnouncementAddressResource::make($this->address),
-            //'images' => ImageResource::collection($this->getMedia('image','watermarked')),
+            'images' => ImageResource::collection($this->getMedia('image')),
             'main_image' => $this->getFirstMediaUrl('image'),
             'main_image_thumb' => $this->getFirstMediaUrl('image','thumb'),
             'user' => $this->user,
