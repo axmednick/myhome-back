@@ -31,8 +31,10 @@ class TemporaryFile extends Model implements HasMedia
                     ->width(1000) // Width of the image after adding watermark
                     ->height(1000) // Height of the image after adding watermark
                     ->optimize()
-                    ->watermarkOpacity(25)
+                    ->watermarkOpacity(20)
                     ->performOnCollections('image');
             });
+        $this->addMediaConversion('original')->nonQueued();
+
     }
 }

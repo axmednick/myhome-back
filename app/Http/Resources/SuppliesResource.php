@@ -16,7 +16,8 @@ class SuppliesResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'name' => $this->name,
+            'icon'=>$this->supply->getFirstMediaUrl('icon')
         ];
     }
 }
