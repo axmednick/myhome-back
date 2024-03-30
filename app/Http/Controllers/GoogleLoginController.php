@@ -19,15 +19,15 @@ class GoogleLoginController extends Controller
     public function handleGoogleCallback()
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
-        dd($googleUser);
+
         $user = User::where('email', $googleUser->email)->first();
         if(!$user)
         {
             $user = User::create(['name' => $googleUser->name, 'email' => $googleUser->email, 'password' => \Hash::make(rand(100000,999999))]);
         }
 
-        Auth::login($user);
+        $token = $user->createToken('AccessToken')->plainTextToken;
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->away("https://myhome.az/giris?token=$token");
     }
 }
