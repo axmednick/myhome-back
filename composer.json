@@ -9,6 +9,7 @@
         "ebess/advanced-nova-media-library": "*",
         "fruitcake/laravel-cors": "*",
         "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "*",
         "kongulov/nova-tab-translatable": "^2.1",
         "laravel/framework": "^10.10",
         "laravel/nova": "~4.0",
