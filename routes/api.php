@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\Announcement\AnnouncementController;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\FavoriteController;
@@ -31,6 +32,7 @@ Route::controller(UserAuthController::class)->prefix('auth')->group(function(){
 Route::prefix('user')->group(function (){
     Route::post('profile-update',[ProfileController::class,'profileUpdate']);
    Route::get('/announcements/{id?}',[AnnouncementController::class,'userAnnouncements']);
+
    Route::get('/favorites',[AnnouncementController::class,'favorites']);
    Route::middleware('auth:sanctum')->group(function (){
        Route::prefix('announcement')->group(function (){
@@ -54,7 +56,7 @@ Route::prefix('user')->group(function (){
    Route::get('region/{id}/villages',[GlobalDataController::class,'villages']);
    Route::get('rental-client-types',[GlobalDataController::class,'clientTypeForRents']);
    Route::get('metro-stations',[GlobalDataController::class,'metroStations']);
-   Route::get('/all-regions',[GlobalDataController::class,'allRegions']);
+   Route::get('/all-regions',[GlobalDataController::class,'allRegion s']);
    Route::get('/all-villages',[GlobalDataController::class,'allVillages']);
 
 
@@ -65,6 +67,9 @@ Route::prefix('announcement')->group(function (){
     Route::get('/item/{id}',[AnnouncementController::class,'detail']);
     Route::get('/nearby-metro-stations',[AnnouncementController::class,'nearbyMetroStations']);
     Route::get('/supplies',[AnnouncementController::class,'supplies']);
+    Route::get('/phone/{id}',[AnnouncementController::class,'announcementPhone']);
+    Route::post('/make-vip',[AdvertController::class,'makeVip']);
+    Route::post('/make-premium',[AdvertController::class,'makePremium']);
 
 
 });

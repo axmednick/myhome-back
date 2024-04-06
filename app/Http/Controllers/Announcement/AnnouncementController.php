@@ -229,4 +229,11 @@ class AnnouncementController extends Controller
 
         return SuppliesResource::collection(Supply::all());
     }
+
+    public function announcementPhone($id){
+
+        $announcement = Announcement::where('id',$id)->first();
+
+        return $announcement->user->phone;
+    }
 }
