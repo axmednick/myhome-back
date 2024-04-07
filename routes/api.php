@@ -31,6 +31,7 @@ Route::controller(UserAuthController::class)->prefix('auth')->group(function(){
 
 Route::prefix('user')->group(function (){
     Route::post('profile-update',[ProfileController::class,'profileUpdate']);
+    Route::post('password-update',[ProfileController::class,'passwordUpdate']);
    Route::get('/announcements/{id?}',[AnnouncementController::class,'userAnnouncements']);
 
    Route::get('/favorites',[AnnouncementController::class,'favorites']);
