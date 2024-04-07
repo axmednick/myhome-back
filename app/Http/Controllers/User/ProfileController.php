@@ -46,8 +46,6 @@ class ProfileController extends Controller
             'password' => 'required|min:6',
         ]);
 
-
-
         if ($validate->fails()) {
             return response()->json($validate->errors()->messages());
         }

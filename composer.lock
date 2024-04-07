@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ede7fbaeeeba3d49ab2281675e9f2e11",
+    "content-hash": "3769930ff52acacf1e50f6b51d6b97ab",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8601,6 +8601,61 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "ziffmedia/nova-select-plus",
+            "version": "v2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ziffmedia/nova-select-plus.git",
+                "reference": "459ec8258ba467f53ea8ef355ca13cdb2ce39d88"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ziffmedia/nova-select-plus/zipball/459ec8258ba467f53ea8ef355ca13cdb2ce39d88",
+                "reference": "459ec8258ba467f53ea8ef355ca13cdb2ce39d88",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^4.0",
+                "php": "^7.3|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ZiffMedia\\NovaSelectPlus\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ZiffMedia\\NovaSelectPlus\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ralph Schindler",
+                    "email": "ralph.schindler@ziffmedia.com"
+                }
+            ],
+            "description": "A Nova select field for simple and complex select inputs",
+            "keywords": [
+                "ajax",
+                "laravel",
+                "nova",
+                "select",
+                "vue-select"
+            ],
+            "support": {
+                "issues": "https://github.com/ziffmedia/nova-select-plus/issues",
+                "source": "https://github.com/ziffmedia/nova-select-plus/tree/v2.0.6"
+            },
+            "time": "2024-01-03T18:01:29+00:00"
         }
     ],
     "packages-dev": [

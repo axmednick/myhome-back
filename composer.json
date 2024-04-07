@@ -19,7 +19,8 @@
         "mostafaznv/nova-ckeditor": "^5.2",
         "simplehtmldom/simplehtmldom": "*",
         "spatie/laravel-medialibrary": "*",
-        "spatie/laravel-translatable": "*"
+        "spatie/laravel-translatable": "*",
+        "ziffmedia/nova-select-plus": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

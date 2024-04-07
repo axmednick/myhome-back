@@ -14,4 +14,7 @@ class Region extends Model
     public function villages(){
         return $this->hasMany(Village::class);
     }
+    public function metro_stations(){
+        return $this->belongsToMany(MetroStation::class,'region_metro_stations');
+    }
 }

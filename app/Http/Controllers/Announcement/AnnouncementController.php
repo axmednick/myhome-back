@@ -15,6 +15,7 @@ use App\Models\Announcement;
 use App\Models\AnnouncementRentalClientTypes;
 use App\Models\Favorite;
 use App\Models\MetroStation;
+use App\Models\Region;
 use App\Models\Supply;
 use App\Models\User;
 use App\Services\AnnouncementService;
@@ -217,10 +218,11 @@ class AnnouncementController extends Controller
         return AnnouncementResource::make($announcement);
     }
 
-    public function nearbyMetroStations()
+    public function nearbyMetroStations(Request $request)
     {
-        $metroStations = MetroStation::limit(3)->get();
-        return MetrostationsResource::collection($metroStations);
+        $region = Region::find($request->region_id);
+
+        return MetrostationsResource::collection($region->metro_stations);
 
     }
 
