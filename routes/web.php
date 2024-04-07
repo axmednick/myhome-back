@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [\App\Http\Controllers\DefaultController::class,'index']);
 
 Route::get('/auth/{driver}/redirect', [App\Http\Controllers\GoogleLoginController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/{driver}/callback', [App\Http\Controllers\GoogleLoginController::class, 'handleCallback'])->name('google.callback');
