@@ -59,6 +59,7 @@ Route::prefix('user')->group(function (){
    Route::get('metro-stations',[GlobalDataController::class,'metroStations']);
    Route::get('/all-regions',[GlobalDataController::class,'allRegion s']);
    Route::get('/all-villages',[GlobalDataController::class,'allVillages']);
+   Route::get('/popular-categories',[GlobalDataController::class,'popularCategories']);
 
 
 Route::prefix('announcement')->group(function (){

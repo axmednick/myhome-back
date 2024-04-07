@@ -6,6 +6,7 @@ use App\Http\Resources\AnnouncementTypeResource;
 use App\Http\Resources\ApartmentTypeResource;
 use App\Http\Resources\CityResource;
 use App\Http\Resources\MetrostationsResource;
+use App\Http\Resources\PopularCategoryResource;
 use App\Http\Resources\PropertyTypeResource;
 use App\Http\Resources\RegionsAndVillageResource;
 use App\Http\Resources\RentalClientTypesResource;
@@ -16,6 +17,7 @@ use App\Models\ApartmentType;
 use App\Models\City;
 use App\Models\ClientTypeForRent;
 use App\Models\MetroStation;
+use App\Models\PopularCategory;
 use App\Models\PropertyType;
 use App\Models\Region;
 use App\Models\Village;
@@ -56,5 +58,9 @@ class GlobalDataController extends Controller
     }
     public function allVillages(){
         return  VillageResource::collection(Village::orderBy('region_id')->get());
+    }
+
+    public function popularCategories(){
+        return PopularCategoryResource::collection(PopularCategory::all());
     }
 }
