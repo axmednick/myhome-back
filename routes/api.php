@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\GlobalDataController;
+use App\Http\Controllers\User\LinkController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\UserAnnouncementController;
 use Illuminate\Http\Request;
@@ -35,12 +36,21 @@ Route::prefix('user')->group(function (){
    Route::get('/announcements/{id?}',[AnnouncementController::class,'userAnnouncements']);
 
    Route::get('/favorites',[AnnouncementController::class,'favorites']);
+
+
    Route::middleware('auth:sanctum')->group(function (){
+
        Route::prefix('announcement')->group(function (){
            Route::get('toggle-is-active/{id}',[UserAnnouncementController::class,'toggleIsActive']);
            Route::delete('delete/{id}',[UserAnnouncementController::class,'deleteAnnouncement']);
            Route::get('statistics/{id}',[UserAnnouncementController::class,'announcementStatistics']);
            Route::get('/toggle-favorite/{id}',[FavoriteController::class,'toggleFavorite']);
+       });
+
+       Route::prefix('link')->group(function (){
+          Route::post('create',[LinkController::class,'create']);
+          Route::post('update/{id}',[LinkController::class,'update']);
+          Route::delete('delete/{id}',[LinkController::class,'delete']);
        });
 
 
