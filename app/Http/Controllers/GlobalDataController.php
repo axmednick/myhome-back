@@ -10,6 +10,7 @@ use App\Http\Resources\PopularCategoryResource;
 use App\Http\Resources\PropertyTypeResource;
 use App\Http\Resources\RegionsAndVillageResource;
 use App\Http\Resources\RentalClientTypesResource;
+use App\Http\Resources\StaticPageResource;
 use App\Http\Resources\VillageResource;
 use App\Models\AnnouncementRentalClientTypes;
 use App\Models\AnnouncementType;
@@ -20,6 +21,7 @@ use App\Models\MetroStation;
 use App\Models\PopularCategory;
 use App\Models\PropertyType;
 use App\Models\Region;
+use App\Models\StaticPage;
 use App\Models\Village;
 use Illuminate\Http\Request;
 
@@ -62,5 +64,14 @@ class GlobalDataController extends Controller
 
     public function popularCategories(){
         return PopularCategoryResource::collection(PopularCategory::all());
+    }
+
+    public function staticPages(){
+        $staticPages = StaticPage::all();
+        return StaticPageResource::collection($staticPages);
+    }
+    public function staticPage($slug){
+        $staticPage = StaticPage::where('slug',$slug)->first();
+        return StaticPageResource::make($staticPage);
     }
 }
