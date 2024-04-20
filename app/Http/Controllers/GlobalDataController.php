@@ -23,10 +23,18 @@ use App\Models\PropertyType;
 use App\Models\Region;
 use App\Models\StaticPage;
 use App\Models\Village;
+use App\Services\MetaTagsService;
 use Illuminate\Http\Request;
 
 class GlobalDataController extends Controller
 {
+
+    public $metaTagsService;
+    public function __construct(MetaTagsService $metaTagsService)
+    {
+        $this->metaTagsService = $metaTagsService;
+    }
+
     public function announcementTypes(){
         return AnnouncementTypeResource::collection(AnnouncementType::all());
     }
@@ -73,5 +81,10 @@ class GlobalDataController extends Controller
     public function staticPage($slug){
         $staticPage = StaticPage::where('slug',$slug)->first();
         return StaticPageResource::make($staticPage);
+    }
+
+
+    public function metaTags($query){
+        return $this->metaTagsService->getMetaTags($query);
     }
 }

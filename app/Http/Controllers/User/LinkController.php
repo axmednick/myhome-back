@@ -13,18 +13,12 @@ class LinkController extends Controller
 {
     public function create(Request $request){
 
-        $validate = Validator::make($request->all(),[
-           'name'=>'required|min:1|max:50'
-        ]);
 
-        if ($validate->fails()){
-            return response()->json($validate->errors()->all());
-        }
 
         $link = Link::create([
             'user_id'=>auth('sanctum')->user()->id,
            'name'=>$request->name,
-           'link'=>StringHelper::randomString()
+           'link'=>'https://myhome.az/link/'.StringHelper::randomString()
         ]);
 
         return LinkResource::make($link);
@@ -33,8 +27,17 @@ class LinkController extends Controller
 
     public function update(Request $request,$id){
 
+        $validate = Validator::make($request->all(),[
+            'name'=>'required|min:1|max:50'
+        ]);
+
+        if ($validate->fails()){
+            return response()->json($validate->errors()->all());
+        }
+
         $link = Link::findOrFail($id);
 
+        $link->name=$request->name;
 
         $link->announcement_ids=json_encode($request->announcement_id);
 

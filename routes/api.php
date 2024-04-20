@@ -27,6 +27,7 @@ Route::controller(UserAuthController::class)->prefix('auth')->group(function(){
     Route::post('register', 'register');
     Route::post('login', 'login');
     Route::get('user', 'user');
+    Route::get('/email-verification/{userId}/{otp}','verifyOtp');
 });
 
 
@@ -72,6 +73,7 @@ Route::prefix('user')->group(function (){
    Route::get('/popular-categories',[GlobalDataController::class,'popularCategories']);
    Route::get('/static-pages',[GlobalDataController::class,'staticPages']);
    Route::get('/static-page/{slug}',[GlobalDataController::class,'staticPage']);
+   Route::get('/meta-tags/{query}',[GlobalDataController::class,'metaTags']);
 
 
 Route::prefix('announcement')->group(function (){

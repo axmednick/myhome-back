@@ -13,6 +13,7 @@ return [
     |
     */
 
+    'otp_expiry'=>60,
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
