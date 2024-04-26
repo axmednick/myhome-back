@@ -77,7 +77,7 @@ class UserAuthController extends Controller
     {
         $result = $this->authService->verifyOtpAndMarkEmailVerified($userId, $otp);
 
-        $token = Auth::loginUsingId($userId);
+        $token = Auth::loginUsingId($userId)->plainTextToken;
 
 
         if ($token) {
