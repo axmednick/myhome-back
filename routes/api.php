@@ -10,6 +10,7 @@ use App\Http\Controllers\User\LinkController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\UserAnnouncementController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -87,5 +88,15 @@ Route::prefix('announcement')->group(function (){
     Route::post('/make-vip',[AdvertController::class,'makeVip']);
     Route::post('/make-premium',[AdvertController::class,'makePremium']);
 
+});
+
+
+
+Route::get('/test',function (){
+
+    $user = \App\Models\User::find(15);
+    $token = $user->createToken('MyApp')->plainTextToken;
+
+    dd(    $token);
 
 });
