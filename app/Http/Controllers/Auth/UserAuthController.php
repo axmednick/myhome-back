@@ -77,11 +77,17 @@ class UserAuthController extends Controller
     {
         $result = $this->authService->verifyOtpAndMarkEmailVerified($userId, $otp);
 
-        if (!$result) {
+        $token = Auth::loginUsingId($userId);
+
+
+        if ($token) {
+
+            return redirect('https://myhome.az?emailVerification=true&token=' . $token);
+
+        } else {
+
             return redirect('https://myhome.az?emailVerification=false');
         }
-
-        return redirect('https://myhome.az?emailVerification=true');
     }
 
 }
