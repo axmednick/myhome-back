@@ -85,7 +85,7 @@ class UserAuthController extends Controller
 
             $token = $user->createToken('MyApp')->plainTextToken;
 
-            return redirect('https://myhome.az?emailVerification=true&token=' . $token);
+            return redirect('https://myhome.az/giris?emailVerification=true&token=' . $token);
 
         } else {
 
