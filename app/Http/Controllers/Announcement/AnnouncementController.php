@@ -84,14 +84,13 @@ class AnnouncementController extends Controller
             $user = auth('sanctum')->user();
         }
 
-
         $announcement = Announcement::create([
             'announcement_type_id' => $request->announcement_type,
             'property_type_id' => $request->property_type,
             'apartment_type_id' => $request->apartment_type,
             'area' => $request->area ? $request->area : null,
             'house_area' => $request->house_area,
-            'room_count' => $request->roomCount ? $request->roomCount : null,
+            'room_count' => $request->room_count ? $request->room_count : null,
             'floor' => $request->floor ? $request->floor : null,
             'floor_count' => $request->floor_count ? $request->floor_count : null,
             'description' => $request->description,

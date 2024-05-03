@@ -50,8 +50,9 @@ Route::prefix('user')->group(function (){
        });
 
        Route::prefix('link')->group(function (){
-          Route::post('create',[LinkController::class,'create']);
-          Route::post('update/{id}',[LinkController::class,'update']);
+           Route::get('/',[LinkController::class,'index']);
+          Route::get('generate',[LinkController::class,'generate']);
+          Route::post('store',[LinkController::class,'store']);
           Route::delete('delete/{id}',[LinkController::class,'delete']);
        });
 

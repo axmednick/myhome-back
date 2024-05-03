@@ -11,37 +11,37 @@ use Illuminate\Support\Facades\Validator;
 
 class LinkController extends Controller
 {
-    public function create(Request $request){
 
+    public function index(){
+
+        $links = Link::where('user_id',auth('sanctum')->id())->get();
+
+        return LinkResource::collection($links);
+    }
+
+    public function generate(Request $request){
+
+        return response()->json(['link'=>'https://myhome.az/link/'.StringHelper::randomString()]);
+    }
+
+    public function store(Request $request){
+
+        $validate = Validator::make($request->all(),[
+            'name'=>'required|min:1|max:50',
+            'link'=>'required'
+        ]);
 
 
         $link = Link::create([
-            'user_id'=>auth('sanctum')->user()->id,
-           'name'=>$request->name,
-           'link'=>'https://myhome.az/link/'.StringHelper::randomString()
+            'user_id'=>auth('sanctum')->id(),
+            'name'=>$request->name,
+            'link'=>$request->link,
+            'announcement_ids'=>json_encode($request->announcement_ids,true)
         ]);
 
         return LinkResource::make($link);
 
-    }
 
-    public function update(Request $request,$id){
-
-        $validate = Validator::make($request->all(),[
-            'name'=>'required|min:1|max:50'
-        ]);
-
-        if ($validate->fails()){
-            return response()->json($validate->errors()->all());
-        }
-
-        $link = Link::findOrFail($id);
-
-        $link->name=$request->name;
-
-        $link->announcement_ids=json_encode($request->announcement_id);
-
-        $link->save();
 
     }
 
