@@ -77,9 +77,8 @@ class AnnouncementController extends Controller
                 'email' => $request->email,
                 'password' => $request->password
             ]);
-
-
-        } else {
+        }
+       else {
 
             $user = auth('sanctum')->user();
         }

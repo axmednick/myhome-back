@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Otp;
 use App\Models\User;
 use App\Services\AuthService;
+use Google_Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -90,6 +91,23 @@ class UserAuthController extends Controller
         } else {
 
             return redirect('https://myhome.az?emailVerification=false');
+        }
+    }
+
+
+    public function googleOneTapLogin(Request $request){
+
+
+        $client = new Google_Client(['client_id' => '221758298387-hum5vconak66a3jd53s67m41nmseok4j.apps.googleusercontent.com']);  // Specify the CLIENT_ID of the app that accesses the backend
+        $payload = $client->verifyIdToken($request->token);
+
+        return $payload;
+        if ($payload) {
+            $userid = $payload['sub'];
+            // If the request specified a Google Workspace domain
+            //$domain = $payload['hd'];
+        } else {
+            // Invalid ID token
         }
     }
 
