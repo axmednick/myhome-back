@@ -187,7 +187,7 @@ class AnnouncementController extends Controller
     {
 
 
-        $announcements = Announcement::where('user_id',auth('sanctum')->id());
+        $announcements = Announcement::where('user_id',auth('sanctum')->id())->orderBy('id','desc');
 
         if ($request->status){
 
