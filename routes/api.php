@@ -8,6 +8,7 @@ use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\GlobalDataController;
 use App\Http\Controllers\User\LinkController;
 use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\SavedSearchController;
 use App\Http\Controllers\User\UserAnnouncementController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,81 +25,84 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(UserAuthController::class)->prefix('auth')->group(function(){
+Route::controller(UserAuthController::class)->prefix('auth')->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');
     Route::get('user', 'user');
-    Route::get('/email-verification/{userId}/{otp}','verifyOtp');
-    Route::get('/google-one-tap','googleOneTapLogin');
+    Route::get('/email-verification/{userId}/{otp}', 'verifyOtp');
+    Route::get('/google-one-tap', 'googleOneTapLogin');
 });
 
 
-Route::prefix('user')->group(function (){
-    Route::post('profile-update',[ProfileController::class,'profileUpdate']);
-    Route::post('password-update',[ProfileController::class,'passwordUpdate']);
-   Route::get('/announcements/{id?}',[AnnouncementController::class,'userAnnouncements']);
+Route::prefix('user')->group(function () {
 
-   Route::get('/favorites',[AnnouncementController::class,'favorites']);
+    Route::get('/announcements/{id?}', [AnnouncementController::class, 'userAnnouncements']);
+    Route::get('/favorites', [AnnouncementController::class, 'favorites']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('profile-update', [ProfileController::class, 'profileUpdate']);
+        Route::post('password-update', [ProfileController::class, 'passwordUpdate']);
 
+        Route::prefix('saved-search')->group(function (){
+            Route::get('/',[SavedSearchController::class,'index']);
+            Route::post('store',[SavedSearchController::class,'store']);
+            Route::delete('{id}',[SavedSearchController::class,'delete']);
+        });
 
-   Route::middleware('auth:sanctum')->group(function (){
+        Route::prefix('announcement')->group(function () {
+            Route::get('toggle-is-active/{id}', [UserAnnouncementController::class, 'toggleIsActive']);
+            Route::delete('delete/{id}', [UserAnnouncementController::class, 'deleteAnnouncement']);
+            Route::get('statistics/{id}', [UserAnnouncementController::class, 'announcementStatistics']);
+            Route::get('/toggle-favorite/{id}', [FavoriteController::class, 'toggleFavorite']);
+        });
 
-       Route::prefix('announcement')->group(function (){
-           Route::get('toggle-is-active/{id}',[UserAnnouncementController::class,'toggleIsActive']);
-           Route::delete('delete/{id}',[UserAnnouncementController::class,'deleteAnnouncement']);
-           Route::get('statistics/{id}',[UserAnnouncementController::class,'announcementStatistics']);
-           Route::get('/toggle-favorite/{id}',[FavoriteController::class,'toggleFavorite']);
-       });
-
-       Route::prefix('link')->group(function (){
-           Route::get('/',[LinkController::class,'index']);
-          Route::get('generate',[LinkController::class,'generate']);
-          Route::post('store',[LinkController::class,'store']);
-          Route::delete('delete/{id}',[LinkController::class,'delete']);
-       });
-
-
-   });
-
-});
-
-
-   Route::get('announcement-types',[GlobalDataController::class,'announcementTypes']);
-   Route::get('property-types',[GlobalDataController::class,'propertyTypes']);
-   Route::get('apartment-types',[GlobalDataController::class,'apartmentTypes']);
-   Route::get('cities',[GlobalDataController::class,'cities']);
-   Route::get('city/{id}/regions',[GlobalDataController::class,'regions']);
-   Route::get('region/{id}/villages',[GlobalDataController::class,'villages']);
-   Route::get('rental-client-types',[GlobalDataController::class,'clientTypeForRents']);
-   Route::get('metro-stations',[GlobalDataController::class,'metroStations']);
-   Route::get('/all-regions',[GlobalDataController::class,'allRegion s']);
-   Route::get('/all-villages',[GlobalDataController::class,'allVillages']);
-   Route::get('/popular-categories',[GlobalDataController::class,'popularCategories']);
-   Route::get('/static-pages',[GlobalDataController::class,'staticPages']);
-   Route::get('/static-page/{slug}',[GlobalDataController::class,'staticPage']);
-   Route::get('/meta-tags/{query}',[GlobalDataController::class,'metaTags']);
+        Route::prefix('link')->group(function () {
+            Route::get('/', [LinkController::class, 'index']);
+            Route::get('generate', [LinkController::class, 'generate']);
+            Route::post('store', [LinkController::class, 'store']);
+            Route::delete('delete/{id}', [LinkController::class, 'delete']);
+        });
 
 
-Route::prefix('announcement')->group(function (){
-    Route::post('/image-upload',[FileUploadController::class,'temporaryFile']);
-    Route::post('/store',[AnnouncementController::class,'store']);
-    Route::get('/list',[AnnouncementController::class,'announcements']);
-    Route::get('/item/{id}',[AnnouncementController::class,'detail']);
-    Route::get('/nearby-metro-stations',[AnnouncementController::class,'nearbyMetroStations']);
-    Route::get('/supplies',[AnnouncementController::class,'supplies']);
-    Route::get('/phone/{id}',[AnnouncementController::class,'announcementPhone']);
-    Route::post('/make-vip',[AdvertController::class,'makeVip']);
-    Route::post('/make-premium',[AdvertController::class,'makePremium']);
+    });
 
 });
 
 
+Route::get('announcement-types', [GlobalDataController::class, 'announcementTypes']);
+Route::get('property-types', [GlobalDataController::class, 'propertyTypes']);
+Route::get('apartment-types', [GlobalDataController::class, 'apartmentTypes']);
+Route::get('cities', [GlobalDataController::class, 'cities']);
+Route::get('city/{id}/regions', [GlobalDataController::class, 'regions']);
+Route::get('region/{id}/villages', [GlobalDataController::class, 'villages']);
+Route::get('rental-client-types', [GlobalDataController::class, 'clientTypeForRents']);
+Route::get('metro-stations', [GlobalDataController::class, 'metroStations']);
+Route::get('/all-regions', [GlobalDataController::class, 'allRegion s']);
+Route::get('/all-villages', [GlobalDataController::class, 'allVillages']);
+Route::get('/popular-categories', [GlobalDataController::class, 'popularCategories']);
+Route::get('/static-pages', [GlobalDataController::class, 'staticPages']);
+Route::get('/static-page/{slug}', [GlobalDataController::class, 'staticPage']);
+Route::get('/meta-tags/{query}', [GlobalDataController::class, 'metaTags']);
 
-Route::get('/test',function (){
+
+Route::prefix('announcement')->group(function () {
+    Route::post('/image-upload', [FileUploadController::class, 'temporaryFile']);
+    Route::post('/store', [AnnouncementController::class, 'store']);
+    Route::get('/list', [AnnouncementController::class, 'announcements']);
+    Route::get('/item/{id}', [AnnouncementController::class, 'detail']);
+    Route::get('/nearby-metro-stations', [AnnouncementController::class, 'nearbyMetroStations']);
+    Route::get('/supplies', [AnnouncementController::class, 'supplies']);
+    Route::get('/phone/{id}', [AnnouncementController::class, 'announcementPhone']);
+    Route::post('/make-vip', [AdvertController::class, 'makeVip']);
+    Route::post('/make-premium', [AdvertController::class, 'makePremium']);
+
+});
+
+
+Route::get('/test', function () {
 
     $user = \App\Models\User::find(15);
     $token = $user->createToken('MyApp')->plainTextToken;
 
-    dd(    $token);
+    dd($token);
 
 });
