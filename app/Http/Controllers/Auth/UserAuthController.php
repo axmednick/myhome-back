@@ -100,11 +100,11 @@ class UserAuthController extends Controller
         $client = new Google_Client(['client_id' => '221758298387-hum5vconak66a3jd53s67m41nmseok4j.apps.googleusercontent.com']);  // Specify the CLIENT_ID of the app that accesses the backend
         $googleUser = $client->verifyIdToken($request->token);
 
-        dd($googleUser);
-        $user = User::where('email', $googleUser->email)->first();
+
+        $user = User::where('email', $googleUser['email'])->first();
 
         if (!$user) {
-            $user = User::create(['name' => $googleUser->name, 'email' => $googleUser->email, 'password' => Hash::make(rand(100000, 999999))]);
+            $user = User::create(['name' => $googleUser['name'], 'email' => $googleUser['email'], 'password' => Hash::make(rand(100000, 999999))]);
         }
 
         $token = $user->createToken('AccessToken')->plainTextToken;
