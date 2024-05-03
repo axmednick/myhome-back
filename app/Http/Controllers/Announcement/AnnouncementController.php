@@ -97,7 +97,7 @@ class AnnouncementController extends Controller
             'description' => $request->description,
             'user_id' => $user->id,
             'price' => $request->price,
-            'is_repaired' => $request->is_repair,
+            'is_repaired' => $request->is_repaired,
             'document_id' => $request->property_document,
             'rental_type' => $request->rental_type,
             'looking_roommate' => $request->looking_roommate,
