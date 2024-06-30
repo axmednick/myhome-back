@@ -100,9 +100,12 @@ Route::prefix('announcement')->group(function () {
 
 Route::get('/test', function () {
 
-    $user = \App\Models\User::find(15);
-    $token = $user->createToken('MyApp')->plainTextToken;
+    $agents = \App\Models\Ev10AnnouncementOwners::where('type', 'agent')->get();
 
-    dd($token);
+    foreach ($agents as $agent) {
+
+        echo $agent->email.'<br>';
+
+    }
 
 });

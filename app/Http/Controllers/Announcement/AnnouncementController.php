@@ -52,19 +52,18 @@ class AnnouncementController extends Controller
         }
 
 
-
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-       if (!auth('sanctum')->check()) {
+        if (!auth('sanctum')->check()) {
 
             $userValidator = Validator::make($request->all(), [
                 'phone' => 'required|unique:users',
                 'name' => 'required',
                 'email' => 'required|email|unique:users',
-                'password' =>'required',
-                'user_type'=>'required'
+                'password' => 'required',
+                'user_type' => 'required'
             ]);
 
             if ($userValidator->fails()) {
@@ -77,8 +76,7 @@ class AnnouncementController extends Controller
                 'email' => $request->email,
                 'password' => $request->password
             ]);
-        }
-       else {
+        } else {
 
             $user = auth('sanctum')->user();
         }
@@ -99,8 +97,8 @@ class AnnouncementController extends Controller
             'document_id' => $request->property_document,
             'rental_type' => $request->rental_type,
             'looking_roommate' => $request->looking_roommate,
-            'credit_possible'=>$request->credit_possible,
-            'in_credit'=>$request->in_credit,
+            'credit_possible' => $request->credit_possible,
+            'in_credit' => $request->in_credit,
         ]);
 
 
@@ -122,7 +120,7 @@ class AnnouncementController extends Controller
 
                 AnnouncementRentalClientTypes::create([
                     'client_type_for_rent_id' => $client_type_for_rent,
-                    'announcement_id'=>$announcement->id
+                    'announcement_id' => $announcement->id
 
                 ]);
 
@@ -130,15 +128,13 @@ class AnnouncementController extends Controller
         }
 
 
-
-            if ($request->has('supplies') && is_array($request->supplies)) {
-                foreach ($request->get('supplies') as $supply) {
-                    $announcement->supplies()->create([
-                        'supply_id' => $supply
-                    ]);
-                }
+        if ($request->has('supplies') && is_array($request->supplies)) {
+            foreach ($request->get('supplies') as $supply) {
+                $announcement->supplies()->create([
+                    'supply_id' => $supply
+                ]);
             }
-
+        }
 
 
         if ($request->has('metro_stations') && is_array($request->metro_stations)) {
@@ -183,15 +179,15 @@ class AnnouncementController extends Controller
     }
 
 
-    public function userAnnouncements(Request $request,$id = null)
+    public function userAnnouncements(Request $request, $id = null)
     {
 
 
-        $announcements = Announcement::where('user_id',auth('sanctum')->id())->orderBy('id','desc');
+        $announcements = Announcement::where('user_id', auth('sanctum')->id())->orderBy('id', 'desc');
 
-        if ($request->status){
+        if ($request->status) {
 
-            $announcements->where('status',1);
+            $announcements->where('status', 1);
         }
 
         return AnnouncementResource::collection($announcements->paginate(12));
@@ -230,9 +226,10 @@ class AnnouncementController extends Controller
         return SuppliesResource::collection(Supply::all());
     }
 
-    public function announcementPhone($id){
+    public function announcementPhone($id)
+    {
 
-        $announcement = Announcement::where('id',$id)->first();
+        $announcement = Announcement::where('id', $id)->first();
 
         return $announcement->user->phone;
     }
