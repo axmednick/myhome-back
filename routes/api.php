@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\Announcement\AnnouncementController;
 use App\Http\Controllers\Auth\UserAuthController;
+use App\Http\Controllers\BonusController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\GlobalDataController;
@@ -38,6 +39,7 @@ Route::prefix('user')->group(function () {
 
     Route::get('/announcements/{id?}', [AnnouncementController::class, 'userAnnouncements']);
     Route::get('/favorites', [AnnouncementController::class, 'favorites']);
+    Route::get('/bonus-progress', [BonusController::class, 'progress']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('profile-update', [ProfileController::class, 'profileUpdate']);
         Route::post('password-update', [ProfileController::class, 'passwordUpdate']);
@@ -82,8 +84,6 @@ Route::get('/popular-categories', [GlobalDataController::class, 'popularCategori
 Route::get('/static-pages', [GlobalDataController::class, 'staticPages']);
 Route::get('/static-page/{slug}', [GlobalDataController::class, 'staticPage']);
 Route::get('/meta-tags/{query}', [GlobalDataController::class, 'metaTags']);
-
-
 
 Route::prefix('announcement')->group(function () {
     Route::post('/image-upload', [FileUploadController::class, 'temporaryFile']);
