@@ -31,10 +31,13 @@ class SendMailCommand extends Command
         $agents = Ev10AnnouncementOwners::where('type', 'agent')->get();
 
         foreach ($agents as $agent) {
-            Mail::to('ahmad@rustamov.az')->send(new AgentMail());
-
-            $this->info("Sending email to {$agent->email}");
-            sleep(5);
+            try {
+                Mail::to($agent->email)->send(new AgentMail());
+                $this->info("Sending email to {$agent->email}");
+            } catch (\Exception $e) {
+                $this->error("Failed to send email to {$agent->email}: {$e->getMessage()}");
+            }
         }
     }
+
 }

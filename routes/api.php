@@ -84,6 +84,7 @@ Route::get('/static-page/{slug}', [GlobalDataController::class, 'staticPage']);
 Route::get('/meta-tags/{query}', [GlobalDataController::class, 'metaTags']);
 
 
+
 Route::prefix('announcement')->group(function () {
     Route::post('/image-upload', [FileUploadController::class, 'temporaryFile']);
     Route::post('/store', [AnnouncementController::class, 'store']);
