@@ -40,6 +40,7 @@ Route::prefix('user')->group(function () {
     Route::get('/announcements/{id?}', [AnnouncementController::class, 'userAnnouncements']);
     Route::get('/favorites', [AnnouncementController::class, 'favorites']);
     Route::get('/bonus-progress', [BonusController::class, 'progress']);
+    Route::get('/take-bonus', [BonusController::class, 'progress']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('profile-update', [ProfileController::class, 'profileUpdate']);
         Route::post('password-update', [ProfileController::class, 'passwordUpdate']);

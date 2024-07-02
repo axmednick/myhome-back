@@ -10,7 +10,21 @@ class BonusController extends Controller
 {
     public function progress()
     {
+        $user = auth('sanctum')->user();
+        $currentBonus = Bonus::where('announcement_count', '>', $user->announcements()->count())->first();
+        return BonusResource::make($currentBonus);
+    }
 
-        return BonusResource::make(Bonus::find(1));
+    public function take()
+    {
+        $user = auth('sanctum')->user();
+        $bonus = Bonus::find(1);
+        if ($user->announcements()->count() >= $bonus->announcement_count) {
+
+            return response()->json(['message' => 'Bonus taken']);
+        }
+        else{
+
+        }
     }
 }
