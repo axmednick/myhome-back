@@ -151,7 +151,7 @@ class AnnouncementService
         return $announcement;
     }
 
-    public function similarAnnouncements($id):Announcement
+    public function similarAnnouncements($id)
     {
         $announcement = $this->announcementById($id);
 
