@@ -22,6 +22,8 @@ class UserResource extends JsonResource
             'user_type'=>$this->user_type,
             'phone'=>$this->phone,
             'image'=>$this->avatar,
+            'balance'=>$this->balance,
+            'bonus_balance'=>$this->bonus_balance,
 
 
         ];
