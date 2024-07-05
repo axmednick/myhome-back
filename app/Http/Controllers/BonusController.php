@@ -15,7 +15,8 @@ class BonusController extends Controller
         if (UserBonus::where('user_id', $user->id)->exists()) {
             return false;
         }
-        $currentBonus = Bonus::where('announcement_count', '<', $user->announcements()->count())->first();
+        return $user->announcements()->count();
+        $currentBonus = Bonus::where('announcement_count', '>', $user->announcements()->count())->first();
         return BonusResource::make($currentBonus);
     }
 
