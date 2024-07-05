@@ -18,7 +18,7 @@ class BonusResource extends JsonResource
             'id'=>$this->id,
             'announcement_count'=>$this->announcement_count,
             'bonus_amount'=>$this->bonus_amount,
-            'user_announcements_count'=>12,
+            'user_announcements_count'=>auth('sanctum')->user()->announcements()->count(),
         ];
     }
 }
