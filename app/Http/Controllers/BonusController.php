@@ -13,7 +13,7 @@ class BonusController extends Controller
     {
         $user = auth('sanctum')->user();
         if (UserBonus::where('user_id', $user->id)->exists()) {
-            return false;
+            return response()->json(['data' => []], 200);
         }
         $currentBonus = Bonus::where('announcement_count', '<=', $user->announcements()->count())->first();
         if (!$currentBonus) {
