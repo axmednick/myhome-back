@@ -61,7 +61,7 @@ class UserAuthController extends Controller
 
             return response()->json([
                 'token' => $success['token'],
-                'user' => \auth('sanctum')->user(),
+                'user' => UserResource::make($user),
                 'name' => $user->name,
                 'message' => 'User login successfully.',
                 'success' => true
@@ -74,7 +74,7 @@ class UserAuthController extends Controller
     public function user(Request $request)
     {
 
-        return \auth('sanctum')->user();
+        return UserResource::make(\auth('sanctum')->user());
     }
 
     public function verifyOtp(Request $request, $userId, $otp)

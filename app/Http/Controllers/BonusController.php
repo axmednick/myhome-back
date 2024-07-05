@@ -37,7 +37,7 @@ class BonusController extends Controller
         }
 
         else{
-            return $this->sendError('Bonus not found');
+            return $this->sendError('Bonus not found',422);
         }
     }
 }
