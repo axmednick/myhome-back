@@ -17,7 +17,7 @@ class BonusController extends Controller
         }
         $currentBonus = Bonus::where('announcement_count', '<=', $user->announcements()->count())->first();
         if (!$currentBonus) {
-            return response()->json([]);
+            return response()->json(['data' => []], 200);
         }
         return BonusResource::make($currentBonus);
     }
