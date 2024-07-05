@@ -38,6 +38,8 @@ class UserAuthController extends Controller
         }
 
 
+
+
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
 

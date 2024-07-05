@@ -74,7 +74,7 @@ class AnnouncementController extends Controller
                 'phone' => $request->phone,
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password
+                'password' => bcrypt($request->password),
             ]);
         } else {
 
