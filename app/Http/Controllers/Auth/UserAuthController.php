@@ -39,7 +39,7 @@ class UserAuthController extends Controller
 
 
         $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
+        $input['password'] = Hash::make($input['password']);
 
         $user = User::create($input);
         $success['token'] = $user->createToken('MyApp')->plainTextToken;
