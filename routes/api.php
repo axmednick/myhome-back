@@ -39,9 +39,12 @@ Route::prefix('user')->group(function () {
 
     Route::get('/announcements/{id?}', [AnnouncementController::class, 'userAnnouncements']);
     Route::get('/favorites', [AnnouncementController::class, 'favorites']);
-    Route::get('/bonus-progress', [BonusController::class, 'progress']);
-    Route::get('/take-bonus', [BonusController::class, 'progress']);
+
     Route::middleware('auth:sanctum')->group(function () {
+
+        Route::get('/bonus-progress', [BonusController::class, 'progress']);
+        Route::get('/take-bonus', [BonusController::class, 'take']);
+
         Route::post('profile-update', [ProfileController::class, 'profileUpdate']);
         Route::post('password-update', [ProfileController::class, 'passwordUpdate']);
 
@@ -96,6 +99,7 @@ Route::prefix('announcement')->group(function () {
     Route::get('/phone/{id}', [AnnouncementController::class, 'announcementPhone']);
     Route::post('/make-vip', [AdvertController::class, 'makeVip']);
     Route::post('/make-premium', [AdvertController::class, 'makePremium']);
+    Route::get('/similar/{id}', [AnnouncementController::class, 'similarAnnouncements']);
 
 });
 

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\AnnouncementResource;
 use App\Models\Announcement;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -136,7 +137,7 @@ class AnnouncementService
     }
 
 
-    public function announcementsByUser($userId)
+    public function announcementsByUser($userId):Announcement
     {
 
         $announcements = Announcement::where('user_id', $userId)->query();
@@ -144,5 +145,59 @@ class AnnouncementService
         return $announcements;
     }
 
+    public function announcementById($id):Announcement
+    {
+        $announcement = Announcement::find($id);
+        return $announcement;
+    }
+
+    public function similarAnnouncements($id):Announcement
+    {
+        $announcement = $this->announcementById($id);
+
+        if (!$announcement) {
+            return response()->json(['message' => 'Announcement not found'], 404);
+        }
+
+        $similarAnnouncements = Announcement::where('announcement_type_id', $announcement->announcement_type_id)
+            ->where('property_type_id', $announcement->property_type_id)
+            ->where('id', '!=', $id)
+            ->take(5)
+            ->get();
+
+        if ($similarAnnouncements->count() < 5) {
+            $announcementTypeMatches = Announcement::where('announcement_type_id', $announcement->announcement_type_id)
+                ->where('id', '!=', $id)
+                ->whereNotIn('id', $similarAnnouncements->pluck('id'))
+                ->take(5 - $similarAnnouncements->count())
+                ->get();
+
+            $similarAnnouncements = $similarAnnouncements->merge($announcementTypeMatches);
+        }
+
+        if ($similarAnnouncements->count() < 5) {
+            $propertyTypeMatches = Announcement::where('property_type_id', $announcement->property_type_id)
+                ->where('id', '!=', $id)
+                ->whereNotIn('id', $similarAnnouncements->pluck('id'))
+                ->take(5 - $similarAnnouncements->count())
+                ->get();
+
+            $similarAnnouncements = $similarAnnouncements->merge($propertyTypeMatches);
+        }
+
+        if ($similarAnnouncements->count() < 5) {
+            $randomAnnouncements = Announcement::where('id', '!=', $id)
+                ->whereNotIn('id', $similarAnnouncements->pluck('id'))
+                ->inRandomOrder()
+                ->take(5 - $similarAnnouncements->count())
+                ->get();
+
+            $similarAnnouncements = $similarAnnouncements->merge($randomAnnouncements);
+        }
+
+        return $similarAnnouncements;
+
+
+    }
 }
 

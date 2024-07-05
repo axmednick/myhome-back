@@ -207,7 +207,7 @@ class AnnouncementController extends Controller
     public function detail($id)
     {
 
-        $announcement = Announcement::findOrFail($id);
+        $announcement = $this->announcementService->announcementById($id);
 
         return AnnouncementResource::make($announcement);
     }
@@ -232,5 +232,11 @@ class AnnouncementController extends Controller
         $announcement = Announcement::where('id', $id)->first();
 
         return $announcement->user->phone;
+    }
+
+    public function similarAnnouncements($id)
+    {
+
+        return AnnouncementResource::collection($this->announcementService->similarAnnouncements($id));
     }
 }
