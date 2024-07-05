@@ -16,9 +16,9 @@ class BonusResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'announcement_count'=>15,
+            'announcement_count'=>$this->announcement_count,
             'bonus_amount'=>$this->bonus_amount,
-            'user_announcements_count'=>auth('sanctum')->user()->announcements()->count(),
+            'user_announcements_count'=>12,
         ];
     }
 }
