@@ -23,7 +23,7 @@ class BonusController extends Controller
     {
         $user = auth('sanctum')->user();
 
-        $bonus = Bonus::where('announcement_count', '>', $user->announcements()->count())->first();
+        $bonus = Bonus::where('announcement_count', '<', $user->announcements()->count())->first();
 
         if ($bonus) {
 
