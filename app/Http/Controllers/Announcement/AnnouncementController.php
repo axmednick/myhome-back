@@ -174,7 +174,7 @@ class AnnouncementController extends Controller
         $announcements = $this->announcementService->searchAnnouncements($request);
 
 
-        return AnnouncementResource::collection($announcements->orderBy('id', 'desc')->paginate(12));
+        return AnnouncementResource::collection($announcements->orderBy('id', 'desc')->paginate(20));
 
     }
 
