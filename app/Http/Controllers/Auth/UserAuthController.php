@@ -106,21 +106,24 @@ class UserAuthController extends Controller
             $user = User::create([
                 'name' => $googleUser['name'],
                 'email' => $googleUser['email'],
-                'password' => Hash::make(rand(100000, 999999))
+                'password' => Hash::make(rand(100000, 999999)),
+                'register_type' => 'google'
             ]);
 
             if ($googleUser['picture']) {
                 $user->addMediaFromUrl($googleUser['picture'])->toMediaCollection('photo');
             }
         } else {
-            // Check if the user has a photo in their media collection
-            if ($user->getFirstMediaUrl('photo') == '') {
-                if ($googleUser['picture']) {
-                    $user->addMediaFromUrl($googleUser['picture'])->toMediaCollection('photo');
-                }
+
+        }
+        if ($user->getFirstMediaUrl('photo') == '') {
+            if ($googleUser['picture']) {
+                $user->addMediaFromUrl($googleUser['picture'])->toMediaCollection('photo');
             }
         }
 
+        $user->login_type = 'google';
+        $user->save();
         $token = $user->createToken('AccessToken')->plainTextToken;
 
         return response()->json(['token' => $token, 'user' => UserResource::make($user)]);
