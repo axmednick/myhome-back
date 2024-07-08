@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\SlackHelper;
 use App\Models\Announcement;
 use App\Models\User;
 use App\Models\UserBonus;
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        SlackHelper::sendMessage('test');
         Announcement::observe(AnnouncementObserver::class);
         UserBonus::observe(UserBonusObserver::class);
         User::observe(UserObserver::class);
