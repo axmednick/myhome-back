@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Http;
 
 class SlackHelper
 {
@@ -16,7 +15,7 @@ class SlackHelper
                 'Content-Type' => 'application/json',
             ],
             'json' => [
-                'text' => "Myhome: " .$message,
+                'text' => "ht is now active!",
             ],
         ]);
 
