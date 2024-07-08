@@ -127,4 +127,9 @@ class UserAuthController extends Controller
         }
     }
 
+    public function reSend()
+    {
+
+    }
+
 }
