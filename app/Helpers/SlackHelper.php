@@ -16,7 +16,7 @@ class SlackHelper
                 'Content-Type' => 'application/json',
             ],
             'json' => [
-                'text' => "Myhome: {$message}",
+                'text' => "Myhome: " .$message,
             ],
         ]);
 
