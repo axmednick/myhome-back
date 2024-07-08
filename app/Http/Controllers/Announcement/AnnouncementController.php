@@ -242,7 +242,6 @@ class AnnouncementController extends Controller
 
     public function link($link)
     {
-        return $this->announcementService->announcementsByLink($link);
         return AnnouncementResource::collection($this->announcementService->announcementsByLink($link));
 
     }
