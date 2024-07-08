@@ -24,6 +24,7 @@ class UserResource extends JsonResource
             'image'=>$this->avatar,
             'balance'=>$this->balance,
             'bonus_balance'=>$this->bonus_balance,
+            'photo'=>$this->getMedia('photo') ? $this->getFirstMediaUrl('photo') : null,
 
 
         ];

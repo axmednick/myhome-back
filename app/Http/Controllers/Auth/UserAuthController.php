@@ -101,11 +101,17 @@ class UserAuthController extends Controller
         $googleUser = $client->verifyIdToken($request->token);
 
 
-        return $googleUser;
+
         $user = User::where('email', $googleUser['email'])->first();
+
+
 
         if (!$user) {
             $user = User::create(['name' => $googleUser['name'], 'email' => $googleUser['email'], 'password' => Hash::make(rand(100000, 999999))]);
+
+            if ($googleUser['picture']){
+                $user->addMediaFromUrl($googleUser['picture'])->toMediaCollection('photo');
+            }
         }
 
         $token = $user->createToken('AccessToken')->plainTextToken;
