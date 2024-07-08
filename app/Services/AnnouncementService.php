@@ -205,7 +205,7 @@ class AnnouncementService
 
         $announcementIds = json_decode($link->announcement_ids, true);
 
-        return Announcement::whereIn('id', $announcementIds)->paginate(12);
+        return Announcement::whereIn('id', $announcementIds)->paginate(20);
     }
 
 }
