@@ -147,7 +147,7 @@ class AnnouncementService
 
     public function announcementById($id):Announcement
     {
-        $announcement = Announcement::find($id);
+        $announcement = Announcement::findOrFail($id);
         return $announcement;
     }
 
