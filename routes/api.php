@@ -100,6 +100,7 @@ Route::prefix('announcement')->group(function () {
     Route::post('/make-vip', [AdvertController::class, 'makeVip']);
     Route::post('/make-premium', [AdvertController::class, 'makePremium']);
     Route::get('/similar/{id}', [AnnouncementController::class, 'similarAnnouncements']);
+    Route::get('/link/{code}', [AnnouncementController::class, 'link']);
 
 });
 

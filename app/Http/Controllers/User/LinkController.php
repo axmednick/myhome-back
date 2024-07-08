@@ -8,6 +8,7 @@ use App\Http\Resources\LinkResource;
 use App\Models\Link;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class LinkController extends Controller
 {
@@ -31,11 +32,10 @@ class LinkController extends Controller
             'link'=>'required'
         ]);
 
-
         $link = Link::create([
             'user_id'=>auth('sanctum')->id(),
             'name'=>$request->name,
-            'link'=>$request->link,
+            'link'=>Str::replace('https://myhome.az/link/','',$request->link),
             'announcement_ids'=>json_encode($request->announcement_ids,true)
         ]);
 

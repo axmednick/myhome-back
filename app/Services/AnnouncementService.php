@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Resources\AnnouncementResource;
 use App\Models\Announcement;
+use App\Models\Link;
 use Illuminate\Database\Eloquent\Builder;
 
 
@@ -196,8 +197,16 @@ class AnnouncementService
         }
 
         return $similarAnnouncements;
-
-
     }
+
+    public function announcementsByLink($link)
+    {
+        $link = Link::where('link', $link)->first();
+
+        $announcementIds = json_decode($link->announcement_ids, true);
+
+        return Announcement::whereIn('id', $announcementIds)->paginate(12);
+    }
+
 }
 

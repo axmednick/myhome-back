@@ -239,4 +239,11 @@ class AnnouncementController extends Controller
 
         return AnnouncementResource::collection($this->announcementService->similarAnnouncements($id));
     }
+
+    public function link($link)
+    {
+        return $this->announcementService->announcementsByLink($link);
+        return AnnouncementResource::collection($this->announcementService->announcementsByLink($link));
+
+    }
 }
