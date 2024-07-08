@@ -11,7 +11,7 @@ class UserObserver
     public function created(User $user)
     {
 
-        SlackHelper::sendMessage($user->name . ' Registered with: '.$user->register_type);
+        //SlackHelper::sendMessage($user->name . ' Registered with: '.$user->register_type);
 
     }
 }
