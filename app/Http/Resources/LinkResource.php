@@ -18,6 +18,7 @@ class LinkResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'link' => 'https://myhome.az/link/' . $this->link,
+            'announcement_ids' => $this->announcement_ids,
         ];
     }
 }
