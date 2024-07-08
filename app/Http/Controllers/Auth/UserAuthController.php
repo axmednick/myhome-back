@@ -101,6 +101,7 @@ class UserAuthController extends Controller
         $googleUser = $client->verifyIdToken($request->token);
 
 
+        return $googleUser;
         $user = User::where('email', $googleUser['email'])->first();
 
         if (!$user) {
