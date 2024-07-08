@@ -32,6 +32,7 @@ Route::controller(UserAuthController::class)->prefix('auth')->group(function () 
     Route::get('user', 'user');
     Route::get('/email-verification/{userId}/{otp}', 'verifyOtp');
     Route::get('/google-one-tap', 'googleOneTapLogin');
+    Route::post('/otp-check', 'otpCheck');
 });
 
 

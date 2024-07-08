@@ -38,8 +38,6 @@ class UserAuthController extends Controller
         }
 
 
-
-
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
 
@@ -111,9 +109,22 @@ class UserAuthController extends Controller
 
         $token = $user->createToken('AccessToken')->plainTextToken;
 
-        return response()->json(['token'=>$token,'user'=>UserResource::make($user)]);
+        return response()->json(['token' => $token, 'user' => UserResource::make($user)]);
 
+    }
 
+    public function otpCheck(Request $request)
+    {
+        $user = \auth('sanctum')->user();
+
+        $otp = Otp::where('otp_code', $request->otp)->where('user_id', $user->id)->first();
+        if ($otp) {
+            $user->email_verified_at = now();
+            $user->save();
+            return $this->sendResponse([], 'Otp is correct');
+        } else {
+            return $this->sendError('Otp is incorrect', ['error' => 'Otp is incorrect'], 401);
+        }
     }
 
 }
