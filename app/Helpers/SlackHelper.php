@@ -11,7 +11,7 @@ class SlackHelper
     {
         $client = new Client();
 
-        $response = $client->post('https://hooks.slack.com/services/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', [
+        $response = $client->post('https://hooks.slack.com/services/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', [
             'headers' => [
                 'Content-Type' => 'application/json',
             ],
