@@ -146,7 +146,10 @@ class UserAuthController extends Controller
 
     public function reSend()
     {
+        $user = auth('sanctum')->user();
 
+        $this->authService->sendOtpToEmail($user);
+        return $this->sendResponse([], 'Otp is sent');
     }
 
 }

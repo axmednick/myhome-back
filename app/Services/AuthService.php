@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Mail\UserRegisteredMail;
 use App\Models\Otp;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -12,16 +13,22 @@ class AuthService
 {
     public function sendOtpToEmail($user)
     {
-        $otp = Otp::create([
-            'user_id' => $user->id,
-            'otp_code' => $this->generateOtp(),
-            'otp_expiry' => now()->addMinutes(config('auth.otp_expiry')),
-        ]);
+        try {
+            $otp = Otp::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'otp_code' => $this->generateOtp(),
+                    'otp_expiry' => now()->addMinutes(config('auth.otp_expiry')),
+                ]
+            );
 
-        Mail::to($user->email)->queue(new UserRegisteredMail($user,$otp));
+            Mail::to($user->email)->queue(new UserRegisteredMail($user, $otp));
 
-
-        return true;
+            return $otp;
+        } catch (\Exception $e) {
+            Log::error('Failed to send OTP email: ' . $e->getMessage());
+            return false;
+        }
     }
 
 
