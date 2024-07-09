@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        SlackHelper::sendMessage('test');
+        //SlackHelper::sendMessage('test');
         Announcement::observe(AnnouncementObserver::class);
         UserBonus::observe(UserBonusObserver::class);
         User::observe(UserObserver::class);
