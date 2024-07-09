@@ -232,7 +232,12 @@ class AnnouncementController extends Controller
 
         $announcement = Announcement::where('id', $id)->first();
 
-        return $announcement->user->phone;
+        $user = $announcement->user;
+        $user->phone_view_count = $user->phone_view_count + 1;
+        $user->save();
+
+
+        return  $user->phone;
     }
 
     public function similarAnnouncements($id)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Favorite;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -55,12 +56,20 @@ class ProfileController extends Controller
     public function statistics()
     {
         $user = auth('sanctum')->user();
-        $announcementTotalViewCount= $user->announcements->sum('view_count');
+
+        $announcementIds = $user->announcements->pluck('id');
+
+        $announcementTotalViewCount = $user->announcements->sum('view_count');
+
+        $phoneViewCount = $user->phone_view_count;
+
+        $favoriteCount = Favorite::whereIn('announcement_id', $announcementIds)->count();
+
         return $this->sendResponse([
-            'total_view_count' => $user->announcements->count(),
-
+            'total_view_count' => $announcementTotalViewCount,
+            'phone_view_count' => $phoneViewCount,
+            'favorite_count' => $favoriteCount,
         ]);
-
     }
 
 
