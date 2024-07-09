@@ -24,10 +24,6 @@ class ProfileController extends Controller
             return response()->json($validate->errors()->messages());
         }
 
-
-
-
-
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
@@ -54,6 +50,18 @@ class ProfileController extends Controller
         $user->save();
         return response()->json(['status'=>true,'user'=>User::find($user->id)]);
 
+    }
+
+    public function statistics()
+    {
+        $user = auth('sanctum')->user();
+        $announcementTotalViewCount= $user->announcements->sum('view_count');
+        return $this->sendResponse([
+            'total_view_count' => $user->announcements->count(),
+
+        ]);
 
     }
+
+
 }

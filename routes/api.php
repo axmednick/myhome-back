@@ -47,8 +47,10 @@ Route::prefix('user')->group(function () {
         Route::get('/bonus-progress', [BonusController::class, 'progress']);
         Route::get('/take-bonus', [BonusController::class, 'take']);
 
+
         Route::post('profile-update', [ProfileController::class, 'profileUpdate']);
         Route::post('password-update', [ProfileController::class, 'passwordUpdate']);
+        Route::get('/statistics', [ProfileController::class, 'statistics']);
 
         Route::prefix('saved-search')->group(function (){
             Route::get('/',[SavedSearchController::class,'index']);
