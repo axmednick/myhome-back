@@ -12,6 +12,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "*",
         "kongulov/nova-tab-translatable": "^2.1",
+        "laravel-notification-channels/telegram": "^5.0",
         "laravel/framework": "^10.10",
         "laravel/nova": "~4.0",
         "laravel/sanctum": "^3.3",
