@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Helpers\SlackHelper;
+use App\Helpers\TelegramHelper;
 use App\Models\Announcement;
 
 class AnnouncementObserver
@@ -10,7 +11,6 @@ class AnnouncementObserver
     public function created(Announcement $announcement)
     {
 
-        //SlackHelper::sendMessage($announcement->user()->name . ' New announcement created');
-
+        TelegramHelper::sendMessage($announcement->user->name . ' created a new announcement: ' . $announcement->id);
     }
 }
