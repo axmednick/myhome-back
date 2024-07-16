@@ -1,15 +1,37 @@
 <?php
 
 namespace App\Helpers;
-use NotificationChannels\Telegram\TelegramChannel;
-use NotificationChannels\Telegram\TelegramMessage;
 
+use GuzzleHttp\Client;
 
 class TelegramHelper
 {
+    protected static $botToken;
+    protected static $chatId;
+    protected static $client;
+
+    public static function initialize()
+    {
+        self::$botToken = env('TELEGRAM_BOT_TOKEN');
+        self::$chatId = env('TELEGRAM_CHAT_ID');
+        self::$client = new Client();
+    }
 
     public static function sendMessage($message)
     {
-        return TelegramMessage::create()->to('-1001234567890')->content('Hello, world!');
+        if (!self::$botToken || !self::$chatId || !self::$client) {
+            self::initialize();
+        }
+
+        $url = "https://api.telegram.org/bot" . self::$botToken . "/sendMessage";
+
+        $response = self::$client->post($url, [
+            'form_params' => [
+                'chat_id' => self::$chatId,
+                'text' => $message,
+            ],
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\TelegramHelper;
 use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\Announcement\AnnouncementController;
 use App\Http\Controllers\Auth\UserAuthController;
@@ -25,6 +26,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+
 
 Route::controller(UserAuthController::class)->prefix('auth')->group(function () {
     Route::post('register', 'register');
@@ -108,15 +111,3 @@ Route::prefix('announcement')->group(function () {
 
 });
 
-
-Route::get('/test', function () {
-
-    $agents = \App\Models\Ev10AnnouncementOwners::where('type', 'agent')->get();
-
-    foreach ($agents as $agent) {
-
-        echo $agent->email.'<br>';
-
-    }
-
-});
