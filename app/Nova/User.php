@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
@@ -46,6 +47,7 @@ class User extends Resource
 
             Gravatar::make()->maxWidth(50),
 
+            Images::make('Photo'),
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
