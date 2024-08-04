@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\Conversions\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
+
 
 class Announcement extends Model implements HasMedia
 {
@@ -66,7 +68,7 @@ class Announcement extends Model implements HasMedia
                 $this
                     ->addMediaConversion('watermarked')
                     ->watermark(public_path('watermark.png'))
-                    ->watermarkPosition(Manipulations::POSITION_CENTER) // Watermarkın mərkəzi mövqeyi
+                    ->watermarkPosition(Manipulations::POSITION_CENTER)
                     ->width(1000) // Width of the image after adding watermark
                     ->height(1000) // Height of the image after adding watermark
                     ->optimize()

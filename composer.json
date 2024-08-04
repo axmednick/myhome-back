@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "aws/aws-sdk-php": "^3.0",
         "ebess/advanced-nova-media-library": "*",
         "fruitcake/laravel-cors": "*",
         "google/apiclient": "*",
@@ -18,14 +19,13 @@
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.10",
         "laravel/tinker": "^2.8",
+        "league/flysystem-aws-s3-v3": "^3.0",
         "mostafaznv/nova-ckeditor": "^5.2",
         "simplehtmldom/simplehtmldom": "*",
+        "spatie/image": "^3.7",
         "spatie/laravel-medialibrary": "*",
         "spatie/laravel-translatable": "*",
-        "ziffmedia/nova-select-plus": "*",
-        "league/flysystem-aws-s3-v3": "^3.0",
-        "aws/aws-sdk-php": "^3.0"
-
+        "ziffmedia/nova-select-plus": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
