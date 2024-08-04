@@ -111,3 +111,4 @@ Route::prefix('announcement')->group(function () {
 
 });
 
+Route::post('/test', [FileUploadController::class,'test']);
