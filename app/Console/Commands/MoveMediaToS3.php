@@ -22,7 +22,7 @@ class MoveMediaToS3 extends Command
         $announcements = Announcement::all();
 
         foreach ($announcements as $announcement) {
-            $mediaItems = $announcement->getMedia('image'); // Belirli medya koleksiyonunu alıyoruz
+            $mediaItems = $announcement->getMedia('image');
 
             foreach ($mediaItems as $media) {
                 $this->moveMediaToS3($media);
@@ -38,19 +38,11 @@ class MoveMediaToS3 extends Command
         $this->moveFile($media->getPath(), $media->getPathRelativeToRoot(), $media->disk);
 
         // Dönüştürülmüş dosyaları taşı
-        if (!empty($media->generatedConversions) && is_array($media->generatedConversions)) {
-            foreach ($media->generatedConversions as $conversion => $status) {
-                if ($status) {
-                    $conversionPath = $media->getPath($conversion);
-                    $relativeConversionPath = $media->getPathRelativeToRoot($conversion);
-
-                    // Dönüştürülmüş dosyanın mevcut olup olmadığını kontrol et
-                    if (Storage::disk($media->disk)->exists($relativeConversionPath)) {
-                        $this->moveFile($conversionPath, $relativeConversionPath, $media->disk);
-                    } else {
-                        $this->error("Conversion file not found: {$relativeConversionPath}");
-                    }
-                }
+        foreach ($media->getGeneratedConversions() as $conversion => $status) {
+            if ($status) {
+                $conversionPath = $media->getPath($conversion);
+                $relativeConversionPath = $media->getPathRelativeToRoot($conversion);
+                $this->moveFile($conversionPath, $relativeConversionPath, $media->disk);
             }
         }
 
@@ -61,19 +53,17 @@ class MoveMediaToS3 extends Command
 
     protected function moveFile($localPath, $relativePath, $disk)
     {
-        // Mevcut diskten dosya var mı kontrol et
+        // Dosyanın mevcut olup olmadığını kontrol et
         if (Storage::disk($disk)->exists($relativePath)) {
             $fileContents = Storage::disk($disk)->get($relativePath);
 
             // Dosya S3'e yükleniyor
-            if ($fileContents !== null) {
-                Storage::disk('s3')->put($relativePath, $fileContents);
+            Storage::disk('s3')->put($relativePath, $fileContents);
 
-                // Mevcut dosya siliniyor
-                Storage::disk($disk)->delete($relativePath);
-            } else {
-                $this->error("File contents are null for: {$relativePath}");
-            }
+            // Mevcut dosya siliniyor
+            Storage::disk($disk)->delete($relativePath);
+
+            $this->info("File successfully moved to S3: {$relativePath}");
         } else {
             $this->error("File not found on disk: {$relativePath}");
         }
