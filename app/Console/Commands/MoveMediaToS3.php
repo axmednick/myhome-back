@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class MoveMediaToS3 extends Command
 {
-    protected $signature = 's3';
+    protected $signature = 'media:move-to-s3';
     protected $description = 'Move media files of Announcements to S3';
 
     public function __construct()
@@ -43,7 +43,13 @@ class MoveMediaToS3 extends Command
                 if ($status) {
                     $conversionPath = $media->getPath($conversion);
                     $relativeConversionPath = $media->getPathRelativeToRoot($conversion);
-                    $this->moveFile($conversionPath, $relativeConversionPath, $media->disk);
+
+                    // Dönüştürülmüş dosyanın mevcut olup olmadığını kontrol et
+                    if (Storage::disk($media->disk)->exists($relativeConversionPath)) {
+                        $this->moveFile($conversionPath, $relativeConversionPath, $media->disk);
+                    } else {
+                        $this->error("Conversion file not found: {$relativeConversionPath}");
+                    }
                 }
             }
         }
@@ -55,13 +61,21 @@ class MoveMediaToS3 extends Command
 
     protected function moveFile($localPath, $relativePath, $disk)
     {
-        // Mevcut diskten dosya alınıyor
-        $fileContents = Storage::disk($disk)->get($relativePath);
+        // Mevcut diskten dosya var mı kontrol et
+        if (Storage::disk($disk)->exists($relativePath)) {
+            $fileContents = Storage::disk($disk)->get($relativePath);
 
-        // Dosya S3'e yükleniyor
-        Storage::disk('s3')->put($relativePath, $fileContents);
+            // Dosya S3'e yükleniyor
+            if ($fileContents !== null) {
+                Storage::disk('s3')->put($relativePath, $fileContents);
 
-        // Mevcut dosya siliniyor
-        Storage::disk($disk)->delete($relativePath);
+                // Mevcut dosya siliniyor
+                Storage::disk($disk)->delete($relativePath);
+            } else {
+                $this->error("File contents are null for: {$relativePath}");
+            }
+        } else {
+            $this->error("File not found on disk: {$relativePath}");
+        }
     }
 }
