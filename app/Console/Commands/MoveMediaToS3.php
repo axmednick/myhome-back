@@ -2,30 +2,21 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Announcement;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Announcement;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Support\Facades\Storage;
 
 class MoveMediaToS3 extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 's3';
+    protected $description = 'Move media files of Announcements to S3';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         $announcements = Announcement::all();
@@ -40,17 +31,20 @@ class MoveMediaToS3 extends Command
 
         $this->info('All media files of Announcements have been moved to S3.');
     }
+
     protected function moveMediaToS3(Media $media)
     {
         // Orijinal dosyayı taşı
         $this->moveFile($media->getPath(), $media->getPathRelativeToRoot(), $media->disk);
 
         // Dönüştürülmüş dosyaları taşı
-        foreach ($media->generatedConversions as $conversion => $status) {
-            if ($status) {
-                $conversionPath = $media->getPath($conversion);
-                $relativeConversionPath = $media->getPathRelativeToRoot($conversion);
-                $this->moveFile($conversionPath, $relativeConversionPath, $media->disk);
+        if (!empty($media->generatedConversions) && is_array($media->generatedConversions)) {
+            foreach ($media->generatedConversions as $conversion => $status) {
+                if ($status) {
+                    $conversionPath = $media->getPath($conversion);
+                    $relativeConversionPath = $media->getPathRelativeToRoot($conversion);
+                    $this->moveFile($conversionPath, $relativeConversionPath, $media->disk);
+                }
             }
         }
 
