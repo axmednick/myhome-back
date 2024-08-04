@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Announcement;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -27,24 +28,28 @@ class MoveMediaToS3 extends Command
      */
     public function handle()
     {
-        $mediaItems = Media::all();
+        $announcements = Announcement::all();
 
-        foreach ($mediaItems as $media) {
-            // Mevcut diskten dosya alınıyor
-            $filePath = $media->getPath();
-            $fileContents = Storage::disk($media->disk)->get($media->getPathRelativeToRoot());
+        foreach ($announcements as $announcement) {
+            $mediaItems = $announcement->getMedia(); // Announcement modeline ait medya dosyalarını alıyoruz
 
-            // Dosya S3'e yükleniyor
-            Storage::disk('s3')->put($media->getPathRelativeToRoot(), $fileContents);
+            foreach ($mediaItems as $media) {
+                // Mevcut diskten dosya alınıyor
+                $filePath = $media->getPath();
+                $fileContents = Storage::disk($media->disk)->get($media->getPathRelativeToRoot());
 
-            // Mevcut dosya siliniyor
-            Storage::disk($media->disk)->delete($media->getPathRelativeToRoot());
+                // Dosya S3'e yükleniyor
+                Storage::disk('s3')->put($media->getPathRelativeToRoot(), $fileContents);
 
-            // Media modelindeki disk alanı güncelleniyor
-            $media->disk = 's3';
-            $media->save();
+                // Mevcut dosya siliniyor
+                Storage::disk($media->disk)->delete($media->getPathRelativeToRoot());
+
+                // Media modelindeki disk alanı güncelleniyor
+                $media->disk = 's3';
+                $media->save();
+            }
         }
 
-        $this->info('All media files have been moved to S3.');
+        $this->info('All media files of Announcements have been moved to S3.');
     }
 }
