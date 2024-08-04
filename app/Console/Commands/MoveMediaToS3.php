@@ -31,25 +31,43 @@ class MoveMediaToS3 extends Command
         $announcements = Announcement::all();
 
         foreach ($announcements as $announcement) {
-            $mediaItems = $announcement->getMedia(); // Announcement modeline ait medya dosyalarını alıyoruz
+            $mediaItems = $announcement->getMedia('image'); // Belirli medya koleksiyonunu alıyoruz
 
             foreach ($mediaItems as $media) {
-                // Mevcut diskten dosya alınıyor
-                $filePath = $media->getPath();
-                $fileContents = Storage::disk($media->disk)->get($media->getPathRelativeToRoot());
-
-                // Dosya S3'e yükleniyor
-                Storage::disk('s3')->put($media->getPathRelativeToRoot(), $fileContents);
-
-                // Mevcut dosya siliniyor
-                Storage::disk($media->disk)->delete($media->getPathRelativeToRoot());
-
-                // Media modelindeki disk alanı güncelleniyor
-                $media->disk = 's3';
-                $media->save();
+                $this->moveMediaToS3($media);
             }
         }
 
         $this->info('All media files of Announcements have been moved to S3.');
+    }
+    protected function moveMediaToS3(Media $media)
+    {
+        // Orijinal dosyayı taşı
+        $this->moveFile($media->getPath(), $media->getPathRelativeToRoot(), $media->disk);
+
+        // Dönüştürülmüş dosyaları taşı
+        foreach ($media->generatedConversions as $conversion => $status) {
+            if ($status) {
+                $conversionPath = $media->getPath($conversion);
+                $relativeConversionPath = $media->getPathRelativeToRoot($conversion);
+                $this->moveFile($conversionPath, $relativeConversionPath, $media->disk);
+            }
+        }
+
+        // Media modelindeki disk alanı güncelleniyor
+        $media->disk = 's3';
+        $media->save();
+    }
+
+    protected function moveFile($localPath, $relativePath, $disk)
+    {
+        // Mevcut diskten dosya alınıyor
+        $fileContents = Storage::disk($disk)->get($relativePath);
+
+        // Dosya S3'e yükleniyor
+        Storage::disk('s3')->put($relativePath, $fileContents);
+
+        // Mevcut dosya siliniyor
+        Storage::disk($disk)->delete($relativePath);
     }
 }
