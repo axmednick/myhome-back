@@ -68,7 +68,7 @@ class Announcement extends Model implements HasMedia
                 $this
                     ->addMediaConversion('watermarked')
                     ->watermark(public_path('watermark.png'))
-                    ->watermarkPosition(Manipulations::POSITION_CENTER)
+                    ->watermarkPosition('center') // Watermarkın mərkəzi mövqeyi doğrudan dize olarak belirleniyor
                     ->width(1000) // Width of the image after adding watermark
                     ->height(1000) // Height of the image after adding watermark
                     ->optimize()
