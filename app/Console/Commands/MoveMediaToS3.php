@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -35,14 +34,14 @@ class MoveMediaToS3 extends Command
     protected function moveMediaToS3(Media $media)
     {
         // Orijinal dosyayı taşı
-        $this->moveFile($media->getPath(), $media->getPathRelativeToRoot(), $media->disk);
+        $this->moveFile($media->getPath(), $media->getPathRelativeToRoot());
 
         // Dönüştürülmüş dosyaları taşı
         foreach ($media->getGeneratedConversions() as $conversion => $status) {
             if ($status) {
                 $conversionPath = $media->getPath($conversion);
                 $relativeConversionPath = $media->getPathRelativeToRoot($conversion);
-                $this->moveFile($conversionPath, $relativeConversionPath, $media->disk);
+                $this->moveFile($conversionPath, $relativeConversionPath);
             }
         }
 
@@ -51,17 +50,17 @@ class MoveMediaToS3 extends Command
         $media->save();
     }
 
-    protected function moveFile($localPath, $relativePath, $disk)
+    protected function moveFile($localPath, $relativePath)
     {
         // Dosyanın mevcut olup olmadığını kontrol et
-        if (Storage::disk($disk)->exists($relativePath)) {
-            $fileContents = Storage::disk($disk)->get($relativePath);
+        if (Storage::disk('public')->exists($relativePath)) {
+            $fileContents = Storage::disk('public')->get($relativePath);
 
             // Dosya S3'e yükleniyor
             Storage::disk('s3')->put($relativePath, $fileContents);
 
             // Mevcut dosya siliniyor
-            Storage::disk($disk)->delete($relativePath);
+            Storage::disk('public')->delete($relativePath);
 
             $this->info("File successfully moved to S3: {$relativePath}");
         } else {
