@@ -19,8 +19,9 @@ class TemporaryFile extends Model implements HasMedia
             ->registerMediaConversions(function (Media $media) {
                 $this
                     ->addMediaConversion('thumb')
-                    ->width(500)
-                    ->height(500)
+                    ->width(344)
+                    ->height(244)
+                    ->fit('crop', 344, 244) // Crop işlemiyle tam boyutlandırma
                     ->optimize()
                     ->performOnCollections('image');
 
@@ -28,13 +29,13 @@ class TemporaryFile extends Model implements HasMedia
                     ->addMediaConversion('watermarked')
                     ->watermark(public_path('watermark.png'))
                     ->watermarkPosition('center')
-                    ->width(1000) // Width of the image after adding watermark
-                    ->height(1000) // Height of the image after adding watermark
+                    ->width(1000) // Watermark ekledikten sonra resmin genişliği
+                    ->height(1000) // Watermark ekledikten sonra resmin yüksekliği
                     ->optimize()
                     ->watermarkOpacity(20)
                     ->performOnCollections('image');
             });
         $this->addMediaConversion('original')->nonQueued();
-
     }
+
 }
