@@ -27,7 +27,7 @@ class TemporaryFile extends Model implements HasMedia
                 $this
                     ->addMediaConversion('watermarked')
                     ->watermark(public_path('watermark.png'))
-                    ->watermarkPosition(Manipulations::POSITION_CENTER) // Watermarkın mərkəzi mövqeyi
+                    ->watermarkPosition('center')
                     ->width(1000) // Width of the image after adding watermark
                     ->height(1000) // Height of the image after adding watermark
                     ->optimize()
