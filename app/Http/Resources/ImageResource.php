@@ -15,8 +15,8 @@ class ImageResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'url' => $this->getFullUrl(),
-            'thumb' => $this->getFullUrl(),
+            'url' => $this->getFullUrl('watermarked'),
+            'thumb' => $this->getFullUrl('thumb'),
 
         ];
     }
