@@ -9,14 +9,22 @@ use Storage;
 
 class FileUploadController extends Controller
 {
-    public function temporaryFile(Request $request){
-
-        $temporaryFile=TemporaryFile::create([]);
+    public function temporaryFile(Request $request)
+    {
+        $temporaryFile = TemporaryFile::create([]);
 
         $temporaryFile->addMediaFromRequest('file')->toMediaCollection('image');
+
+        // Dönüşümlerin oluşturulup oluşturulmadığını kontrol edin
+        $thumbUrl = $temporaryFile->getFirstMediaUrl('image', 'thumb');
+        $watermarkedUrl = $temporaryFile->getFirstMediaUrl('image', 'watermarked');
+        $originalUrl = $temporaryFile->getFirstMediaUrl('image');
+
         return response()->json([
-            'id'=>$temporaryFile->id,
-            'url'=>$temporaryFile->getFirstMediaUrl('image')
+            'id' => $temporaryFile->id,
+            'thumb_url' => $thumbUrl,
+            'watermarked_url' => $watermarkedUrl,
+            'original_url' => $originalUrl
         ]);
     }
 

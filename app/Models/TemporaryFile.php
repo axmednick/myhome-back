@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-
+use Spatie\Image\Enums\AlignPosition;
+use Spatie\MediaLibrary\Conversions\Manipulations;
 use Spatie\MediaLibrary\Conversions\Manipulations as SpatieManipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -13,7 +13,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class TemporaryFile extends Model implements HasMedia
 {
-    use HasFactory,InteractsWithMedia;
+    use HasFactory, InteractsWithMedia;
 
     public function registerMediaCollections(): void
     {
@@ -28,16 +28,13 @@ class TemporaryFile extends Model implements HasMedia
 
                 $this
                     ->addMediaConversion('watermarked')
-                    ->watermark(public_path('watermark.png'))
-                    ->watermarkPosition(SpatieManipulations::POSITION_CENTER) // Watermarkın mərkəzi mövqeyi
-                    ->width(1000) // Width of the image after adding watermark
-                    ->height(1000) // Height of the image after adding watermark
+                    ->watermark(public_path('watermark.png'),AlignPosition::Center)
+                    ->width(1000) // Watermark eklendikten sonra resmin genişliği
+                    ->height(1000) // Watermark eklendikten sonra resmin yüksekliği
                     ->optimize()
-                    ->watermarkOpacity(20)
                     ->performOnCollections('image');
             });
+
         $this->addMediaConversion('original')->nonQueued();
-
     }
-
 }
