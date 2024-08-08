@@ -34,4 +34,24 @@ class TelegramHelper
 
         return json_decode($response->getBody()->getContents(), true);
     }
+
+
+    public static function sendError($message)
+    {
+        if (!self::$botToken || !self::$chatId || !self::$client) {
+            self::initialize();
+        }
+
+        $url = "https://api.telegram.org/bot" . self::$botToken . "/sendMessage";
+
+        $response = self::$client->post($url, [
+            'form_params' => [
+                'chat_id' => '-1002235708455',
+                'text' => $message,
+            ],
+        ]);
+
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
 }

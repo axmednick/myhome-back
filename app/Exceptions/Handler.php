@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\TelegramHelper;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -26,5 +27,15 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+
+          TelegramHelper::sendError('MyHome.Az - '. $exception->getMessage());
+
+        return parent::render($request, $exception);
+
+
     }
 }
