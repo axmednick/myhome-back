@@ -4,101 +4,116 @@ namespace App\Services;
 
 class MetaTagsService
 {
-
     public $title;
     public $description;
 
+    public function setMetaTags($query)
+    {
+        // Query parametrlərini parse edirik
+        parse_str($query, $params);
 
-    public function setMetaTags($query){
+        // Başlıq və təsvirin ilkin variantları (default halları) təyin edilir
+        $result = [
+            'title' => 'Ən yeni daşınmaz əmlak satışı və kirayəsi elanları 2024',
+            'description' => 'Azərbaycanda ən yeni daşınmaz əmlak satışı və kirayəsi elanları MyHome.az-da! Bakı və rayonlarda ən son mənzil, həyət evi, bağ evi, villa, ofis, obyekt satışı və kirayəsi elanları ilə tanış olmaq üçün veb-sayta keçid edin.',
+        ];
 
-        $result = match($query) {
-            'announcementType=1' => [
+        // Müxtəlif query şərtlərinə uyğun meta teqləri təyin etmək
+        if (isset($params['room_ids'])) {
+            $roomCount = $params['room_ids'];
+            $result = [
+                'title' => "{$roomCount} otaqlı mənzil qiymətləri, {$roomCount} otaqlı mənzil elanları 2024",
+                'description' => "Bakıda {$roomCount} otaqlı mənzillərin kirayə və satışı. {$roomCount} otaqlı evlərin qiyməti, kirayə və satış elanları. Ən son {$roomCount} otaqlı kirayə ev elanları. {$roomCount} otaqlı yeni tikili evlər.",
+            ];
+        } elseif (isset($params['announcementType']) && $params['announcementType'] == 1) {
+            $result = [
                 'title' => 'Daşınmaz əmlak satışı. Alqı-satqı elanları 2024',
-                'description' => 'Bakı və rayonlarda kirayə evlər. Daşınmaz əmlak alqı-satqısı elanları. İpoteka ilə mənzillər. Ən yeni əmlak elanları. Emlak elanlari sayti.',
-            ],
-            'announcementType=2' => [
+                'description' => 'Bakı və rayonlarda daşınmaz əmlak alqı-satqısı elanları. İpoteka ilə mənzillər. Ən yeni əmlak elanları. Emlak elanları saytı.',
+            ];
+        } elseif (isset($params['announcementType']) && $params['announcementType'] == 2) {
+            $result = [
                 'title' => 'Daşınmaz əmlak kirayəsi. Kirayə elanları 2024',
-                'description' => 'Bakı və rayonlarda kirayə evlər. Ən son daşınmaz əmlak, həyət evi, villa, mənzil, ofis, obyekt kirayəsi elanları. Gunluk kiraye evler.',
-            ],
-            'credit_possible=true' => [
+                'description' => 'Bakı və rayonlarda kirayə evlər. Ən son daşınmaz əmlak, həyət evi, villa, mənzil, ofis, obyekt kirayəsi elanları. Günlük kirayə evlər.',
+            ];
+        } elseif (isset($params['credit_possible']) && $params['credit_possible'] === 'true') {
+            $result = [
                 'title' => 'İpoteka ilə mənzil satışı, ipotekaya uyğun çıxarışlı evlər 2024',
-                'description' => 'İpoteka ilə sərfəli şərtlərlə satılan mənzilləri burada tapa bilərsiniz. Ipoteka ile evler. Kupçali evler. İpotekaya uyğun çıxarışlı mənzil elanları myhome.az-da!',
-            ],
-            'announcementType=2&rental_type=2' => [
+                'description' => 'İpoteka ilə sərfəli şərtlərlə satılan mənzilləri burada tapa bilərsiniz. Ipoteka ile evler. Kupçalı evlər. İpotekaya uyğun çıxarışlı mənzil elanları myhome.az-da!',
+            ];
+        } elseif (isset($params['announcementType']) && $params['announcementType'] == 2 && isset($params['rental_type']) && $params['rental_type'] == 2) {
+            $result = [
                 'title' => 'Günlük kirayə evlər. Günlük kirayə mənzillər və bağ evləri 2024',
-                'description' => 'Günlük kirayəyə verilən mənzil, villa və bağ evləri. Bakıda və rayonlarda günlük kirayə evlər MyHome.az-da! Gunluk kiraye evler.',
-            ],
-            'client_types_for_rent=4' => [
+                'description' => 'Günlük kirayəyə verilən mənzil, villa və bağ evləri. Bakıda və rayonlarda günlük kirayə evlər MyHome.az-da! Günlük kirayə evlər.',
+            ];
+        } elseif (isset($params['client_types_for_rent']) && $params['client_types_for_rent'] == 4) {
+            $result = [
                 'title' => 'Tələbələr üçün kirayə evlər 2024',
-                'description' => 'Tələbələr üçün kirayə ev və mənzil elanları MyHome.az-da! Telebeler ucun kiraye evler. Bakida telebelere kiraye evler verilir. Universitetə yaxın məsafədə kirayə evlər.',
-            ],
-            'room_ids=2' => [
-                'title' => '2 otaqlı mənzil qiymətləri, 2 otaqlı mənzil elanları 2024',
-                'description' => 'Bakıda 2 otaqlı mənzillərin kirayə və satışı. 2 otaqli evlerin qiymeti, kiraye ve satis elanları. En son 2 otaqli kiraye ev elanlari. 2 otaqli yeni tikili evler.',
-            ],
-            'city=1&propertyType=6' => [
-                'title' => 'Bakıda ffis elanları, ofislərin satışı və icarəsi 2024',
-                'description' => 'Bakıda ofis elanları, ofislərin icarəsi və satışı. Yeni ofis elanlari. Merkeze yaxin ofisler, ofis icaresi elanlari. En yeni elanlar.',
-            ],
-            'apartment_type=1' => [
+                'description' => 'Tələbələr üçün kirayə ev və mənzil elanları MyHome.az-da! Tələbələr üçün kirayə evlər. Bakıda tələbələrə kirayə evlər verilir. Universitetə yaxın məsafədə kirayə evlər.',
+            ];
+        } elseif (isset($params['city']) && $params['city'] == 1 && isset($params['propertyType']) && $params['propertyType'] == 6) {
+            $result = [
+                'title' => 'Bakıda ofis elanları, ofislərin satışı və icarəsi 2024',
+                'description' => 'Bakıda ofis elanları, ofislərin icarəsi və satışı. Yeni ofis elanları. Mərkəzə yaxın ofislər, ofis icarəsi elanları. Ən yeni elanlar.',
+            ];
+        } elseif (isset($params['apartment_type']) && $params['apartment_type'] == 1) {
+            $result = [
                 'title' => 'Yeni tikili mənzillər 2024',
-                'description' => 'Yeni tikililərdə mənzillərin satışı və kirayəsi elanları MyHome.az-da! En yeni kiraye ve satis elanlari. Bakıda və rayonlarda yeni mənzil elanları.',
-            ],
-            'propertyType=1' => [
+                'description' => 'Yeni tikililərdə mənzillərin satışı və kirayəsi elanları MyHome.az-da! Ən yeni kirayə və satış elanları. Bakıda və rayonlarda yeni mənzil elanları.',
+            ];
+        } elseif (isset($params['propertyType']) && $params['propertyType'] == 1) {
+            $result = [
                 'title' => 'Mənzil alqı-satqısı elanları 2024',
-                'description' => 'Bakı və rayonlarda mənzil satışı və kirayəsi elanları. Yeni mənzillərin ən sərfəli qiymətlərlə satışı və kirayəsi. En yeni kiraye ve satis elanlari.',
-            ],
-            'propertyType=2' => [
+                'description' => 'Bakı və rayonlarda mənzil satışı və kirayəsi elanları. Yeni mənzillərin ən sərfəli qiymətlərlə satışı və kirayəsi. Ən yeni kirayə və satış elanları.',
+            ];
+        } elseif (isset($params['propertyType']) && $params['propertyType'] == 2) {
+            $result = [
                 'title' => 'Həyət evi elanları 2024',
-                'description' => 'Bakı və rayonlarda həyət evləri. Heyet evi elanlari, satisi ve kirayesi. Bakida heyet evi qiymetleri. Bakıda heyet evi qiymeti. En yeni elanlar.',
-            ],
-            'propertyType=1&city=1' => [
-                'title' => 'Bakıda daşınmaz əmlak satışı',
-                'description' => 'Bakida menzil satisi, heyet evi elanlari, alqi satqi elanlari. Bakida menzil qiymetleri. En yeni satis elanlari.',
-            ],
-            'announcementType=1&propertyType=1&city=1' => [
-                'title' => 'Bakıda mənzil satışı, mənzil alqı-satısı',
-                'description' => 'Bakida menziller, Bakida menzi qiymetleri. Yeni tikili menziller. Bakida ucuz menziller. Nağd və ipoteka ilə mənzil elanları. En yeni elanlar.',
-            ],
-            'announcementType=2&city=1' => [
-                'title' => 'Bakıda kirayə evlər',
-                'description' => 'Bakida kiraye evler. Bakida ucuz kiraye evlər. Bakida kiraye ev qiymetleri. Bakida en yenu kiraye ev elanlari myhome.az-da!',
-            ],
-            'announcementType=2&client_types_for_rent=5' => [
-                'title' => 'Gənc ailələr üçün sərfəli mənzillər',
-                'description' => 'Gənc ailələr üçün sərfəli kirayə evlər. En yeni kiraye ev elanlari. Baki ve rayonlarda serfeli sertlerle aileler ucun menziller.',
-            ],
-            'propertyType=3' => [
+                'description' => 'Bakı və rayonlarda həyət evləri. Həyət evi elanları, satışı və kirayəsi. Bakıda həyət evi qiymətləri. Bakıda həyət evi qiyməti. Ən yeni elanlar.',
+            ];
+        } elseif (isset($params['propertyType']) && $params['propertyType'] == 3) {
+            $result = [
                 'title' => 'Villa qiymətləri',
-                'description' => 'Bakıda villa qiymətləri. En yeni villa elanlari. En luks villalar, lüks villa elanlari ve qiymetler.',
-            ],
-            'propertyType=4' => [
+                'description' => 'Bakıda villa qiymətləri. Ən yeni villa elanları. Ən lüks villalar, lüks villa elanları və qiymətlər.',
+            ];
+        } elseif (isset($params['propertyType']) && $params['propertyType'] == 4) {
+            $result = [
                 'title' => 'Bağ evi, bağ evləri',
-                'description' => 'Şəhərdən kənarda bağ evləri. Bag evi qiymetleri, Bakida bag evleri. Rayonlarda bag evi elanlari, en son elanlar.',
-            ],
-            'city=1&propertyType=2' => [
+                'description' => 'Şəhərdən kənarda bağ evləri. Bağ evi qiymətləri, Bakıda bağ evləri. Rayonlarda bağ evi elanları, ən son elanlar.',
+            ];
+        } elseif (isset($params['city']) && $params['city'] == 1 && isset($params['propertyType']) && $params['propertyType'] == 2) {
+            $result = [
                 'title' => 'Həyət evləri / Bakı',
-                'description' => 'Bütün şəhər və rayonlarda həyət evləri. Heyet evi kirayəsi və satışı. Bakıda heyet evi qiymetleri.',
-            ],
-            default => [
-                'title' => 'Ən yeni daşınmaz əmlak satışı və kirayəsi elanları 2024',
-                'description' => 'Azərbaycanda ən yeni daşınmaz əmlak satışı və kirayəsi elanları MyHome.az-da! Bakı və rayonlarda ən son mənzil, həyət evi, bağ evi, villa, ofis, obyekt satışı və kirayəsi elanları ilə tanış olmaq üçün veb-sayta keçid edin.',
-            ],
-        };
+                'description' => 'Bütün şəhər və rayonlarda həyət evləri. Həyət evi kirayəsi və satışı. Bakıda həyət evi qiymətləri.',
+            ];
+        } elseif (isset($params['announcementType']) && $params['announcementType'] == 1 && isset($params['propertyType']) && $params['propertyType'] == 1 && isset($params['city']) && $params['city'] == 1) {
+            $result = [
+                'title' => 'Bakıda mənzil satışı, mənzil alqı-satqısı',
+                'description' => 'Bakıda mənzillər, Bakıda mənzil qiymətləri. Yeni tikili mənzillər. Bakıda ucuz mənzillər. Nağd və ipoteka ilə mənzil elanları. Ən yeni elanlar.',
+            ];
+        } elseif (isset($params['announcementType']) && $params['announcementType'] == 2 && isset($params['client_types_for_rent']) && $params['client_types_for_rent'] == 5) {
+            $result = [
+                'title' => 'Gənc ailələr üçün sərfəli mənzillər',
+                'description' => 'Gənc ailələr üçün sərfəli kirayə evlər. Ən yeni kirayə ev elanları. Bakı və rayonlarda sərfəli şərtlərlə ailələr üçün mənzillər.',
+            ];
+        } elseif (isset($params['announcementType']) && $params['announcementType'] == 2 && isset($params['city']) && $params['city'] == 1) {
+            $result = [
+                'title' => 'Bakıda kirayə evlər',
+                'description' => 'Bakıda kirayə evlər. Bakıda ucuz kirayə evlər. Bakıda kirayə ev qiymətləri. Bakıda ən yeni kirayə ev elanları myhome.az-da!',
+            ];
+        }
 
-
-
-        $this->title=$result['title'];
-        $this->description=$result['description'];
+        // Title və description üçün nəticəni təyin edirik
+        $this->title = $result['title'];
+        $this->description = $result['description'];
     }
 
-    public function getMetaTags($query){
+    public function getMetaTags($query)
+    {
         $this->setMetaTags($query);
 
         return [
-            'title'=>$this->title,
-            'description'=>$this->description
+            'title' => $this->title,
+            'description' => $this->description,
         ];
     }
-
 }
