@@ -27,16 +27,19 @@ class AnnouncementService
         }
 
         if ($request->has('room_ids')) {
-            // room_ids dəyərlərini array kimi toplamaq
-            $roomIds = (array) $request->query('room_ids');
+            // Bütün query parametrlərini alırıq və 'room_ids' olanları array-ə çeviririk
+            $roomIds = $request->query('room_ids');
 
-            // "more" dəyəri varsa, onu ayrıca yoxlayırıq
+            // room_ids-ləri yoxlayırıq, bir array olub-olmadığını təsdiqləyirik
+            $roomIds = is_array($roomIds) ? $roomIds : [$roomIds];
+
             if (in_array("more", $roomIds)) {
                 $announcements->where('room_count', '>', 5);
             } else {
                 $announcements->whereIn('room_count', $roomIds);
             }
         }
+
 
 
 
