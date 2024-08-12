@@ -26,16 +26,27 @@ class AnnouncementService
 
         }
 
-        if ($request->room_ids) {
-            // room_ids dəyərlərini array-ə çevir
-            $roomIds = explode(',', $request->room_ids);
+        if ($request->has('room_ids')) {
+            // room_ids-ləri array kimi əldə edirik
+            $roomIds = $request->query('room_ids');
 
-            if (in_array("more", $roomIds)) {
-                $announcements->where('room_count', '>', 5);
+            // Əgər bir neçə room_ids varsa, onları array kimi istifadə edək
+            if (is_array($roomIds)) {
+                if (in_array("more", $roomIds)) {
+                    $announcements->where('room_count', '>', 5);
+                } else {
+                    $announcements->whereIn('room_count', $roomIds);
+                }
             } else {
-                $announcements->whereIn('room_count', $roomIds);
+                // Əgər yalnız bir room_ids varsa
+                if ($roomIds === "more") {
+                    $announcements->where('room_count', '>', 5);
+                } else {
+                    $announcements->where('room_count', $roomIds);
+                }
             }
         }
+
 
 
         if ($request->apartmentType) {
