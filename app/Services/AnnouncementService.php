@@ -27,6 +27,7 @@ class AnnouncementService
         }
 
         if ($request->has('room_ids')) {
+
             // Bütün query parametrlərini alırıq və 'room_ids' olanları array-ə çeviririk
             $roomIds = $request->query('room_ids');
 
