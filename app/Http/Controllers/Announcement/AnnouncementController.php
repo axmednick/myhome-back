@@ -8,6 +8,7 @@ use App\Http\Requests\ApartmentRequest;
 use App\Http\Requests\HouseRequest;
 use App\Http\Requests\LandRequest;
 use App\Http\Requests\OfficeRequest;
+use App\Http\Resources\AnnouncementBaseResource;
 use App\Http\Resources\AnnouncementResource;
 use App\Http\Resources\MetrostationsResource;
 use App\Http\Resources\SuppliesResource;
@@ -173,7 +174,6 @@ class AnnouncementController extends Controller
         $announcements = Announcement::query();
 
         $announcements = $this->announcementService->searchAnnouncements($request);
-
 
         return AnnouncementResource::collection($announcements->orderBy('id', 'desc')->paginate(20));
 
