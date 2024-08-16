@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Helpers\CitySuffix;
+use App\Models\City;
+
 class MetaTagsService
 {
     public $title;
@@ -12,7 +15,6 @@ class MetaTagsService
         // Query parametrlərini parse edirik
         parse_str($query, $params);
 
-        // Başlıq və təsvirin ilkin variantları (default halları) təyin edilir
         $result = [
             'title' => 'Ən yeni daşınmaz əmlak satışı və kirayəsi elanları 2024',
             'description' => 'Azərbaycanda ən yeni daşınmaz əmlak satışı və kirayəsi elanları MyHome.az-da! Bakı və rayonlarda ən son mənzil, həyət evi, bağ evi, villa, ofis, obyekt satışı və kirayəsi elanları ilə tanış olmaq üçün veb-sayta keçid edin.',
@@ -81,9 +83,10 @@ class MetaTagsService
                 'description' => 'Şəhərdən kənarda bağ evləri. Bağ evi qiymətləri, Bakıda bağ evləri. Rayonlarda bağ evi elanları, ən son elanlar.',
             ];
         } elseif (isset($params['city']) && $params['city'] == 1 && isset($params['propertyType']) && $params['propertyType'] == 2) {
+            $city = City::find($params['city']);
             $result = [
-                'title' => 'Həyət evləri / Bakı',
-                'description' => 'Bütün şəhər və rayonlarda həyət evləri. Həyət evi kirayəsi və satışı. Bakıda həyət evi qiymətləri.',
+                'title' => CitySuffix::cityWithSuffix($city->name). ' Həyət evləri',
+                'description' => CitySuffix::cityWithSuffix($city->name). ' həyət evləri. Həyət evi kirayəsi və satışı. Bakıda həyət evi qiymətləri.',
             ];
         } elseif (isset($params['announcementType']) && $params['announcementType'] == 1 && isset($params['propertyType']) && $params['propertyType'] == 1 && isset($params['city']) && $params['city'] == 1) {
             $result = [
