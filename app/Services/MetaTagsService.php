@@ -60,6 +60,14 @@ class MetaTagsService
         }
         ///Tags for city
 
+
+        elseif (isset($params['city']) && count($params) == 1 ) {
+            $result = [
+                'title' => "{$cityNameWithSuffix} mənzillər, həyət evləri,villa və bağ evləri",
+                'description' => "{$cityNameWithSuffix} ev elanları, obyektlərin satışı və icarəsi. {$cityNameWithSuffix} əmlak",
+            ];
+        }
+
         elseif (isset($params['city'])  && isset($params['propertyType']) && $params['propertyType'] == 1 ) {
 
             $result = [
