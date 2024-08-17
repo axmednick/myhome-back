@@ -10,7 +10,7 @@ class CitySuffix
 
         $lastChar = mb_substr($cityName, -1);
 
-        return in_array(mb_strtolower($lastChar), $softVowels) ? '-də' : '-da';
+        return in_array(mb_strtolower($lastChar), $softVowels) ? 'də' : 'da';
     }
 
     public static function cityWithSuffix(string $cityName): string
