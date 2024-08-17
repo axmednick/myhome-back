@@ -47,17 +47,18 @@ class MetaTagsService
                 'title' => 'İpoteka ilə mənzil satışı, ipotekaya uyğun çıxarışlı evlər 2024',
                 'description' => 'İpoteka ilə sərfəli şərtlərlə satılan mənzilləri burada tapa bilərsiniz. Ipoteka ile evler. Kupçalı evlər. İpotekaya uyğun çıxarışlı mənzil elanları myhome.az-da!',
             ];
-        } elseif (isset($params['announcementType']) && $params['announcementType'] == 2 && isset($params['rental_type']) && $params['rental_type'] == 2 && count($params) == 2) {
+        } elseif (isset($params['announcementType']) && $params['announcementType'] == 2 && isset($params['rental_type']) && $params['rental_type']) {
             $result = [
                 'title' => 'Günlük kirayə evlər. Günlük kirayə mənzillər və bağ evləri 2024',
                 'description' => 'Günlük kirayəyə verilən mənzil, villa və bağ evləri. Bakıda və rayonlarda günlük kirayə evlər MyHome.az-da! Günlük kirayə evlər.',
             ];
-        } elseif (isset($params['client_types_for_rent']) && $params['client_types_for_rent'] == 4 && count($params) == 1) {
+        } elseif (isset($params['client_types_for_rent']) && $params['client_types_for_rent'] == 4) {
             $result = [
                 'title' => 'Tələbələr üçün kirayə evlər 2024',
                 'description' => 'Tələbələr üçün kirayə ev və mənzil elanları MyHome.az-da! Tələbələr üçün kirayə evlər. Bakıda tələbələrə kirayə evlər verilir. Universitetə yaxın məsafədə kirayə evlər.',
             ];
         }
+        ///Tags for city
 
         elseif (isset($params['city'])  && isset($params['propertyType']) && $params['propertyType'] == 1 && count($params) == 2) {
 
@@ -87,7 +88,10 @@ class MetaTagsService
                 'title' => "{$cityNameWithSuffix} villa elanları, villaların satışı və kirayəsi 2024",
                 'description' => "{$cityNameWithSuffix} villa elanları, lüks villa satışı və kirayəsi. Ən yeni villa elanları. {$cityNameWithSuffix} elit villalar, villa icarəsi.",
             ];
-        } elseif (isset($params['city']) && isset($params['propertyType']) && $params['propertyType'] == 4 && count($params) == 2) {
+        }
+
+
+        elseif (isset($params['city']) && isset($params['propertyType']) && $params['propertyType'] == 4 && count($params) == 2) {
             $result = [
                 'title' => "{$cityNameWithSuffix} bağ evi elanları, bağ evlərinin satışı və kirayəsi 2024",
                 'description' => "{$cityNameWithSuffix} bağ evi elanları, bağ evlərinin satışı və kirayəsi. Şəhərdən kənarda bağ evləri. Ən yeni bağ evi elanları.",
@@ -104,7 +108,7 @@ class MetaTagsService
             ];
         }
 
-
+        //Tags for city end
         elseif (isset($params['apartment_type']) && $params['apartment_type'] == 1 && count($params) == 1) {
             $result = [
                 'title' => 'Yeni tikili mənzillər 2024',
