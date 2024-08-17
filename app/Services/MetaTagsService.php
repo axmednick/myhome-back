@@ -60,7 +60,7 @@ class MetaTagsService
         }
         ///Tags for city
 
-        elseif (isset($params['city'])  && isset($params['propertyType']) && $params['propertyType'] == 1 && count($params) == 2) {
+        elseif (isset($params['city'])  && isset($params['propertyType']) && $params['propertyType'] == 1 ) {
 
             $result = [
                 'title' => $cityNameWithSuffix . ' Evlər və Mənzillər ',
@@ -68,7 +68,7 @@ class MetaTagsService
             ];
         }
 
-        elseif (isset($params['city'])  && isset($params['propertyType']) && $params['propertyType'] == 2 && count($params) == 2) {
+        elseif (isset($params['city'])  && isset($params['propertyType']) && $params['propertyType'] == 2 ) {
 
             $result = [
                 'title' => $cityNameWithSuffix . ' Həyət evləri',
@@ -76,14 +76,14 @@ class MetaTagsService
             ];
         }
 
-        elseif (isset($params['city'])  && isset($params['propertyType']) && $params['propertyType'] == 6 && count($params) == 2) {
+        elseif (isset($params['city'])  && isset($params['propertyType']) && $params['propertyType'] == 6 ) {
             $result = [
                 'title' => "{$cityNameWithSuffix} ofis elanları, ofislərin satışı və icarəsi 2024",
                 'description' => "{$cityNameWithSuffix} ofis elanları, ofislərin icarəsi və satışı. Yeni ofis elanları. Mərkəzə yaxın ofislər, ofis icarəsi elanları. Ən yeni elanlar.",
             ];
         }
 
-        elseif (isset($params['city']) && isset($params['propertyType']) && $params['propertyType'] == 3 && count($params) == 2) {
+        elseif (isset($params['city']) && isset($params['propertyType']) && $params['propertyType'] == 3 ) {
             $result = [
                 'title' => "{$cityNameWithSuffix} villa elanları, villaların satışı və kirayəsi 2024",
                 'description' => "{$cityNameWithSuffix} villa elanları, lüks villa satışı və kirayəsi. Ən yeni villa elanları. {$cityNameWithSuffix} elit villalar, villa icarəsi.",
@@ -91,17 +91,17 @@ class MetaTagsService
         }
 
 
-        elseif (isset($params['city']) && isset($params['propertyType']) && $params['propertyType'] == 4 && count($params) == 2) {
+        elseif (isset($params['city']) && isset($params['propertyType']) && $params['propertyType'] == 4 ) {
             $result = [
                 'title' => "{$cityNameWithSuffix} bağ evi elanları, bağ evlərinin satışı və kirayəsi 2024",
                 'description' => "{$cityNameWithSuffix} bağ evi elanları, bağ evlərinin satışı və kirayəsi. Şəhərdən kənarda bağ evləri. Ən yeni bağ evi elanları.",
             ];
-        } elseif (isset($params['city']) && isset($params['propertyType']) && $params['propertyType'] == 5 && count($params) == 2) {
+        } elseif (isset($params['city']) && isset($params['propertyType']) && $params['propertyType'] == 5 ) {
             $result = [
                 'title' => "{$cityNameWithSuffix} torpaq elanları,{$cityNameWithSuffix} torpaq qiymətləri torpaqların satışı 2024",
                 'description' => "{$cityNameWithSuffix} torpaq elanları. Ən yeni torpaq satışı elanları. {$cityNameWithSuffix} bağ və əkin sahələrinin satışı.",
             ];
-        } elseif (isset($params['city']) && isset($params['propertyType']) && $params['propertyType'] == 7 && count($params) == 2) {
+        } elseif (isset($params['city']) && isset($params['propertyType']) && $params['propertyType'] == 7 ) {
             $result = [
                 'title' => "{$cityNameWithSuffix} obyekt elanları, obyektlərin satışı və icarəsi 2024",
                 'description' => "{$cityNameWithSuffix} obyekt elanları, obyektlərin satışı və icarəsi. {$cityNameWithSuffix} ən yeni kommersiya obyektləri.",
