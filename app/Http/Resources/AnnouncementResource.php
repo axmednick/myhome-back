@@ -82,11 +82,11 @@ class AnnouncementResource extends JsonResource
     {
 
         $title = " ";
-        if ($this->address->village) {
+        if (isset($this->address->village)) {
             $title .= $this->address->village->name . ' qəsəbəsi';
-        } elseif ($this->address->region) {
+        } elseif (isset($this->address->region)) {
             $title .= $this->address->region->name . ' rayonu';
-        } elseif ($this->address->city) {
+        } elseif (isset($this->address->city)) {
             $title .= $this->address->city->name . ' şəhəri';
         }
 
