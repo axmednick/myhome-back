@@ -19,5 +19,5 @@ jobs:
       run: |
         echo "$SSH_PRIVATE_KEY" > key.pem
         chmod 600 key.pem
-        ssh -o StrictHostKeyChecking=no -i key.pem user@server_ip "cd /var/www/api && git pull origin master && composer install --no-dev && php artisan migrate --force && php artisan config:cache && php artisan route:cache"
+        ssh -o StrictHostKeyChecking=no -i key.pem root@193.164.5.168 "cd /var/www/api && git pull origin master && composer install --no-dev && php artisan migrate --force && php artisan config:cache && php artisan route:cache"
         rm key.pem
