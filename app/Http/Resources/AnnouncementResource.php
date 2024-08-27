@@ -66,6 +66,7 @@ class AnnouncementResource extends JsonResource
 
     public function shortTitle()
     {
+
         if (isset($this->address->village)) {
             return $this->address->village->name . ' qəsəbəsi';
         }
@@ -75,64 +76,81 @@ class AnnouncementResource extends JsonResource
         if (isset($this->address->city)) {
             return $this->address->city->name . ' şəhəri';
         }
-
-        return ''; // Əgər heç biri mövcud deyilsə, boş qaytar
     }
 
     public function title()
     {
+
         $title = " ";
-        if (isset($this->address->village)) {
+        if ($this->address->village) {
             $title .= $this->address->village->name . ' qəsəbəsi';
-        } elseif (isset($this->address->region)) {
+        } elseif ($this->address->region) {
             $title .= $this->address->region->name . ' rayonu';
-        } elseif (isset($this->address->city)) {
+        } elseif ($this->address->city) {
             $title .= $this->address->city->name . ' şəhəri';
         }
 
         if ($this->house_area) {
             $title .= " " . $this->house_area . "m²";
-        } elseif ($this->area) {
+        } elseif ($this->house_area) {
             $title .= " " . $this->area . "m²";
         }
 
-        switch ($this->property_type_id) {
-            case 1: $title .= " mənzil"; break;
-            case 2: $title .= " həyət evi"; break;
-            case 3: $title .= " villa"; break;
-            case 4: $title .= " bağ evi"; break;
-            case 5: $title .= " torpaq"; break;
-            case 6: $title .= " ofis"; break;
-            case 7: $title .= " obyekt"; break;
+        if ($this->property_type_id == 1) {
+            $title .= " mənzil";
+        }
+        if ($this->property_type_id == 2) {
+            $title .= " həyət evi";
+        }
+        if ($this->property_type_id == 3) {
+            $title .= " villa";
+        }
+        if ($this->property_type_id == 4) {
+            $title .= " bağ evi";
+        }
+        if ($this->property_type_id == 5) {
+            $title .= " torpaq";
+        }
+        if ($this->property_type_id == 6) {
+            $title .= " ofis";
+        }
+        if ($this->property_type_id == 7) {
+            $title .= " obyekt";
         }
 
-        switch ($this->announcement_type_id) {
-            case 1: $title .= " satılır"; break;
-            case 2: $title .= " kirayə verilir"; break;
+
+        if ($this->announcement_type_id == 1) {
+            $title .= " satılır";
         }
+        if ($this->announcement_type_id == 2) {
+            $title .= " kirayə verilir";
+        }
+
 
         return $title;
     }
+
 
     public function shortDetails()
     {
         $details = [];
 
         if ($this->room_count) {
-            $details[] = $this->room_count . ' otaqlı';
+            array_push($details, $this->room_count . ' otaqlı');
         }
 
         if ($this->house_area) {
-            $details[] = $this->house_area . ' m²';
-        } elseif ($this->area) {
-            $details[] = $this->area . ' m²';
+            array_push($details, $this->house_area . ' m²');
+        }
+
+        if (!$this->house_area && $this->area) {
+            array_push($details, $this->area . ' m²');
         }
 
         if ($this->floor_count && $this->floor) {
-            $details[] = $this->floor . '/' . $this->floor_count;
+            array_push($details, $this->area . ' m²');
         }
 
         return $details;
     }
-
 }
