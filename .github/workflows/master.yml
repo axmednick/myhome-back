@@ -1,0 +1,23 @@
+name: Deploy Laravel to Server
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Kodu Yükləyin
+      uses: actions/checkout@v2
+
+    - name: SSH ilə Serverə Bağlanmaq və Deploy Etmək
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > key.pem
+        chmod 600 key.pem
+        ssh -o StrictHostKeyChecking=no -i key.pem root@193.164.5.168 "cd /var/www/api && git pull origin master && composer install --no-dev && php artisan migrate --force && php artisan config:cache && php artisan route:cache"
+        rm key.pem
