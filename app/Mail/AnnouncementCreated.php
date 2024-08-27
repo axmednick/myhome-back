@@ -14,6 +14,7 @@ class AnnouncementCreated extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $announcement;
     /**
      * Create a new message instance.
      */
