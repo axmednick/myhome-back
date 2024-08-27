@@ -37,7 +37,7 @@ class DashinmakEmlakUsersParserCommand extends Command
             $announcements = $html->find('.list');
 
             foreach ($announcements as $announcement) {
-                $announcementUrl = 'htt ps://yeniemlak.az'.$announcement->find('a', 0)->getAttribute('href');
+                $announcementUrl = 'https://yeniemlak.az'.$announcement->find('a', 0)->getAttribute('href');
                 Log::error($announcementUrl);
                 sleep(5);
                 $announcementDetailPage = $client->load($announcementUrl);
