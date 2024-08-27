@@ -19,4 +19,11 @@ class AnnouncementObserver
         Mail::to($announcement->user->email)->queue(new AnnouncementCreated($announcement));
 
     }
+
+    public function updated(Announcement $announcement)
+    {
+        if ($announcement->isDirty('status') && $announcement->status == 1) {
+            Mail::to($announcement->user->email)->send(new AnnouncementStatusUpdated($announcement));
+        }
+    }
 }
