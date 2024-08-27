@@ -35,7 +35,7 @@ class AnnouncementStatusUpdated extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Announcement Status Updated',
+            subject: 'Elan təsdiq olundu',
         );
     }
 
