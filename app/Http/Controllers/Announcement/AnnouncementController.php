@@ -38,6 +38,7 @@ class AnnouncementController extends Controller
     public function store(Request $request)
     {
 
+        return response()->json($request->all());
 
         if ($request->property_type == 1) {
             $validator = Validator::make($request->all(), (new ApartmentRequest)->rules());
