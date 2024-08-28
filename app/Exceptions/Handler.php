@@ -32,7 +32,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
 
-          TelegramHelper::sendError('MyHome.Az - '. $exception->getMessage());
+         // TelegramHelper::sendError('MyHome.Az - '. $exception->getMessage());
 
         return parent::render($request, $exception);
 
