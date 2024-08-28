@@ -40,7 +40,7 @@ class AnnouncementController extends Controller
 
 
 
-/*        if ($request->property_type == 1) {
+        if ($request->property_type == 1) {
             $validator = Validator::make($request->all(), (new ApartmentRequest)->rules());
         }
         if ($request->property_type == 2 || $request->property_type == 3 || $request->property_type == 4) {
@@ -83,8 +83,6 @@ class AnnouncementController extends Controller
 
             $user = auth('sanctum')->user();
         }
-
-        return $user;*/
 
         $announcement = Announcement::create([
             'announcement_type_id' => $request->announcement_type,
