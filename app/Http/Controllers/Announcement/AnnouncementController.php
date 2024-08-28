@@ -84,6 +84,8 @@ class AnnouncementController extends Controller
             $user = auth('sanctum')->user();
         }
 
+        return $user;
+
         $announcement = Announcement::create([
             'announcement_type_id' => $request->announcement_type,
             'property_type_id' => $request->property_type,
@@ -116,7 +118,7 @@ class AnnouncementController extends Controller
 
         ]);
 
-        return $announcement;
+
 
 
         if ($request->has('client_types_for_rent') && is_array($request->client_types_for_rent)) {
