@@ -17,7 +17,7 @@ class AnnouncementObserver
 
         TelegramHelper::sendMessage($announcement->user->name . ' created a new announcement: ' . $announcement->id);
 
-        Mail::to($announcement->user->email)->queue(new AnnouncementCreated($announcement));
+        //Mail::to($announcement->user->email)->queue(new AnnouncementCreated($announcement));
 
     }
 
