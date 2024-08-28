@@ -38,7 +38,7 @@ class AnnouncementController extends Controller
     public function store(Request $request)
     {
 
-        return response()->json($request->all());
+
 
         if ($request->property_type == 1) {
             $validator = Validator::make($request->all(), (new ApartmentRequest)->rules());
@@ -115,6 +115,8 @@ class AnnouncementController extends Controller
             'address' => $request->address,
 
         ]);
+
+        return $announcement;
 
 
         if ($request->has('client_types_for_rent') && is_array($request->client_types_for_rent)) {
