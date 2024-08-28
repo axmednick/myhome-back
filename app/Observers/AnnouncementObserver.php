@@ -21,10 +21,10 @@ class AnnouncementObserver
 
     }
 
-    public function updated(Announcement $announcement)
+/*    public function updated(Announcement $announcement)
     {
         if ($announcement->isDirty('status') && $announcement->status == 1) {
             Mail::to($announcement->user->email)->queue(new AnnouncementStatusUpdated($announcement));
         }
-    }
+    }*/
 }
