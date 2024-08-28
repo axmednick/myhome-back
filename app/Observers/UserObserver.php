@@ -12,7 +12,7 @@ class UserObserver
     public function created(User $user)
     {
 
-        TelegramHelper::sendMessage('New user registered: ' . $user->name . ' (' . $user->email . ')');
+      //  TelegramHelper::sendMessage('New user registered: ' . $user->name . ' (' . $user->email . ')');
 
     }
 }
