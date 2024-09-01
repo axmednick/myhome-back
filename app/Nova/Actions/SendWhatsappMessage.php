@@ -46,6 +46,7 @@ Sadəcə əlavə bir neçə saniyənizi sərf edərək elanlarınızı platforma
             $model->sent = true;
             $model->save();
 
+
             return Action::openInNewTab($url);
         }
 
