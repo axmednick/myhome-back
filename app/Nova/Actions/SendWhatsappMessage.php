@@ -33,7 +33,13 @@ class SendWhatsappMessage extends Action
             }
 
             $name = urlencode($model->name);
-            $message = urlencode("Salam $name, bizim saytımız yenidir, burada elan yerləşdirin.");
+            $message = urlencode("Hörmətli,
+
+Sizi daşınmaz əmlak elanlarınızı aylıq elan limit olmadan tam ödənişsiz şəkildə MyHome.az platformasında yerləşdirməyə dəvət edirik. MyHome istifadəçilər üçün daşınmaz əmlak satışı, kirayəsi elanlarının yayımlanmasını və axtarışını təmin edən veb layihədir.
+
+Hazırda yeni istifadəçilərə ilk 20 elanı yerləşdirdikdən sonra 100 AZN bonus balansı hədiyyə edilir. Ödənişli xidmətlər aktivləşdikdən sonra siz bu balansdan istifadə edərək elanlarınızı önə çəkə və ya premium edə biləcəksiniz.
+
+Sadəcə əlavə bir neçə saniyənizi sərf edərək elanlarınızı platformamızda yerləşdirə bilərsiniz. Məqsədimiz elanlarınızın daha çox insana çatdırmaqdır.");
 
             $url = "https://api.whatsapp.com/send/?phone=$phone&type=phone_number&app_absent=0&text=$message";
 
