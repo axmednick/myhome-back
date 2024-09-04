@@ -13,10 +13,5 @@ class DefaultController extends Controller
 {
     public function index(){
 
-
-        TelegramHelper::sendMessage(' created a new announcement: ' );
-
-
-
     }
 }
