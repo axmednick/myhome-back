@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('announcements:check-pending')->everyTenMinutes();
+        $schedule->command('announcements:check-pending')->everyFiveSeconds();
 
     }
 
