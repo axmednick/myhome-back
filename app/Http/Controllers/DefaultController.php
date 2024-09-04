@@ -14,10 +14,8 @@ class DefaultController extends Controller
     public function index(){
 
 
-        Mail::raw('Yeni elan var', function ($message) {
-            $message->to('ahmad@rustamov.az')
-                ->subject('Elan Məlumatı');
-        })->queue();
+        TelegramHelper::sendMessage(' created a new announcement: ' );
+
 
 
     }
