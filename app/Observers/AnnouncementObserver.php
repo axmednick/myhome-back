@@ -14,6 +14,7 @@ class AnnouncementObserver
 {
     public function created(Announcement $announcement)
     {
+
         try {
             TelegramHelper::sendMessage($announcement->user->name . ' created a new announcement: ' . $announcement->id);
         } catch (\Exception $e) {
