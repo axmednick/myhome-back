@@ -17,16 +17,15 @@ class SendWhatsappMessage extends Action
     /**
      * Perform the action on the given models.
      *
-     * @param  \Laravel\Nova\Fields\ActionFields  $fields
-     * @param  \Illuminate\Support\Collection  $models
+     * @param \Laravel\Nova\Fields\ActionFields $fields
+     * @param \Illuminate\Support\Collection $models
      * @return mixed
      */
     public function handle(ActionFields $fields, Collection $models)
     {
         foreach ($models as $model) {
-            // WhatsApp URL yaratmaq
-            $phone = $model->phone;
 
+            $phone = $model->phone;
             $phone = $model->phone;
             if (substr($phone, 0, 1) === '0') {
                 $phone = '994' . substr($phone, 1);
@@ -56,7 +55,7 @@ Sadəcə əlavə bir neçə saniyənizi sərf edərək elanlarınızı platforma
     /**
      * Get the fields available on the action.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @return array
      */
     public function fields(NovaRequest $request)
