@@ -16,7 +16,7 @@ class AnnouncementObserver
     {
 
         try {
-            TelegramHelper::sendMessage($announcement->user->name . ' created a new announcement: ' . $announcement->id);
+            TelegramHelper::sendMessage(' created a new announcement: ' );
         } catch (\Exception $e) {
             \Log::error('Telegram mesaj göndərilmədi: ' . $e->getMessage());
         }
