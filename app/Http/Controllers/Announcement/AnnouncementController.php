@@ -175,8 +175,8 @@ class AnnouncementController extends Controller
     public function announcements(Request $request)
     {
 
-        $response = SlackHelper::sendMessage('test');
-        dd($response->body());
+ /*       $response = SlackHelper::sendMessage('test');
+        dd($response->body());*/
         $announcements = Announcement::query();
 
         $announcements = $this->announcementService->searchAnnouncements($request);
