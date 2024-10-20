@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Announcement;
 
+use App\Helpers\SlackHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Announcement\AnnouncementRequest;
 use App\Http\Requests\ApartmentRequest;
