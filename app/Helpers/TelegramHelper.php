@@ -12,8 +12,8 @@ class TelegramHelper
 
     public static function initialize()
     {
-        self::$botToken = env('TELEGRAM_BOT_TOKEN');
-        self::$chatId = env('TELEGRAM_CHAT_ID');
+        self::$botToken = '8157799965:AAFN_3mO3UNTOvoT3lRc2737CY3aM_e1-HA';
+        self::$chatId = '-1002302339821';
         self::$client = new Client();
     }
 

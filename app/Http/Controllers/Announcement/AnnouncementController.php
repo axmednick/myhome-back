@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Announcement;
 
 use App\Helpers\SlackHelper;
+use App\Helpers\TelegramHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Announcement\AnnouncementRequest;
 use App\Http\Requests\ApartmentRequest;
@@ -175,8 +176,7 @@ class AnnouncementController extends Controller
     public function announcements(Request $request)
     {
 
- /*       $response = SlackHelper::sendMessage('test');
-        dd($response->body());*/
+        TelegramHelper::sendMessage('dedede');
         $announcements = Announcement::query();
 
         $announcements = $this->announcementService->searchAnnouncements($request);

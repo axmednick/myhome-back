@@ -15,7 +15,17 @@ class AnnouncementObserver
     public function created(Announcement $announcement)
     {
 
-        SlackHelper::sendMessage( $announcement->user->name.' Created at new announcement: ');
+        try {
+            TelegramHelper::sendMessage(' created a new announcement: ' );
+        } catch (\Exception $e) {
+            \Log::error('Telegram mesaj göndərilmədi: ' . $e->getMessage());
+        }
+
+        try {
+            Mail::to($announcement->user->email)->queue(new AnnouncementCreated($announcement));
+        } catch (\Exception $e) {
+            \Log::error('Mail göndərilmədi: ' . $e->getMessage());
+        }
 
     }
 
