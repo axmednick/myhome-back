@@ -16,7 +16,7 @@ class SlackHelper
             'text' =>$message,
         ];
 
-        Http::post($slackUrl, $message);
+        return $response = Http::post($slackUrl, $message);
 
     }
 }
