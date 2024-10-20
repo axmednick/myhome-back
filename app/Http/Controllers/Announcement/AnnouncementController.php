@@ -176,7 +176,7 @@ class AnnouncementController extends Controller
     public function announcements(Request $request)
     {
 
-        TelegramHelper::sendMessage('dedede');
+
         $announcements = Announcement::query();
 
         $announcements = $this->announcementService->searchAnnouncements($request);
