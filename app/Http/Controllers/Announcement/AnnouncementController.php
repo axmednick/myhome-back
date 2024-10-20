@@ -176,7 +176,7 @@ class AnnouncementController extends Controller
     {
 
         $response = SlackHelper::sendMessage('test');
-        dd($response);
+        dd($response->body());
         $announcements = Announcement::query();
 
         $announcements = $this->announcementService->searchAnnouncements($request);
