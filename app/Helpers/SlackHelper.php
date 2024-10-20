@@ -10,7 +10,7 @@ class SlackHelper
     public static function sendMessage($message)
     {
 
-        $slackUrl = 'https://hooks.slack.com/services/T07B159734K/B07T223AAV7/PphsDjMYGkELiiGaAw8TpDg';
+        $slackUrl = 'https://hooks.slack.com/services/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';
 
         $message = [
             'text' =>$message,
