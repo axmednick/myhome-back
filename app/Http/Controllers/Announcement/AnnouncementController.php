@@ -175,6 +175,7 @@ class AnnouncementController extends Controller
     public function announcements(Request $request)
     {
 
+
         $announcements = Announcement::query();
 
         $announcements = $this->announcementService->searchAnnouncements($request);
