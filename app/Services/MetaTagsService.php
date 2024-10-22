@@ -13,6 +13,7 @@ class MetaTagsService
 
     public function setMetaTags($query)
     {
+
         // Query parametrlərini parse edirik
         parse_str($query, $params);
 
@@ -20,16 +21,7 @@ class MetaTagsService
             $city = City::find($params['city']);
             $cityNameWithSuffix = CitySuffix::cityWithSuffix($city->name);
         }
-        elseif (isset($params['metro'])) {
-            $metroStations = MetroStation::whereIn('id', (array) $params['metro'])->pluck('name')->toArray();
 
-            $metroStationsNames = implode(', ', $metroStations);
-
-            $result = [
-                'title' => "{$metroStationsNames} metro stansiyaları yaxınlığında mənzil və ev elanları 2024",
-                'description' => "{$metroStationsNames} metro stansiyaları yaxınlığında satılan və kirayə verilən mənzillər. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
-            ];
-        }
 
 
         $result = [
@@ -169,6 +161,38 @@ class MetaTagsService
                 'title' => "{$cityNameWithSuffix} kirayə evlər",
                 'description' => "{$cityNameWithSuffix} kirayə evlər. {$cityNameWithSuffix} ucuz kirayə evlər. {$cityNameWithSuffix} kirayə ev qiymətləri. {$cityNameWithSuffix} ən yeni kirayə ev elanları myhome.az-da!",
             ];
+        }
+
+        elseif (isset($params['metro']) && count($params) == 1) {
+
+            $metroStations = MetroStation::whereIn('id', (array) $params['metro'])->pluck('name')->toArray();
+
+            $metroStationsNames = implode(', ', $metroStations);
+
+            $result = [
+                'title' => "{$metroStationsNames} metro stansiyaları yaxınlığında mənzil və ev elanları 2024",
+                'description' => "{$metroStationsNames} metro stansiyaları yaxınlığında satılan və kirayə verilən mənzillər. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
+            ];
+
+        }
+        elseif (isset($params['metro']) && isset($params['announcementType'])) {
+            $metroStations = MetroStation::whereIn('id', (array) $params['metro'])->pluck('name')->toArray();
+            $metroStationsNames = implode(', ', $metroStations);
+
+            // Announcement type 1: Satış
+            if ($params['announcementType'] == 1) {
+                $result = [
+                    'title' => "{$metroStationsNames} metro stansiyaları yaxınlığında satışda olan mənzillər 2024",
+                    'description' => "{$metroStationsNames} metro stansiyaları yaxınlığında satılan mənzillər. Ən yeni daşınmaz əmlak satış elanları myhome.az-da!",
+                ];
+            }
+            // Announcement type 2: Kirayə
+            elseif ($params['announcementType'] == 2) {
+                $result = [
+                    'title' => "{$metroStationsNames} metro stansiyaları yaxınlığında kirayə mənzillər 2024",
+                    'description' => "{$metroStationsNames} metro stansiyaları yaxınlığında kirayə verilən mənzillər. Ən yeni kirayə daşınmaz əmlak elanları myhome.az-da!",
+                ];
+            }
         }
 
         // Title və description üçün nəticəni təyin edirik
