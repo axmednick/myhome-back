@@ -19,6 +19,14 @@ class MetaTagsService
             $city = City::find($params['city']);
             $cityNameWithSuffix = CitySuffix::cityWithSuffix($city->name);
         }
+        elseif (isset($params['metro_stations']) && count($params) == 1) {
+            $metroStations = implode(', ', $params['metro_stations']);
+            $result = [
+                'title' => "{$metroStations} metro stansiyası yaxınlığında mənzil və ev elanları 2024",
+                'description' => "{$metroStations} metro stansiyası yaxınlığında satılan və kirayə verilən mənzillər. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
+            ];
+        }
+
 
         $result = [
             'title' => 'Ən yeni daşınmaz əmlak satışı və kirayəsi elanları 2024',
