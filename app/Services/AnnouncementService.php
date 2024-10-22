@@ -15,25 +15,15 @@ class AnnouncementService
     public function searchAnnouncements($request): Builder
     {
         $announcements = Announcement::query();
-
         if ($request->propertyType) {
             $announcements->where('property_type_id', $request->propertyType);
         }
-
-
         if ($request->announcementType) {
             $announcements->where('announcement_type_id', $request->announcementType);
-
         }
-
         if ($request->has('room_ids')) {
-
-            // Bütün query parametrlərini alırıq və 'room_ids' olanları array-ə çeviririk
             $roomIds = $request->query('room_ids');
-
-            // room_ids-ləri yoxlayırıq, bir array olub-olmadığını təsdiqləyirik
             $roomIds = is_array($roomIds) ? $roomIds : [$roomIds];
-
             if (in_array("more", $roomIds)) {
                 $announcements->where('room_count', '>', 5);
             } else {
@@ -41,40 +31,26 @@ class AnnouncementService
             }
         }
 
-
-
-
         if ($request->apartmentType) {
             $announcements->where('apartment_type_id', $request->apartmentType);
-
         }
-
         if ($request->minPrice) {
             $announcements->where('price', '>=', $request->minPrice);
-
         }
-
         if ($request->maxPrice) {
             $announcements->where('price', '<=', $request->maxPrice);
-
         }
-
         if ($request->minArea) {
             $announcements->where('house_area', '>=', $request->minArea);
-
         }
-
         if ($request->maxArea) {
             $announcements->where('house_area', '<=', $request->maxArea);
-
         }
-
         if ($request->cities) {
             $announcements->whereHas('address', function ($query) use ($request) {
                 $query->whereIn('city_id', $request->cities);
             });
         }
-
         if ($request->regions) {
             $announcements->whereHas('address', function ($query) use ($request) {
                 $query->whereIn('region_id', $request->regions);
