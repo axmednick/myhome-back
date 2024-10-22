@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Helpers\CitySuffix;
 use App\Models\City;
+use App\Models\MetroStation;
 
 class MetaTagsService
 {
@@ -19,11 +20,14 @@ class MetaTagsService
             $city = City::find($params['city']);
             $cityNameWithSuffix = CitySuffix::cityWithSuffix($city->name);
         }
-        elseif (isset($params['metro_stations']) && count($params) == 1) {
-            $metroStations = implode(', ', $params['metro_stations']);
+        elseif (isset($params['metro'])) {
+            $metroStations = MetroStation::whereIn('id', (array) $params['metro'])->pluck('name')->toArray();
+
+            $metroStationsNames = implode(', ', $metroStations);
+
             $result = [
-                'title' => "{$metroStations} metro stansiyası yaxınlığında mənzil və ev elanları 2024",
-                'description' => "{$metroStations} metro stansiyası yaxınlığında satılan və kirayə verilən mənzillər. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
+                'title' => "{$metroStationsNames} metro stansiyaları yaxınlığında mənzil və ev elanları 2024",
+                'description' => "{$metroStationsNames} metro stansiyaları yaxınlığında satılan və kirayə verilən mənzillər. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
             ];
         }
 

@@ -61,12 +61,15 @@ class AnnouncementService
                 $query->whereIn('village_id', $request->villages);
             });
         }
+        if ($request->query('metro')) {
+            $metroStations = $request->query('metro');
+            $metroStations = is_array($metroStations) ? $metroStations : [$metroStations];
 
-        if ($request->metro_stations) {
-            $announcements->whereHas('address', function ($query) use ($request) {
-                $query->whereIn('metro_station_id', $request->metro_stations);
+            $announcements->whereHas('address', function ($query) use ($metroStations) {
+                $query->whereIn('metro_station_id', $metroStations);
             });
         }
+
 
         if ($request->keyword) {
             $announcements->
