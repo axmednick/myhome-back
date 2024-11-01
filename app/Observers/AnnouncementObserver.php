@@ -49,4 +49,5 @@ class AnnouncementObserver
             Mail::to($announcement->user->email)->queue(new AnnouncementStatusUpdated($announcement));
         }
     }
+
 }
