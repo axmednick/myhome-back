@@ -8,14 +8,38 @@ use App\Mail\AnnouncementCreated;
 use App\Mail\AnnouncementStatusUpdated;
 use App\Mail\UserRegisteredMail;
 use App\Models\Announcement;
+use App\Models\Bonus;
+use App\Models\UserBonus;
 use Illuminate\Support\Facades\Mail;
 
 class AnnouncementObserver
 {
     public function created(Announcement $announcement)
     {
+        TelegramHelper::sendMessage($announcement->user->name.' created a new announcement: '.$announcement->id);
 
-            TelegramHelper::sendMessage($announcement->user->name.' created a new announcement: '.$announcement->id);
+
+        $user = $announcement->user;
+
+        $announcementCount = $user->announcements()->count();
+
+        $bonus = Bonus::where('announcement_count', $announcementCount)->first();
+
+        if ($bonus) {
+            $userBonusExists = UserBonus::where('user_id', $user->id)
+                ->where('bonus_id', $bonus->id)
+                ->exists();
+
+            if (!$userBonusExists) {
+                $user->increment('bonus_balance', $bonus->bonus_amount);
+
+                UserBonus::create([
+                    'user_id' => $user->id,
+                    'bonus_id' => $bonus->id,
+                ]);
+            }
+        }
+
 
     }
 
