@@ -10,11 +10,11 @@ class UserBonusObserver
 {
     public function created(UserBonus $userBonus)
     {
-        $user = User::find($userBonus->user_id);
+      /*  $user = User::find($userBonus->user_id);
         $bonus = Bonus::find($userBonus->bonus_id);
 
         $user->bonus_balance += $bonus->bonus_amount;
-        $user->save();
+        $user->save();*/
 
     }
 
