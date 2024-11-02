@@ -9,25 +9,26 @@ class DateHelper
 
     public static function formatCreatedAt($createdAt)
     {
-        $createdAt = Carbon::parse($createdAt)->timezone(config('app.timezone')); // serverin saat qurşağına uyğun olaraq tarixi təyin edin
+        $createdAt = Carbon::parse($createdAt)->timezone(config('app.timezone'));
+        $now = Carbon::now()->timezone(config('app.timezone'));
 
-        $now = Carbon::now()->timezone(config('app.timezone')); // indiki vaxtı da uyğun saat qurşağında təyin edin
+        $diffInDays = $createdAt->diffInDays($now);
+        $diffInHours = $createdAt->diffInHours($now);
 
-        $diff = $createdAt->diff($now);
-
-        if ($diff->d == 0) {
+        if ($diffInDays == 0 && $diffInHours < 24) {
             return "Bu gün " . $createdAt->format('H:i');
-        } elseif ($diff->d == 1) {
+        } elseif ($diffInDays == 1) {
             return "Dün " . $createdAt->format('H:i');
-        } elseif ($diff->d > 1 && $diff->d < 7) {
-            return $diff->d . " gün əvvəl " . $createdAt->format('H:i');
-        } elseif ($diff->d >= 7 && $diff->d < 31) {
-            $weeks = floor($diff->d / 7);
+        } elseif ($diffInDays > 1 && $diffInDays < 7) {
+            return $diffInDays . " gün əvvəl " . $createdAt->format('H:i');
+        } elseif ($diffInDays >= 7 && $diffInDays < 31) {
+            $weeks = floor($diffInDays / 7);
             return $weeks . " həftə əvvəl";
-        } elseif ($diff->d >= 31) {
-            $months = floor($diff->d / 30);
+        } elseif ($diffInDays >= 31) {
+            $months = floor($diffInDays / 30);
             return $months . " ay əvvəl";
         }
     }
+
 
 }
