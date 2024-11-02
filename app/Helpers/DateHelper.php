@@ -12,23 +12,27 @@ class DateHelper
         $createdAt = Carbon::parse($createdAt)->timezone(config('app.timezone'));
         $now = Carbon::now()->timezone(config('app.timezone'));
 
-        $diffInDays = $createdAt->diffInDays($now);
-        $diffInHours = $createdAt->diffInHours($now);
-
-        if ($diffInDays == 0 && $diffInHours < 24) {
+        // Saniyə və dəqiqə fərqinə görə tam tarixi yoxlayırıq
+        if ($now->isSameDay($createdAt)) {
             return "Bu gün " . $createdAt->format('H:i');
-        } elseif ($diffInDays == 1) {
+        } elseif ($now->copy()->subDay()->isSameDay($createdAt)) {
             return "Dün " . $createdAt->format('H:i');
-        } elseif ($diffInDays > 1 && $diffInDays < 7) {
-            return $diffInDays . " gün əvvəl " . $createdAt->format('H:i');
-        } elseif ($diffInDays >= 7 && $diffInDays < 31) {
-            $weeks = floor($diffInDays / 7);
-            return $weeks . " həftə əvvəl";
-        } elseif ($diffInDays >= 31) {
-            $months = floor($diffInDays / 30);
-            return $months . " ay əvvəl";
+        } else {
+            // Daha uzun müddətli fərqləri həftələr və aylarla yoxlayırıq
+            $diffInDays = $createdAt->diffInDays($now);
+
+            if ($diffInDays < 7) {
+                return $diffInDays . " gün əvvəl " . $createdAt->format('H:i');
+            } elseif ($diffInDays >= 7 && $diffInDays < 31) {
+                $weeks = floor($diffInDays / 7);
+                return $weeks . " həftə əvvəl";
+            } else {
+                $months = floor($diffInDays / 30);
+                return $months . " ay əvvəl";
+            }
         }
     }
+
 
 
 }
