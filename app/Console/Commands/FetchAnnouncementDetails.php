@@ -42,63 +42,81 @@ class FetchAnnouncementDetails extends Command
         // Faylı təmizləyərək yenidən yazmaq üçün boş bir JSON massiv ilə başlayaq
         file_put_contents($outputFilePath, "[\n");
 
+        // Progress bar yaratmaq
+        $totalLinks = count($links);
+        $bar = $this->output->createProgressBar($totalLinks);
+        $bar->start();
+
         foreach ($links as $index => $link) {
+            try {
+                // Hər elanın HTML məlumatını çəkin
+                $html = $htmlWeb->load($link);
 
-            // Hər elanın HTML məlumatını çəkin
-            $html = $htmlWeb->load($link);
+                if ($html) {
+                    // Şəxsin adını və vəzifəsini tapırıq
+                    $name = $html->find('.product-owner__info-name', 0)->plaintext ?? 'N/A';
+                    $role = $html->find('.product-owner__info-region', 0)->plaintext ?? 'N/A';
 
-            if ($html) {
-                // Şəxsin adını və vəzifəsini tapırıq
-                $name = $html->find('.product-owner__info-name', 0)->plaintext ?? 'N/A';
-                $role = $html->find('.product-owner__info-region', 0)->plaintext ?? 'N/A';
+                    // Elanın ID-sini linkdən çıxarırıq
+                    preg_match('/items\/(\d+)/', $link, $matches);
+                    $announcementId = $matches[1] ?? null;
 
-                // Elanın ID-sini linkdən çıxarırıq
-                preg_match('/items\/(\d+)/', $link, $matches);
-                $announcementId = $matches[1] ?? null;
+                    if ($announcementId) {
+                        // Əlaqə nömrəsini API-dən əldə etmək
+                        $phoneApiUrl = "https://bina.az/items/{$announcementId}/phones?source_link=" . urlencode($link) . "&trigger_button=main";
+                        $phoneResponse = Http::get($phoneApiUrl);
 
-                if ($announcementId) {
-                    // Əlaqə nömrəsini API-dən əldə etmək
-                    $phoneApiUrl = "https://bina.az/items/{$announcementId}/phones?source_link=" . urlencode($link) . "&trigger_button=main";
-                    $phoneResponse = Http::get($phoneApiUrl);
+                        // Əgər API uğurlu cavab verirsə, əlaqə nömrəsini çıxarırıq
+                        if ($phoneResponse->successful()) {
+                            $phoneData = $phoneResponse->json();
+                            $phone = $phoneData['phones'][0] ?? 'N/A';
+                        } else {
+                            $phone = 'N/A';
+                        }
 
-                    // Əgər API uğurlu cavab verirsə, əlaqə nömrəsini çıxarırıq
-                    if ($phoneResponse->successful()) {
-                        $phoneData = $phoneResponse->json();
-                        $phone = $phoneData['phones'][0] ?? 'N/A';
-                    } else {
-                        $phone = 'N/A';
-                    }
-
-                    // Məlumatları JSON formatında fayla əlavə edirik
-                    $data = [
-                        'name' => $name,
-                        'role' => $role,
-                        'phone' => $phone,
-                    ];
-
-                    if (!DataAgent::where('phone',$phone)->first()) {
-                        DataAgent::create([
+                        // Məlumatları JSON formatında fayla əlavə edirik
+                        $data = [
                             'name' => $name,
-                            'type' => $role,
+                            'role' => $role,
                             'phone' => $phone,
-                            'site' => 'bina.az'
-                        ]);
-                    }
-                    echo $name,' '. $role,' '.$phone."\n";
+                        ];
 
-                    // JSON formatında yazmaq və hər məlumatdan sonra vergül əlavə etmək
-                    $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-                    file_put_contents($outputFilePath, $jsonData . ",\n", FILE_APPEND);
+                        if (!DataAgent::where('phone', $phone)->first()) {
+                            DataAgent::create([
+                                'name' => $name,
+                                'type' => $role,
+                                'phone' => $phone,
+                                'site' => 'bina.az'
+                            ]);
+                        }
+
+
+
+
+                        // Uğurla işlənən linki siyahıdan sil
+                        unset($links[$index]);
+
+                        // Yenilənmiş linkləri `links.json` faylına geri yaz
+                        file_put_contents($filePath, json_encode(array_values($links), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                    }
+                } else {
+                    $this->error("Failed to fetch details from: {$link}");
                 }
-            } else {
-                $this->error("Failed to fetch details from: {$link}");
+            } catch (\Exception $e) {
+                // Səhv baş verdikdə xəta mesajını göstər və növbəti linkə keç
+                $this->error("Error processing link {$link}: " . $e->getMessage());
             }
+
+            // Hər bir link işlənəndən sonra progress bar-ı artır
+            $bar->advance();
         }
 
         // Faylı bağlamaq üçün son nöqtə qoyuruq və JSON formatına uyğunlaşırıq
         file_put_contents($outputFilePath, "\n]", FILE_APPEND);
 
-        $this->info("Announcement details have been saved to announcement_details.json");
+        // Progress bar-ı tamamlayırıq
+        $bar->finish();
+        $this->info("\nAnnouncement details have been saved to announcement_details.json");
 
         return Command::SUCCESS;
     }

@@ -175,14 +175,30 @@ class AnnouncementController extends Controller
 
     public function announcements(Request $request)
     {
+        // Cache anahtarını oluştur
+        $cacheKey = 'announcements_' . md5(serialize($request->all()));
 
+        // 5 dakikalık cache kullanımı
+        $announcements = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($request) {
+            return $this->announcementService
+                ->searchAnnouncements($request)
+                ->with([
+                    'announcement_type',
+                    'property_type',
+                    'apartment_type',
+                    'address.village',
+                    'address.region',
+                    'address.city',
+                    'user',
+                    'supplies',
+                    'rental_client_types',
+                    'metro_stations'
+                ])
+                ->orderBy('id', 'desc')
+                ->paginate(20);
+        });
 
-        $announcements = Announcement::query();
-
-        $announcements = $this->announcementService->searchAnnouncements($request);
-
-        return AnnouncementResource::collection($announcements->orderBy('id', 'desc')->paginate(20));
-
+        return AnnouncementResource::collection($announcements);
     }
 
 
