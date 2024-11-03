@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\Favorite;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -87,7 +88,7 @@ class ProfileController extends Controller
         $user->user_type=$request->user_type;
         $user->save();
 
-        return $this->sendResponse($user,'User type changed');
+        return $this->sendResponse(UserResource::make($user),'User type changed');
 
     }
 
