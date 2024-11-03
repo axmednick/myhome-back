@@ -14,9 +14,9 @@ class DateHelper
 
         // Saniyə və dəqiqə fərqinə görə tam tarixi yoxlayırıq
         if ($now->isSameDay($createdAt)) {
-            return "Bu gün " . $createdAt->format('H:i');
+            return "Bugün " . $createdAt->format('H:i');
         } elseif ($now->copy()->subDay()->isSameDay($createdAt)) {
-            return "Dün " . $createdAt->format('H:i');
+            return "Dünən " . $createdAt->format('H:i');
         } else {
             // Daha uzun müddətli fərqləri həftələr və aylarla yoxlayırıq
             $diffInDays = $createdAt->diffInDays($now);

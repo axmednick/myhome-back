@@ -80,6 +80,7 @@ class AnnouncementController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
+                'user_type'=>$request->user_type,
                 'register_type'=>'announcement',
             ]);
         } else {
