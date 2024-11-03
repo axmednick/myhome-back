@@ -52,7 +52,7 @@ Route::prefix('user')->group(function () {
 
 
         Route::post('profile-update', [ProfileController::class, 'profileUpdate']);
-        Route::post('/update-user-type', [ProfileController::class, 'userTypeUpdate']);
+        Route::post('/update-user-type', [ProfileController::class, 'updateUserType']);
         Route::post('password-update', [ProfileController::class, 'passwordUpdate']);
         Route::get('/statistics', [ProfileController::class, 'statistics']);
 
