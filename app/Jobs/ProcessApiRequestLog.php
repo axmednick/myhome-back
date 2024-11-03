@@ -14,32 +14,29 @@ class ProcessApiRequestLog implements ShouldQueue
 
     protected $ipAddress;
     protected $date;
+    protected $userAgent;
 
-    public function __construct($ipAddress, $date)
+    public function __construct($ipAddress, $date, $userAgent)
     {
         $this->ipAddress = $ipAddress;
         $this->date = $date;
+        $this->userAgent = $userAgent;
     }
 
     public function handle()
     {
-        // 1. IP-yə görə günlük hostu qeyd etmək
         $existingRequest = ApiRequest::firstOrCreate([
             'ip_address' => $this->ipAddress,
             'date' => $this->date,
+            'user_agent' => $this->userAgent,
         ]);
 
-        // 2. Gündəlik statistik məlumatları yeniləmək
-        $dailyStats = DailyStatistic::firstOrCreate([
-            'date' => $this->date,
-        ]);
+        $dailyStats = DailyStatistic::firstOrCreate(['date' => $this->date]);
 
-        // Unique host əlavə etmək
         if ($existingRequest->wasRecentlyCreated) {
             $dailyStats->increment('unique_hosts');
         }
 
-        // Hit sayını artırmaq
         $dailyStats->increment('hits');
     }
 }

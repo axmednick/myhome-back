@@ -22,9 +22,9 @@ class LogApiRequest
     {
         $ipAddress = $request->ip();
         $date = now()->toDateString();
+        $userAgent = $request->header('User-Agent');
 
-        // Queue-a ataraq işlənməyə göndəririk
-        Queue::push(new ProcessApiRequestLog($ipAddress, $date));
+        Queue::push(new ProcessApiRequestLog($ipAddress, $date, $userAgent));
 
         return $next($request);
     }
