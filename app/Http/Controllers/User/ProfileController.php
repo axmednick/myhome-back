@@ -72,5 +72,22 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function updateUserType(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        $validate = Validator::make($request->all(), [
+            'user_type' => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json($validate->errors()->messages());
+        }
+
+        $user->user_type=$request->user_type;
+        $user->save();
+
+    }
+
 
 }
