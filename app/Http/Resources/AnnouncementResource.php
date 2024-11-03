@@ -47,7 +47,7 @@ class AnnouncementResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             "formatted_date" => DateHelper::formatCreatedAt($this->created_at),
-            'view_count' => 15,
+            'view_count' => $this->view_count,
             'is_active' => $this->is_active,
             'is_favorite'=>Favorite::where('announcement_id', $this->id) ->where('user_id',auth('sanctum')->id())->exists(),
             'supplies'=>AnnouncementSuppliesResource::collection($this->supplies),
