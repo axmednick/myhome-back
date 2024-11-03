@@ -87,6 +87,8 @@ class ProfileController extends Controller
         $user->user_type=$request->user_type;
         $user->save();
 
+        return $this->sendResponse($user,'User type changed');
+
     }
 
 
