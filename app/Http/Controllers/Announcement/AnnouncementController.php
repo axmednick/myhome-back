@@ -183,6 +183,7 @@ class AnnouncementController extends Controller
                 ->searchAnnouncements($request)
                 ->with([
                     'announcement_type',
+                    'media',
                     'property_type',
                     'apartment_type',
                     'address.village',
