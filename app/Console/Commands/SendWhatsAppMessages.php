@@ -15,7 +15,7 @@ class SendWhatsAppMessages extends Command
     public function handle()
     {
         // "Vasitəçi / Rieltor" olan dataları alırıq
-        $contacts = DataAgent::where('type', 'Vasitəçi / Rieltor')->where('sent', false)->get();
+        $contacts = DataAgent::where('site','bina.az')->where('type', 'vasitəçi (agent)')->where('sent', false)->get();
 
         if ($contacts->isEmpty()) {
             $this->info('Heç bir mesaj göndərilmədi. Gözləyən kontaktlar yoxdur.');
@@ -26,16 +26,19 @@ class SendWhatsAppMessages extends Command
         $sendSpeed = 1;
         $bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzExNDcwNzUsInVzZXJfaWQiOjI4MjR9.n7ybjQaJqWf3-gPDDbz8BbV4Fz_RIPlg3K6yH90INDg';
 
+        $this->output->progressStart(count($contacts));
 
         foreach ($contacts as $contact) {
-            $message = "Salam {$contact->name}, Sizi alqı-satqı elanlarınızı MyHome.az saytında yerləşdirməyə dəvət edirik.\n\n".
-                "Yeni və funksionallığı ilə fərqlənən layihənin bu mərhələsində aktivlik göstərən rieltorlara sonrakı mərhələlərdə xüsusi imkanlar və imtiyazlar təqdim olunacaq.\n\n".
-                "Elə indi qeydiyyatdan keçin, 20 elan yerləşdirin və 100₼ bonus balansı əldə edin! Bonus balansını yaxın zamanda aktivləşəcək ödənişli funksiyalar üçün istifadə edə biləcəksiniz. Qeyd edək ki, 1 ay ərzində istənilən qədər ödənişsiz elan yerləşdirmək mümkündür.\n\n".
-                "Hörmətlə, MyHome.az administrasiyası";
+            $message = "Salam, {$contact->name}. Sizi alqı-satqı elanlarınızı MyHome.az saytında yerləşdirməyə dəvət edirik.
+
+Yeni və funksionallığı ilə fərqlənən layihənin bu mərhələsində aktivlik göstərən rieltorlara sonrakı mərhələlərdə xüsusi imkanlar və imtiyazlar təqdim olunacaq.
+
+Elə indi qeydiyyatdan keçin, 20 elan yerləşdirin və 100₼ bonus balansı əldə edin! Bonus balansını yaxın zamanda aktivləşəcək ödənişli funksiyalar üçün istifadə edə biləcəksiniz. Qeyd edək ki, elan yerləşdirilməsi tam ödənişsizdir və ay ərzində istənilən qədər elan yerləşdirmək mümkündür.
+
+Hörmətlə, MyHome.az administrasiyası";
             $formattedPhone = $this->formatPhoneNumber($contact->phone);
 
 
-           // Mesajı göndəririk
            $response = Http::asForm()->withHeaders([
                 'Authorization' => "Bearer {$bearerToken}"
             ])->post('https://api.wamessage.app/whatsapp/sendmessage/multi', [
@@ -53,15 +56,23 @@ class SendWhatsAppMessages extends Command
             } else {
                 $this->error("Mesaj göndərilmədi: {$contact->phone}");
             }
-            sleep(10);
+            $this->output->progressAdvance();
+            sleep(5);
         }
     }
     private function formatPhoneNumber($phone)
     {
-        // Əgər nömrə 0 ilə başlayırsa, onu sil və +994 əlavə et
+        $phone = preg_replace('/[\s\-\(\)]/', '', $phone);
+
         if (substr($phone, 0, 1) === '0') {
             return '+994' . substr($phone, 1);
         }
-        return $phone;
+
+        if (substr($phone, 0, 4) === '+994') {
+            return $phone;
+        }
+
+        return '+994' . $phone;
     }
+
 }
