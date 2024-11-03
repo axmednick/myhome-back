@@ -66,12 +66,14 @@ class AnnouncementService
         if ($request->maxArea) {
             $announcements->where('house_area', '<=', $request->maxArea);
         }
-        if ($request->query('metro')) {
-            $metroStations = is_array($request->query('metro')) ? $request->query('metro') : [$request->query('metro')];
+        if ($request->has('metro')) {
+            $metroStations = (array) $request->query('metro'); // Array kimi çevirmək
+
             $announcements->whereHas('address', function ($query) use ($metroStations) {
                 $query->whereIn('metro_station_id', $metroStations);
             });
         }
+
         if ($request->keyword) {
             $announcements->where(function ($query) use ($request) {
                 $query->where('id', $request->keyword)
