@@ -2,10 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Jobs\ProcessApiRequestLog;
 use Closure;
 use Illuminate\Http\Request;
 
-use ProcessApiRequestLog;
+
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Queue;
 
