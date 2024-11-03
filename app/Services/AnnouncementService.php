@@ -121,6 +121,8 @@ class AnnouncementService
     public function announcementById($id):Announcement
     {
         $announcement = Announcement::findOrFail($id);
+        $announcement->view_count++;
+        $announcement->save();
         return $announcement;
     }
 
