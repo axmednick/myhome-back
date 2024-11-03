@@ -23,6 +23,7 @@ use App\Models\Supply;
 use App\Models\User;
 use App\Services\AnnouncementService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -175,10 +176,8 @@ class AnnouncementController extends Controller
 
     public function announcements(Request $request)
     {
-        // Cache anahtarını oluştur
         $cacheKey = 'announcements_' . md5(serialize($request->all()));
 
-        // 5 dakikalık cache kullanımı
         $announcements = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($request) {
             return $this->announcementService
                 ->searchAnnouncements($request)
