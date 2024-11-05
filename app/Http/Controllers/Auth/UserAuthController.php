@@ -30,7 +30,8 @@ class UserAuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
-            'phone' => 'unique:users'
+            'phone' => 'unique:users',
+            'user_type'=>'required'
         ]);
 
         if ($validator->fails()) {
@@ -44,6 +45,7 @@ class UserAuthController extends Controller
         $user = User::create($input);
         $success['token'] = $user->createToken('MyApp')->plainTextToken;
         $success['name'] = $user->name;
+
 
         $this->authService->sendOtpToEmail($user);
 
