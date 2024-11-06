@@ -67,6 +67,7 @@ Route::prefix('user')->group(function () {
             Route::delete('delete/{id}', [UserAnnouncementController::class, 'deleteAnnouncement']);
             Route::get('statistics/{id}', [UserAnnouncementController::class, 'announcementStatistics']);
             Route::get('/toggle-favorite/{id}', [FavoriteController::class, 'toggleFavorite']);
+            Route::post('/update/{id}', [AnnouncementController::class, 'update']);
         });
 
         Route::prefix('link')->group(function () {
@@ -100,6 +101,7 @@ Route::get('/meta-tags/{query}', [GlobalDataController::class, 'metaTags']);
 Route::prefix('announcement')->group(function () {
     Route::post('/image-upload', [FileUploadController::class, 'temporaryFile']);
     Route::post('/store', [AnnouncementController::class, 'store']);
+
     Route::get('/list', [AnnouncementController::class, 'announcements']);
     Route::get('/item/{id}', [AnnouncementController::class, 'detail']);
     Route::get('/nearby-metro-stations', [AnnouncementController::class, 'nearbyMetroStations']);
