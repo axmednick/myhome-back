@@ -278,7 +278,6 @@ class AnnouncementController extends Controller
 
     public function update($id,Request $request)
     {
-        dd(1);
         $announcement = Announcement::findOrFail($id);
 
         if ($announcement->user_id!=auth('sanctum')->id()){
