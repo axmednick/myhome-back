@@ -284,16 +284,16 @@ class AnnouncementController extends Controller
             return $this->sendError('Sizin bunu dəyişmək hüququnuz yoxdur',null,403);
         }
 
-        if ($announcement->property_type == 1) {
+        if ($announcement->property_type_id == 1) {
             $validator = Validator::make($request->all(), (new ApartmentRequest)->rules());
         }
-        if (in_array($announcement->property_type, [2, 3, 4])) {
+        if (in_array($announcement->property_type_id, [2, 3, 4])) {
             $validator = Validator::make($request->all(), (new HouseRequest)->rules());
         }
-        if ($announcement->property_type == 5) {
+        if ($announcement->property_type_id == 5) {
             $validator = Validator::make($request->all(), (new LandRequest)->rules());
         }
-        if (in_array($announcement->property_type, [6, 7])) {
+        if (in_array($announcement->property_type_id, [6, 7])) {
             $validator = Validator::make($request->all(), (new OfficeRequest)->rules());
         }
 
