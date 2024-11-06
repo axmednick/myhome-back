@@ -54,6 +54,8 @@ class Announcement extends Resource
     {
         return [
             ID::make()->sortable(),
+            Boolean::make('Status'),
+
 
             Select::make('Announcement Type', 'announcement_type_id')
                 ->options(\App\Models\AnnouncementType::all()->pluck('name', 'id'))
