@@ -52,7 +52,7 @@ class AnnouncementController extends Controller
         if ($request->property_type == 5) {
             $validator = Validator::make($request->all(), (new LandRequest)->rules());
         }
-        if ($request->property_type == 6 && $request->property_type == 7) {
+        if ($request->property_type == 6 || $request->property_type == 7) {
             $validator = Validator::make($request->all(), (new OfficeRequest)->rules());
         }
 
