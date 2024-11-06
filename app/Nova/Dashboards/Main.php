@@ -5,6 +5,7 @@ namespace App\Nova\Dashboards;
 use App\Models\Announcement;
 
 use App\Nova\Metrics\TodayAnnouncements;
+use App\Nova\Metrics\UserPerAnnouncement;
 use Coroowicaksono\ChartJsIntegration\AreaChart;
 use Coroowicaksono\ChartJsIntegration\LineChart;
 use DB;
@@ -66,7 +67,8 @@ class Main extends Dashboard
                         'categories' => $this->getDateCategories(), // Tarixləri x oxunda göstərmək üçün
                     ],
                 ])
-                ->width('full')
+                ->width('full'),
+            new UserPerAnnouncement()
 
 
         ];
