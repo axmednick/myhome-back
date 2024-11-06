@@ -10,6 +10,7 @@ use App\Mail\UserRegisteredMail;
 use App\Models\Announcement;
 use App\Models\Bonus;
 use App\Models\UserBonus;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
 
 class AnnouncementObserver
@@ -51,6 +52,8 @@ class AnnouncementObserver
         if ($announcement->isDirty('status') && $announcement->status == 1) {
             Mail::to($announcement->user->email)->queue(new AnnouncementStatusUpdated($announcement));
         }
+
+        Artisan::call('optimize:clear');
     }
 
 }

@@ -79,4 +79,6 @@ class Announcement extends Model implements HasMedia
         $this->addMediaConversion('original')->nonQueued();
     }
 
+
+
 }
