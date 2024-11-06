@@ -319,6 +319,8 @@ class AnnouncementController extends Controller
             'in_credit' => $request->in_credit,
         ]);
 
+        $announcement->save();
+
         $existingMediaIds = $announcement->getMedia()->pluck('id')->toArray();
         $incomingMediaIds = $request->media_ids ?? [];
 
