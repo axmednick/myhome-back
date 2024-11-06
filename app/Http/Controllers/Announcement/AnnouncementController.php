@@ -274,4 +274,72 @@ class AnnouncementController extends Controller
         return AnnouncementResource::collection($this->announcementService->announcementsByLink($link));
 
     }
+
+
+    public function update($id,Request $request)
+    {
+        $announcement = Announcement::findOrFail($id);
+
+        if ($announcement->user_id!=auth('sanctum')->id()){
+            return $this->sendError('Sizin bunu dəyişmək hüququnuz yoxdur',null,403);
+        }
+
+        if ($announcement->property_type == 1) {
+            $validator = Validator::make($request->all(), (new ApartmentRequest)->rules());
+        }
+        if (in_array($announcement->property_type, [2, 3, 4])) {
+            $validator = Validator::make($request->all(), (new HouseRequest)->rules());
+        }
+        if ($announcement->property_type == 5) {
+            $validator = Validator::make($request->all(), (new LandRequest)->rules());
+        }
+        if (in_array($announcement->property_type, [6, 7])) {
+            $validator = Validator::make($request->all(), (new OfficeRequest)->rules());
+        }
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+
+        $announcement->update([
+            'apartment_type_id' => $request->apartment_type,
+            'area' => $request->area ? $request->area : null,
+            'house_area' => $request->house_area,
+            'room_count' => $request->room_count ? $request->room_count : null,
+            'floor' => $request->floor ? $request->floor : null,
+            'floor_count' => $request->floor_count ? $request->floor_count : null,
+            'description' => $request->description,
+            'price' => $request->price,
+            'is_repaired' => $request->is_repaired,
+            'document_id' => $request->property_document,
+            'rental_type' => $request->rental_type,
+            'looking_roommate' => $request->looking_roommate,
+            'credit_possible' => $request->credit_possible,
+            'in_credit' => $request->in_credit,
+        ]);
+
+        $existingMediaIds = $announcement->getMedia()->pluck('id')->toArray();
+        $incomingMediaIds = $request->media_ids ?? [];
+
+        $mediaToDelete = array_diff($existingMediaIds, $incomingMediaIds);
+
+        foreach ($mediaToDelete as $mediaId) {
+            $mediaItem = $announcement->getMedia()->where('id', $mediaId)->first();
+            if ($mediaItem) {
+                $mediaItem->delete();
+            }
+        }
+
+        foreach ($incomingMediaIds as $mediaId) {
+            $media = Media::find($mediaId);
+            if ($media && $media->model_id !== $announcement->id) {
+                $media->update([
+                    'model_type' => 'App\Models\Announcement',
+                    'model_id' => $announcement->id,
+                ]);
+            }
+        }
+
+    }
 }
