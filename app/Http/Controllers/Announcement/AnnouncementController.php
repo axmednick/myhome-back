@@ -321,6 +321,8 @@ class AnnouncementController extends Controller
 
         $announcement->save();
 
+
+
         $existingMediaIds = $announcement->getMedia()->pluck('id')->toArray();
         $incomingMediaIds = $request->media_ids ?? [];
 
@@ -342,6 +344,8 @@ class AnnouncementController extends Controller
                 ]);
             }
         }
+
+        return $this->sendResponse(AnnouncementResource::make($announcement));
 
     }
 }
