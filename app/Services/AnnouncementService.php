@@ -14,7 +14,8 @@ class AnnouncementService
 
     public function searchAnnouncements($request): Builder
     {
-        $announcements = Announcement::query()
+        $announcements = Announcement::query()->where('status',1)
+
             ->with([
                 'address' => function ($query) use ($request) {
                     if ($request->cities) {
