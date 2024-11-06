@@ -21,7 +21,7 @@ class UserPerAnnouncement extends Partition
             ->selectRaw('user_id, COUNT(*) as count')
             ->groupBy('user_id')
             ->orderBy('count', 'desc')
-            ->limit(10)
+            ->limit(5)
             ->get()
             ->mapWithKeys(function ($item) {
                 // Retrieve the user's name or fallback to 'Unknown User'
