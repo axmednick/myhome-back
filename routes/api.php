@@ -67,6 +67,7 @@ Route::prefix('user')->group(function () {
             Route::delete('delete/{id}', [UserAnnouncementController::class, 'deleteAnnouncement']);
             Route::get('statistics/{id}', [UserAnnouncementController::class, 'announcementStatistics']);
             Route::get('/toggle-favorite/{id}', [FavoriteController::class, 'toggleFavorite']);
+            Route::get('/edit/{id}', [AnnouncementController::class, 'edit']);
             Route::post('/update/{id}', [AnnouncementController::class, 'update']);
         });
 
