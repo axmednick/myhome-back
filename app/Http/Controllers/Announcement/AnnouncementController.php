@@ -11,6 +11,7 @@ use App\Http\Requests\HouseRequest;
 use App\Http\Requests\LandRequest;
 use App\Http\Requests\OfficeRequest;
 use App\Http\Resources\AnnouncementBaseResource;
+use App\Http\Resources\AnnouncementEditResource;
 use App\Http\Resources\AnnouncementResource;
 use App\Http\Resources\MetrostationsResource;
 use App\Http\Resources\SuppliesResource;
@@ -272,6 +273,14 @@ class AnnouncementController extends Controller
     public function link($link)
     {
         return AnnouncementResource::collection($this->announcementService->announcementsByLink($link));
+
+    }
+
+    public function edit($id)
+    {
+        $announcement = Announcement::findOrFail($id);
+
+        return AnnouncementEditResource::make($announcement);
 
     }
 
