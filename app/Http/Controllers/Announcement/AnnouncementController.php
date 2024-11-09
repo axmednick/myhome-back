@@ -156,16 +156,33 @@ class AnnouncementController extends Controller
             }
 
         }
+        if ($request->has('media_ids') && is_array($request->media_ids)) {
+            $isFirstImage = true; // İlk şəkili əsas şəkil olaraq təyin etmək üçün izləyici
+            foreach ($request->media_ids as $mediaId) {
+                $media = Media::where('model_id', $mediaId)->first();
 
-        if ($request->has('media_ids')) {
-            foreach ($request->media_ids as $media) {
+                if ($media) {
+                    // Medianı elan model tipi və ID ilə yeniləyirik
+                    $media->update([
+                        'model_type' => Announcement::class,
+                        'model_id' => $announcement->id
+                    ]);
 
-                $media = Media::where('model_id', $media)->update([
-                    'model_type' => 'App\Models\Announcement',
-                    'model_id' => $announcement->id
-                ]);
+                    // Əgər bu ilk şəkildirsə, əsas şəkil olaraq təyin edin
+                    if ($isFirstImage) {
+                        $announcement->addMedia($media->getPath())
+                            ->toMediaCollection('main') // "main" kolleksiyasına əlavə edilir
+                            ->withCustomProperties([
+                                'thumb_main' => $media->getUrl('thumb'),
+                                'watermarked' => $media->getUrl('watermarked')
+                            ]);
+
+                        $isFirstImage = false; // Yalnız ilk şəkil əsas olur
+                    }
+                }
             }
         }
+
 
 
         return response()->json([
@@ -335,10 +352,9 @@ class AnnouncementController extends Controller
         $existingMediaIds = $announcement->getMedia()->pluck('id')->toArray();
         $incomingMediaIds = $request->media_ids ?? [];
 
-
-
         $mediaToDelete = array_diff($existingMediaIds, $incomingMediaIds);
 
+// Mövcud mediaları silmək
         foreach ($mediaToDelete as $mediaId) {
             $mediaItem = $announcement->getMedia()->where('id', $mediaId)->first();
             if ($mediaItem) {
@@ -346,15 +362,36 @@ class AnnouncementController extends Controller
             }
         }
 
+        $isFirstImage = true; // İlk şəkli əsas şəkil olaraq təyin etmək üçün izləyici
+
         foreach ($incomingMediaIds as $mediaId) {
-            $media = Media::where('model_id',$mediaId)->first();
+            $media = Media::where('id', $mediaId)->first();
+
             if ($media && $media->model_id !== $announcement->id) {
+                // Medianı yeniləyirik
                 $media->update([
                     'model_type' => 'App\Models\Announcement',
                     'model_id' => $announcement->id,
                 ]);
+
+                // Əgər bu ilk şəkildirsə, əsas şəkil olaraq təyin et
+                if ($isFirstImage) {
+                    $announcement->addMedia($media->getPath())
+                        ->toMediaCollection('main') // "main" kolleksiyasına əlavə
+                        ->withCustomProperties([
+                            'thumb_main' => $media->getUrl('thumb'),
+                            'watermarked' => $media->getUrl('watermarked')
+                        ]);
+
+                    $isFirstImage = false; // Yalnız birinci şəkil əsas olur
+                } else {
+                    // Əsas olmayan digər şəkilləri normal "image" kolleksiyasına əlavə edirik
+                    $announcement->addMedia($media->getPath())
+                        ->toMediaCollection('image');
+                }
             }
         }
+
 
         return $this->sendResponse(AnnouncementResource::make($announcement));
 
