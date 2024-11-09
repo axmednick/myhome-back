@@ -371,6 +371,7 @@ class AnnouncementController extends Controller
 
 
         foreach ($incomingMediaIds as $modelId) {
+            return response()->json($isFirstImage,$modelId);
             $media = Media::where('model_id', $modelId)->first(); // `model_id` ilə medianı tapırıq
 
             if ($media && $media->model_id !== $announcement->id) {
@@ -379,7 +380,7 @@ class AnnouncementController extends Controller
                     'model_type' => 'App\Models\Announcement',
                     'model_id' => $announcement->id,
                 ]);
-                return response()->json($isFirstImage,$modelId);
+
                 // Əgər bu ilk şəkildirsə, əsas şəkil olaraq təyin et
                 if ($isFirstImage) {
                     return response()->json($modelId);
