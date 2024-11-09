@@ -349,29 +349,20 @@ class AnnouncementController extends Controller
 
 
         $announcement->save();
-        $existingMediaIds = $announcement->getMedia()->pluck('id')->toArray(); // Mövcud media id-ləri əldə edirik
         $incomingMediaIds = $request->media_ids ?? [];
 
-        $mediaToDelete = array_diff($existingMediaIds, $incomingMediaIds);
-
-// Mövcud mediaları silirik
-        foreach ($mediaToDelete as $mediaId) {
-            $mediaItem = Media::find($mediaId);
-            if ($mediaItem) {
-                $mediaItem->delete();
-            }
-        }
-
-// Əvvəlki "main" şəkili silirik ki, dublikat yaranmasın
+// Mövcud "main" kolleksiyasını təmizləyirik ki, yeni əsas şəkil təyin edək
         $announcement->clearMediaCollection('main');
 
-        $isFirstImage = true; // İlk şəkili əsas şəkil kimi təyin etmək üçün izləyici
+// Əsas şəkil üçün bir izləyici
+        $isFirstImage = true;
 
         foreach ($incomingMediaIds as $mediaId) {
             $media = Media::find($mediaId);
 
+            // Media obyektini tapdıqdan sonra onu elana aid etməyimiz lazım ola bilər
             if ($media) {
-                // Əgər media yeni əlavə olunursa, onu yeniləyirik
+                // Media artıq elana əlavə edilməmişsə, onu yeniləyirik
                 if ($media->model_id !== $announcement->id) {
                     $media->update([
                         'model_type' => 'App\Models\Announcement',
@@ -379,16 +370,18 @@ class AnnouncementController extends Controller
                     ]);
                 }
 
-                // İlk şəkili "main" kolleksiyasına əsas şəkil kimi təyin edirik
+                // İlk şəkili "main" kolleksiyasına əsas şəkil kimi əlavə edirik
                 if ($isFirstImage) {
                     $announcement->addMediaFromUrl($media->getUrl())
-                        ->toMediaCollection('main');
+                        ->toMediaCollection('main'); // "main" kolleksiyasına əsas şəkil
 
-                    $isFirstImage = false; // Yalnız ilk şəkil əsas olur
+                    $isFirstImage = false; // Yalnız birinci şəkil əsas olur
                 } else {
-                    // Digər şəkilləri "image" kolleksiyasına əlavə edirik
-                    $announcement->addMediaFromUrl($media->getUrl())
-                        ->toMediaCollection('image');
+                    // Digər şəkilləri yalnız bir dəfə "image" kolleksiyasına əlavə edirik
+                    if (!$announcement->hasMedia('image')) {
+                        $announcement->addMediaFromUrl($media->getUrl())
+                            ->toMediaCollection('image');
+                    }
                 }
             }
         }
