@@ -379,7 +379,7 @@ class AnnouncementController extends Controller
                     'model_type' => 'App\Models\Announcement',
                     'model_id' => $announcement->id,
                 ]);
-
+                return response()->json($isFirstImage,$modelId);
                 // Əgər bu ilk şəkildirsə, əsas şəkil olaraq təyin et
                 if ($isFirstImage) {
                     return response()->json($modelId);
