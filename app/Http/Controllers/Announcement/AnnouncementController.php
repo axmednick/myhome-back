@@ -376,7 +376,8 @@ class AnnouncementController extends Controller
 
             return response()->json([
                 1,
-                $media
+                $media,
+                $modelId
             ]);
 
             if ($media && $media->model_id !== $announcement->id) {
