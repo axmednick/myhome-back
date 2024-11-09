@@ -24,7 +24,7 @@ class SendWhatsAppMessages extends Command
 
         $regId = 920119659;
         $sendSpeed = 1;
-        $bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzExNDcwNzUsInVzZXJfaWQiOjI4MjR9.n7ybjQaJqWf3-gPDDbz8BbV4Fz_RIPlg3K6yH90INDg';
+        $bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzE4Mzg4NDIsInVzZXJfaWQiOjI4MjR9.wS-N2FY-Xx2gXlGF4b6GreiBA5tOjkfjAN0mq_alL8I';
 
         $this->output->progressStart(count($contacts));
 

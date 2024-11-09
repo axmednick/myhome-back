@@ -335,6 +335,8 @@ class AnnouncementController extends Controller
         $existingMediaIds = $announcement->getMedia()->pluck('id')->toArray();
         $incomingMediaIds = $request->media_ids ?? [];
 
+
+
         $mediaToDelete = array_diff($existingMediaIds, $incomingMediaIds);
 
         foreach ($mediaToDelete as $mediaId) {
@@ -345,7 +347,7 @@ class AnnouncementController extends Controller
         }
 
         foreach ($incomingMediaIds as $mediaId) {
-            $media = Media::find($mediaId);
+            $media = Media::where('model_id',$mediaId)->first();
             if ($media && $media->model_id !== $announcement->id) {
                 $media->update([
                     'model_type' => 'App\Models\Announcement',
