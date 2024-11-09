@@ -394,7 +394,7 @@ class AnnouncementController extends Controller
                     $isFirstImage = false; // Yalnız birinci şəkil əsas olur
                 } else {
                     // Əsas olmayan digər şəkilləri normal "image" kolleksiyasına əlavə edirik
-                    $announcement->addMedia($media->getPath())
+                    $announcement->addMediaFromUrl($media->getUrl())
                         ->toMediaCollection('image');
                 }
             }
