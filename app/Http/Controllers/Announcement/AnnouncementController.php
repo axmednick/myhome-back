@@ -368,7 +368,7 @@ class AnnouncementController extends Controller
 
         $isFirstImage = true; // İlk şəkli əsas şəkil olaraq təyin etmək üçün izləyici
 
-        return response()->json($incomingMediaIds);
+
 
         foreach ($incomingMediaIds as $modelId) {
             $media = Media::where('model_id', $modelId)->first(); // `model_id` ilə medianı tapırıq
@@ -382,7 +382,7 @@ class AnnouncementController extends Controller
 
                 // Əgər bu ilk şəkildirsə, əsas şəkil olaraq təyin et
                 if ($isFirstImage) {
-                    dd($modelId);
+                    return response()->json($modelId);
                     $announcement->addMedia($media->getPath())
                         ->toMediaCollection('main') // "main" kolleksiyasına əlavə
                         ->withCustomProperties([
