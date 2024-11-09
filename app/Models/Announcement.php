@@ -76,6 +76,27 @@ class Announcement extends Model implements HasMedia
                     ->watermarkOpacity(20)
                     ->performOnCollections('image');
             });
+
+        $this->addMediaCollection('main')
+            ->singleFile() // Ensures only one image is in the "main" collection
+            ->registerMediaConversions(function (Media $media) {
+                $this->addMediaConversion('thumb_main')
+                    ->width(344)
+                    ->height(244)
+                    ->fit('crop', 344, 244)
+                    ->optimize()
+                    ->performOnCollections('main');
+
+                $this->addMediaConversion('watermarked')
+                    ->watermark(public_path('watermark.png'))
+                    ->watermarkPosition('center')
+                    ->width(1000)
+                    ->height(1000)
+                    ->optimize()
+                    ->watermarkOpacity(20)
+                    ->performOnCollections('main');
+            });
+
         $this->addMediaConversion('original')->nonQueued();
     }
 
