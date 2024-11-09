@@ -384,12 +384,12 @@ class AnnouncementController extends Controller
 
                   if ($isFirstImage) {
 
-                    $announcement->addMedia($media->getPath())
-                        ->toMediaCollection('main') // "main" kolleksiyasına əlavə
-                        ->withCustomProperties([
-                            'thumb_main' => $media->getUrl('thumb'),
-                            'watermarked' => $media->getUrl('watermarked')
-                        ]);
+                      $announcement->addMediaFromUrl($media->getUrl()) // Fayl URL-dən əlavə edilir
+                      ->toMediaCollection('main') // "main" kolleksiyasına əlavə
+                      ->withCustomProperties([
+                          'thumb_main' => $media->getUrl('thumb'),
+                          'watermarked' => $media->getUrl('watermarked')
+                      ]);
 
                     $isFirstImage = false; // Yalnız birinci şəkil əsas olur
                 } else {
