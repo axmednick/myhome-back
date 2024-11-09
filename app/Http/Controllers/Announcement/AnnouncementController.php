@@ -379,6 +379,7 @@ class AnnouncementController extends Controller
                     'model_type' => 'App\Models\Announcement',
                     'model_id' => $announcement->id,
                 ]);
+            }
 
                 // Əgər bu ilk şəkildirsə, onu `main` kolleksiyasına əsas şəkil kimi təyin edirik
                 if ($isFirstImage) {
@@ -397,7 +398,7 @@ class AnnouncementController extends Controller
                         ->toMediaCollection('image');
                 }
             }
-        }
+
 
 
 
