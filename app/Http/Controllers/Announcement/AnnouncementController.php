@@ -355,7 +355,7 @@ class AnnouncementController extends Controller
 
 // Mövcud mediaları silmək
         foreach ($mediaToDelete as $mediaId) {
-            $mediaItem = $announcement->getMedia()->where('id', $mediaId)->first();
+            $mediaItem = $announcement->getMedia()->where('model_id', $mediaId)->first();
             if ($mediaItem) {
                 $mediaItem->delete();
             }
@@ -369,7 +369,7 @@ class AnnouncementController extends Controller
         $isFirstImage = true; // İlk şəkli əsas şəkil olaraq təyin etmək üçün izləyici
 
         foreach ($incomingMediaIds as $mediaId) {
-            $media = Media::where('id', $mediaId)->first();
+            $media = Media::where('model_id', $mediaId)->first();
 
             if ($media && $media->model_id !== $announcement->id) {
                 // Medianı yeniləyirik
