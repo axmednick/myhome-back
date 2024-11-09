@@ -364,22 +364,21 @@ class AnnouncementController extends Controller
         }
 
 // "main" kolleksiyasındakı əvvəlki şəkili silirik
-        if ($announcement->getFirstMedia('main')) {
-            $announcement->clearMediaCollection('main');
-        }
+        $announcement->clearMediaCollection('main');
 
         $isFirstImage = true; // İlk şəkili əsas şəkil kimi təyin etmək üçün izləyici
 
         foreach ($incomingMediaIds as $modelId) {
             $media = Media::where('id', $modelId)->first(); // `model_id` ilə medianı tapırıq
 
-            if ($media && $media->model_id !== $announcement->id) {
-                // Medianı yeniləyirik
-                $media->update([
-                    'model_type' => 'App\Models\Announcement',
-                    'model_id' => $announcement->id,
-                ]);
-            }
+            if ($media) {
+                // Əgər bu yeni bir mediadırsa, `model_type` və `model_id` yenilənir
+                if ($media->model_id !== $announcement->id) {
+                    $media->update([
+                        'model_type' => 'App\Models\Announcement',
+                        'model_id' => $announcement->id,
+                    ]);
+                }
 
                 // Əgər bu ilk şəkildirsə, onu `main` kolleksiyasına əsas şəkil kimi təyin edirik
                 if ($isFirstImage) {
@@ -398,8 +397,7 @@ class AnnouncementController extends Controller
                         ->toMediaCollection('image');
                 }
             }
-
-
+        }
 
 
 
