@@ -383,7 +383,7 @@ class AnnouncementController extends Controller
             }
 
                   if ($isFirstImage) {
-                    return response()->json($modelId);
+
                     $announcement->addMedia($media->getPath())
                         ->toMediaCollection('main') // "main" kolleksiyasına əlavə
                         ->withCustomProperties([
