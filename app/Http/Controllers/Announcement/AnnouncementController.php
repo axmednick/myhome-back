@@ -382,12 +382,7 @@ class AnnouncementController extends Controller
                 ]);
             }
 
-                // Əgər bu ilk şəkildirsə, əsas şəkil olaraq təyin et
-                return response()->json([
-                   $modelId,
-                   $isFirstImage
-                ]);
-                if ($isFirstImage) {
+                  if ($isFirstImage) {
                     return response()->json($modelId);
                     $announcement->addMedia($media->getPath())
                         ->toMediaCollection('main') // "main" kolleksiyasına əlavə
