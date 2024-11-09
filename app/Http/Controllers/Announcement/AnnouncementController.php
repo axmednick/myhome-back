@@ -374,8 +374,6 @@ class AnnouncementController extends Controller
 
             $media = Media::where('id', $modelId)->first(); // `model_id` ilə medianı tapırıq
 
-
-
             if ($media && $media->model_id !== $announcement->id) {
                 // Medianı yeniləyirik
                 $media->update([
@@ -386,7 +384,7 @@ class AnnouncementController extends Controller
 
                   if ($isFirstImage) {
 
-                      $announcement->addMediaFromUrl($media->getUrl()) // Şəklin URL-dən istifadə edirik
+                    $announcement->addMedia($media->getPath())
                         ->toMediaCollection('main') // "main" kolleksiyasına əlavə
                         ->withCustomProperties([
                             'thumb_main' => $media->getUrl('thumb'),
@@ -396,7 +394,7 @@ class AnnouncementController extends Controller
                     $isFirstImage = false; // Yalnız birinci şəkil əsas olur
                 } else {
                     // Əsas olmayan digər şəkilləri normal "image" kolleksiyasına əlavə edirik
-                    $announcement->addMediaFromUrl($media->getUrl())
+                    $announcement->addMedia($media->getPath())
                         ->toMediaCollection('image');
                 }
             }
