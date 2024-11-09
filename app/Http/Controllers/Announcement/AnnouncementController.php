@@ -380,7 +380,7 @@ class AnnouncementController extends Controller
 
                 // Əgər bu ilk şəkildirsə, əsas şəkil olaraq təyin et
                 if ($isFirstImage) {
-                    return $modelId;
+                    dd($modelId);
                     $announcement->addMedia($media->getPath())
                         ->toMediaCollection('main') // "main" kolleksiyasına əlavə
                         ->withCustomProperties([
