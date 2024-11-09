@@ -374,11 +374,7 @@ class AnnouncementController extends Controller
 
             $media = Media::where('id', $modelId)->first(); // `model_id` ilə medianı tapırıq
 
-            return response()->json([
-                1,
-                $media,
-                $modelId
-            ]);
+
 
             if ($media && $media->model_id !== $announcement->id) {
                 // Medianı yeniləyirik
