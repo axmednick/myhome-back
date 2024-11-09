@@ -372,7 +372,7 @@ class AnnouncementController extends Controller
 
         foreach ($incomingMediaIds as $modelId) {
 
-            $media = Media::where('model_id', $modelId)->first(); // `model_id` ilə medianı tapırıq
+            $media = Media::where('id', $modelId)->first(); // `model_id` ilə medianı tapırıq
 
             return response()->json([
                 1,
