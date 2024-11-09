@@ -348,7 +348,6 @@ class AnnouncementController extends Controller
         $announcement->save();
 
 
-
         $existingMediaIds = $announcement->getMedia()->pluck('id')->toArray();
         $incomingMediaIds = $request->media_ids ?? [];
 
@@ -360,6 +359,11 @@ class AnnouncementController extends Controller
             if ($mediaItem) {
                 $mediaItem->delete();
             }
+        }
+
+// Əgər artıq "main" kolleksiyasında bir şəkil varsa, onu sil
+        if ($announcement->getFirstMedia('main')) {
+            $announcement->clearMediaCollection('main');
         }
 
         $isFirstImage = true; // İlk şəkli əsas şəkil olaraq təyin etmək üçün izləyici
@@ -391,6 +395,7 @@ class AnnouncementController extends Controller
                 }
             }
         }
+
 
 
         return $this->sendResponse(AnnouncementResource::make($announcement));
