@@ -348,7 +348,7 @@ class AnnouncementController extends Controller
         $announcement->save();
 
 
-        $existingMediaIds = $announcement->getMedia()->pluck('id')->toArray();
+        $existingMediaIds = $announcement->getMedia()->pluck('model_id')->toArray(); // model_id-ləri əldə edirik
         $incomingMediaIds = $request->media_ids ?? [];
 
         $mediaToDelete = array_diff($existingMediaIds, $incomingMediaIds);
@@ -368,8 +368,8 @@ class AnnouncementController extends Controller
 
         $isFirstImage = true; // İlk şəkli əsas şəkil olaraq təyin etmək üçün izləyici
 
-        foreach ($incomingMediaIds as $mediaId) {
-            $media = Media::where('model_id', $mediaId)->first();
+        foreach ($incomingMediaIds as $modelId) {
+            $media = Media::where('model_id', $modelId)->first(); // `model_id` ilə medianı tapırıq
 
             if ($media && $media->model_id !== $announcement->id) {
                 // Medianı yeniləyirik
@@ -395,6 +395,7 @@ class AnnouncementController extends Controller
                 }
             }
         }
+
 
 
 
