@@ -348,7 +348,7 @@ class AnnouncementController extends Controller
         $announcement->save();
 
 
-        $existingMediaIds = $announcement->getMedia()->pluck('model_id')->toArray(); // model_id-ləri əldə edirik
+        $existingMediaIds = $announcement->getMedia()->pluck('model_id')->toArray();
         $incomingMediaIds = $request->media_ids ?? [];
 
         $mediaToDelete = array_diff($existingMediaIds, $incomingMediaIds);
@@ -380,6 +380,7 @@ class AnnouncementController extends Controller
 
                 // Əgər bu ilk şəkildirsə, əsas şəkil olaraq təyin et
                 if ($isFirstImage) {
+                    return $modelId;
                     $announcement->addMedia($media->getPath())
                         ->toMediaCollection('main') // "main" kolleksiyasına əlavə
                         ->withCustomProperties([
