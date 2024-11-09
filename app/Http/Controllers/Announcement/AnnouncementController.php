@@ -380,6 +380,7 @@ class AnnouncementController extends Controller
                     'model_type' => 'App\Models\Announcement',
                     'model_id' => $announcement->id,
                 ]);
+            }
 
                 // Əgər bu ilk şəkildirsə, əsas şəkil olaraq təyin et
                 return response()->json([
@@ -402,7 +403,6 @@ class AnnouncementController extends Controller
                         ->toMediaCollection('image');
                 }
             }
-        }
 
 
 
