@@ -348,12 +348,14 @@ class AnnouncementController extends Controller
         $announcement->save();
 
 
-        $existingMediaIds = $announcement->getMedia()->pluck('model_id')->toArray();
+        $announcement->save();
+
+        $existingMediaIds = $announcement->getMedia()->pluck('model_id')->toArray(); // Mövcud media id-ləri əldə edirik
         $incomingMediaIds = $request->media_ids ?? [];
 
         $mediaToDelete = array_diff($existingMediaIds, $incomingMediaIds);
 
-// Mövcud mediaları silmək
+// Mövcud mediaları silirik
         foreach ($mediaToDelete as $mediaId) {
             $mediaItem = $announcement->getMedia()->where('model_id', $mediaId)->first();
             if ($mediaItem) {
@@ -361,17 +363,14 @@ class AnnouncementController extends Controller
             }
         }
 
-// Əgər artıq "main" kolleksiyasında bir şəkil varsa, onu sil
+// "main" kolleksiyasındakı əvvəlki şəkili silirik
         if ($announcement->getFirstMedia('main')) {
             $announcement->clearMediaCollection('main');
         }
 
-        $isFirstImage = true; // İlk şəkli əsas şəkil olaraq təyin etmək üçün izləyici
-
-
+        $isFirstImage = true; // İlk şəkili əsas şəkil kimi təyin etmək üçün izləyici
 
         foreach ($incomingMediaIds as $modelId) {
-
             $media = Media::where('id', $modelId)->first(); // `model_id` ilə medianı tapırıq
 
             if ($media && $media->model_id !== $announcement->id) {
@@ -380,26 +379,26 @@ class AnnouncementController extends Controller
                     'model_type' => 'App\Models\Announcement',
                     'model_id' => $announcement->id,
                 ]);
-            }
 
-                  if ($isFirstImage) {
+                // Əgər bu ilk şəkildirsə, onu `main` kolleksiyasına əsas şəkil kimi təyin edirik
+                if ($isFirstImage) {
+                    $mainMedia = $announcement->addMediaFromUrl($media->getUrl()) // Fayl URL-dən əlavə edilir
+                    ->toMediaCollection('main'); // "main" kolleksiyasına əlavə
 
-
-                      $mainMedia = $announcement->addMediaFromUrl($media->getUrl()) // Fayl yolundan əlavə edilir
-                      ->toMediaCollection('main'); // "main" kolleksiyasına əlavə
-
-                      // Əlavə edildikdən sonra custom properties təyin edirik
-                      $mainMedia->setCustomProperty('thumb_main', $media->getUrl('thumb'));
-                      $mainMedia->setCustomProperty('watermarked', $media->getUrl('watermarked'));
-                      $mainMedia->save();
+                    // Əlavə edildikdən sonra custom properties təyin edirik
+                    $mainMedia->setCustomProperty('thumb_main', $media->getUrl('thumb'));
+                    $mainMedia->setCustomProperty('watermarked', $media->getUrl('watermarked'));
+                    $mainMedia->save();
 
                     $isFirstImage = false; // Yalnız birinci şəkil əsas olur
                 } else {
-                    // Əsas olmayan digər şəkilləri normal "image" kolleksiyasına əlavə edirik
+                    // Digər şəkilləri "image" kolleksiyasına əlavə edirik
                     $announcement->addMediaFromUrl($media->getUrl())
                         ->toMediaCollection('image');
                 }
             }
+        }
+
 
 
 
