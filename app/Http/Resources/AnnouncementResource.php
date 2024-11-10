@@ -32,7 +32,7 @@ class AnnouncementResource extends JsonResource
             'floor' => $this->floor,
             'house_area' => $this->house_area,
             'description' => $this->description,
-            'price' => number_format($this->price, 0, ',', ' '),
+            //'price' => number_format($this->price, 0, ',', ' '),
             'price_per_square' => $this->house_area!=0 ?  round($this->price / $this->house_area) : 0,
             'user_id' => $this->user_id,
             'address' => AnnouncementAddressResource::make($this->address),
