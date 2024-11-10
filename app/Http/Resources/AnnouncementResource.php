@@ -32,7 +32,7 @@ class AnnouncementResource extends JsonResource
                 'floor' => $this->floor,
                 'house_area' => $this->house_area,
                 'description' => $this->description,
-                'price' => isset($this->price) ? number_format($this->price, 0, ',', ' ') : null, // Problemi burada izah etdik
+                'price' => isset($this->price) ? number_format((float) $this->price, 0, ',', ' ') : null,
                 'price_per_square' => $this->house_area ? round($this->price / $this->house_area) : 0,
                 'user_id' => $this->user_id,
                 'address' => AnnouncementAddressResource::make($this->address),
