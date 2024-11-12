@@ -27,6 +27,7 @@ use App\Services\AnnouncementService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -242,9 +243,9 @@ class AnnouncementController extends Controller
     }
 
 
-    public function detail($id)
+    public function detail(Request $request,$id)
     {
-
+        Log::error($request->type);
         $announcement = $this->announcementService->announcementById($id);
 
         return AnnouncementResource::make($announcement);
