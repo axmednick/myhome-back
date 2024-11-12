@@ -35,7 +35,7 @@ class AnnouncementGridResource extends JsonResource
                 'main_image_thumb' => $this->getFirstMediaUrl('main', 'thumb_main') ?: $this->getFirstMediaUrl('image', 'thumb'),
                 'title' => $this->title(),
                 "formatted_date" => DateHelper::formatCreatedAt($this->created_at),
-                'is_favorite' => Favorite::where('announcement_id', $this->id)->where('user_id', auth('sanctum')->id())->exists(),
+                //'is_favorite' => Favorite::where('announcement_id', $this->id)->where('user_id', auth('sanctum')->id())->exists(),
                 'credit_possible' => $this->credit_possible,
                 'in_credit' => $this->in_credit,
                 'metro_stations' => AnnouncementMetroStationsResource::collection($this->metro_stations),
