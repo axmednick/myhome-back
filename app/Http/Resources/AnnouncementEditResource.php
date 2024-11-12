@@ -19,16 +19,15 @@ class AnnouncementEditResource extends JsonResource
     {
         $date = Carbon::parse($this->created_at)->format('d ') . trans('content.' . Carbon::parse($this->created_at)->format('F')) . Carbon::parse($this->created_at)->format(' Y');
 
+
         $data = [
             'id' => $this->id,
             'announcement_type' => AnnouncementTypeResource::make($this->announcement_type),
             'property_type' => PropertyTypeResource::make($this->property_type),
             'apartment_type' => ApartmentTypeResource::make($this->apartment_type),
             'area' => $this->area,
-            'room_count' => $this->room_count,
             'rental_type' => $this->rental_type,
-            'floor_count' => $this->floor_count,
-            'floor' => $this->floor,
+
             'house_area' => $this->house_area,
             'description' => $this->description,
             'price' => number_format($this->price, 0, ',', ' '),
@@ -38,6 +37,7 @@ class AnnouncementEditResource extends JsonResource
             'images' => MediaResource::collection($this->getMedia('image')),
             'main_image' => $this->getFirstMediaUrl('main') ?: $this->getFirstMediaUrl('image'),
             'main_image_thumb' => $this->getFirstMediaUrl('main', 'thumb_main') ?: $this->getFirstMediaUrl('image', 'thumb'),
+
             'user' => $this->user,
             'short_title' => $this->shortTitle(),
             'title' => $this->title(),
@@ -45,7 +45,7 @@ class AnnouncementEditResource extends JsonResource
             'date' => $date,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'formatted_date' => DateHelper::formatCreatedAt($this->created_at),
+            "formatted_date" => DateHelper::formatCreatedAt($this->created_at),
             'view_count' => $this->view_count,
             'is_active' => $this->is_active,
             'is_favorite' => Favorite::where('announcement_id', $this->id)->where('user_id', auth('sanctum')->id())->exists(),
@@ -58,14 +58,23 @@ class AnnouncementEditResource extends JsonResource
             'status' => $this->status,
             'document_id' => $this->document_id,
             'is_repaired' => $this->is_repaired
+
         ];
 
-        // Null olan dəyərləri çıxarmaq üçün array_filter istifadə edilir
-        return array_filter($data, function ($value) {
-            return !is_null($value);
-        });
-    }
 
+        if ($this->room_count) {
+            $data['room_count'] = $this->room_count;
+        }
+        if ($this->floor) {
+            $data['floor'] = $this->floor;
+        }
+        if ($this->floor_count) {
+            $data['floor'] = $this->floor;
+        }
+
+
+        return $data;
+    }
 
 
     public function shortTitle()
