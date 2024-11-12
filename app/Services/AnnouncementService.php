@@ -133,11 +133,14 @@ class AnnouncementService
         return $announcements;
     }
 
-    public function announcementById($id):Announcement
+    public function announcementById($id,$type):Announcement
     {
         $announcement = Announcement::findOrFail($id);
-        $announcement->view_count++;
-        $announcement->save();
+        if ($type=='details'){
+            $announcement->view_count++;
+            $announcement->save();
+        }
+
         return $announcement;
     }
 

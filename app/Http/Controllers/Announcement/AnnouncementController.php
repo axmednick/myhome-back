@@ -245,8 +245,8 @@ class AnnouncementController extends Controller
 
     public function detail(Request $request,$id)
     {
-        Log::error($request->type);
-        $announcement = $this->announcementService->announcementById($id);
+
+        $announcement = $this->announcementService->announcementById($id,$request->type);
 
         return AnnouncementResource::make($announcement);
     }
