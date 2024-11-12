@@ -32,6 +32,7 @@ class AnnouncementService
                 'user'
             ]);
         Log::error('Search');
+        Log::error($request->rental_client_types);
         if ($request->rental_client_types) {
             Log::error(36);
             if (!in_array(1, $request->rental_client_types)) {
