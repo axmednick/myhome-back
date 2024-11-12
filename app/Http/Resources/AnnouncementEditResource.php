@@ -20,16 +20,13 @@ class AnnouncementEditResource extends JsonResource
         $date = Carbon::parse($this->created_at)->format('d ') . trans('content.' . Carbon::parse($this->created_at)->format('F')) . Carbon::parse($this->created_at)->format(' Y');
 
 
-        return [
+        $data =  [
             'id' => $this->id,
             'announcement_type' => AnnouncementTypeResource::make($this->announcement_type),
             'property_type' => PropertyTypeResource::make($this->property_type),
             'apartment_type' => ApartmentTypeResource::make($this->apartment_type),
             'area' => $this->area,
-            'room_count' => $this->room_count,
-            'rental_type' => $this->rental_type,
-            'floor_count' => $this->floor_count,
-            'floor' => $this->floor,
+
             'house_area' => $this->house_area,
             'description' => $this->description,
             'price' => number_format($this->price, 0, ',', ' '),
@@ -62,6 +59,25 @@ class AnnouncementEditResource extends JsonResource
             'is_repaired'=>$this->is_repaired
 
         ];
+
+
+
+        if ($this->room_count){
+            $data['room_count'] = $this->room_count;
+        }
+        if ($this->rental_type){
+            $data['rental_type'] = $this->rental_type;
+        }
+        if ($this->floor_count){
+            $data['floor_count'] = $this->floor_count;
+        }
+        if ($this->floor){
+            $data['floor'] = $this->floor;
+        }
+
+
+
+        return $data;
     }
 
 
