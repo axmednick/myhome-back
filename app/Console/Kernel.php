@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        \Log::error('Running');
+
         $schedule->command('announcements:check-pending')->everyTenMinutes();
 
     }
