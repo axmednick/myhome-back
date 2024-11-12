@@ -19,8 +19,7 @@ class AnnouncementEditResource extends JsonResource
     {
         $date = Carbon::parse($this->created_at)->format('d ') . trans('content.' . Carbon::parse($this->created_at)->format('F')) . Carbon::parse($this->created_at)->format(' Y');
 
-
-        return [
+        $data = [
             'id' => $this->id,
             'announcement_type' => AnnouncementTypeResource::make($this->announcement_type),
             'property_type' => PropertyTypeResource::make($this->property_type),
@@ -33,13 +32,12 @@ class AnnouncementEditResource extends JsonResource
             'house_area' => $this->house_area,
             'description' => $this->description,
             'price' => number_format($this->price, 0, ',', ' '),
-            'price_per_square' => $this->house_area!=0 ?  round($this->price / $this->house_area) : 0,
+            'price_per_square' => $this->house_area != 0 ? round($this->price / $this->house_area) : 0,
             'user_id' => $this->user_id,
             'address' => AnnouncementAddressResource::make($this->address),
             'images' => MediaResource::collection($this->getMedia('image')),
             'main_image' => $this->getFirstMediaUrl('main') ?: $this->getFirstMediaUrl('image'),
             'main_image_thumb' => $this->getFirstMediaUrl('main', 'thumb_main') ?: $this->getFirstMediaUrl('image', 'thumb'),
-
             'user' => $this->user,
             'short_title' => $this->shortTitle(),
             'title' => $this->title(),
@@ -47,22 +45,27 @@ class AnnouncementEditResource extends JsonResource
             'date' => $date,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            "formatted_date" => DateHelper::formatCreatedAt($this->created_at),
+            'formatted_date' => DateHelper::formatCreatedAt($this->created_at),
             'view_count' => $this->view_count,
             'is_active' => $this->is_active,
-            'is_favorite'=>Favorite::where('announcement_id', $this->id) ->where('user_id',auth('sanctum')->id())->exists(),
-            'supplies'=>AnnouncementSuppliesResource::collection($this->supplies),
-            'client_types_for_rent'=>RentalClientTypesResource::collection($this->rental_client_types),
-            'looking_roommate'=>$this->looking_roommate,
-            'credit_possible'=>$this->credit_possible,
-            'in_credit'=>$this->in_credit,
-            'metro_stations'=>AnnouncementMetroStationsResource::collection($this->metro_stations),
-            'status'=>$this->status,
-            'document_id'=>$this->document_id,
-            'is_repaired'=>$this->is_repaired
-
+            'is_favorite' => Favorite::where('announcement_id', $this->id)->where('user_id', auth('sanctum')->id())->exists(),
+            'supplies' => AnnouncementSuppliesResource::collection($this->supplies),
+            'client_types_for_rent' => RentalClientTypesResource::collection($this->rental_client_types),
+            'looking_roommate' => $this->looking_roommate,
+            'credit_possible' => $this->credit_possible,
+            'in_credit' => $this->in_credit,
+            'metro_stations' => AnnouncementMetroStationsResource::collection($this->metro_stations),
+            'status' => $this->status,
+            'document_id' => $this->document_id,
+            'is_repaired' => $this->is_repaired
         ];
+
+        // Null olan dəyərləri çıxarmaq üçün array_filter istifadə edilir
+        return array_filter($data, function ($value) {
+            return !is_null($value);
+        });
     }
+
 
 
     public function shortTitle()
