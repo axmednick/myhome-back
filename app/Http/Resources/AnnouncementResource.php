@@ -39,7 +39,7 @@ class AnnouncementResource extends JsonResource
                 'address' => AnnouncementAddressResource::make($this->address),
                 'images' => ImageResource::collection($this->getMedia('image')),
                 'main_image' => $this->getFirstMediaUrl('main') ?: $this->getFirstMediaUrl('image'),
-                'main_image_thumb' => $this->getFirstMediaUrl('main', 'thumb_main') ?: $this->getFirstMediaUrl('image', 'thumb'),
+                'main_image_thumb' => $this->getMedia('image')->sortBy('order_column')->first()?->getUrl('thumb'),
                 'user' => $this->user,
                 'short_title' => $this->shortTitle(),
                 'title' => $this->title(),
