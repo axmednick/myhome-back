@@ -68,7 +68,7 @@ class AnnouncementEditResource extends JsonResource
             $data['floor'] = $this->floor;
         }
         if ($this->floor_count) {
-            $data['floor'] = $this->floor;
+            $data['floor_count'] = $this->floor;
         }
 
 
