@@ -160,7 +160,8 @@ class AnnouncementController extends Controller
         }
         if ($request->has('media_ids') && is_array($request->media_ids)) {
             foreach ($request->media_ids as $index => $mediaId) {
-                $media = Media::find($mediaId);
+                $media = Media::where('model_id', $mediaId)->first();
+
 
                 if ($media) {
                     $media->update([
