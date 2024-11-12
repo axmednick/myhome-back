@@ -209,7 +209,7 @@ class AnnouncementController extends Controller
                     'metro_stations'
                 ])
                 ->orderBy('id', 'desc')
-                ->paginate(20);
+                ->paginate(10);
 
 
         return AnnouncementResource::collection($announcements);
