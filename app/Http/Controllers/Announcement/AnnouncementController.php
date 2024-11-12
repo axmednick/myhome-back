@@ -159,27 +159,19 @@ class AnnouncementController extends Controller
 
         }
         if ($request->has('media_ids') && is_array($request->media_ids)) {
-            $isFirstImage = true; // İlk şəkili əsas şəkil olaraq təyin etmək üçün izləyici
-            foreach ($request->media_ids as $mediaId) {
-                $media = Media::where('model_id', $mediaId)->first();
+            foreach ($request->media_ids as $index => $mediaId) {
+                $media = Media::find($mediaId);
 
                 if ($media) {
-                    // Medianı elan model tipi və ID ilə yeniləyirik
                     $media->update([
                         'model_type' => Announcement::class,
-                        'model_id' => $announcement->id
+                        'model_id' => $announcement->id,
+                        'order_column' => $index,
                     ]);
-
-                    // Əgər bu ilk şəkildirsə, əsas şəkil olaraq təyin edin
-                    if ($isFirstImage) {
-                        $announcement->addMediaFromUrl($media->getUrl())
-                            ->toMediaCollection('main');
-
-                        $isFirstImage = false; // Yalnız ilk şəkil əsas olur
-                    }
                 }
             }
         }
+
 
 
 
