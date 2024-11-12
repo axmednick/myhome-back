@@ -193,8 +193,7 @@ class AnnouncementController extends Controller
     {
         $cacheKey = 'announcements_' . md5(serialize($request->all()));
 
-        $announcements = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($request) {
-            return $this->announcementService
+        $announcements = $this->announcementService
                 ->searchAnnouncements($request)
                 ->with([
                     'announcement_type',
@@ -211,7 +210,7 @@ class AnnouncementController extends Controller
                 ])
                 ->orderBy('id', 'desc')
                 ->paginate(20);
-        });
+
 
         return AnnouncementResource::collection($announcements);
     }
