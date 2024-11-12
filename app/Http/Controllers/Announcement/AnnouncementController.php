@@ -358,6 +358,7 @@ class AnnouncementController extends Controller
         foreach ($incomingMediaIds as $index => $mediaId) {
 
             $media = Media::find($mediaId);
+            Log::error($index);
 
             if ($media) {
                 $media->update([
