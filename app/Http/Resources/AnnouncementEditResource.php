@@ -36,7 +36,7 @@ class AnnouncementEditResource extends JsonResource
             'address' => AnnouncementAddressResource::make($this->address),
             'images' => MediaResource::collection($this->getMedia('image')->sortBy('order_column')),
             'main_image' => $this->getFirstMediaUrl('main') ?: $this->getFirstMediaUrl('image'),
-            'main_image_thumb' => $this->getFirstMediaUrl('main', 'thumb_main') ?: $this->getFirstMediaUrl('image', 'thumb'),
+            'main_image_thumb' => $this->getMedia('image')->sortBy('order_column')->first()?->getUrl('thumb'),
 
             'user' => $this->user,
             'short_title' => $this->shortTitle(),
