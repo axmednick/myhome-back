@@ -214,7 +214,6 @@ class AnnouncementController extends Controller
                 ->paginate(10);
 
         return AnnouncementGridResource::collection($announcements);
-        return AnnouncementResource::collection($announcements);
     }
 
 
@@ -325,8 +324,6 @@ class AnnouncementController extends Controller
         }
 
 
-
-
         $announcement->update([
             'apartment_type_id' => $request->apartment_type,
             'area' => $request->area ? $request->area : null,
@@ -344,47 +341,35 @@ class AnnouncementController extends Controller
             'in_credit' => $request->in_credit,
         ]);
 
-        $announcement->save();
 
-
-        $announcement->save();
         $incomingMediaIds = $request->media_ids ?? [];
 
-// Mövcud "main" kolleksiyasını təmizləyirik ki, yeni əsas şəkil təyin edək
-        $announcement->clearMediaCollection('main');
+        $existingMedia = $announcement->getMedia('images');
 
-// Əsas şəkil üçün bir izləyici
-        $isFirstImage = true;
 
-        foreach ($incomingMediaIds as $mediaId) {
-            $media = Media::find($mediaId);
-
-            // Media obyektini tapdıqdan sonra onu elana aid etməyimiz lazım ola bilər
-            if ($media) {
-                // Media artıq elana əlavə edilməmişsə, onu yeniləyirik
-                if ($media->model_id !== $announcement->id) {
-                    $media->update([
-                        'model_type' => 'App\Models\Announcement',
-                        'model_id' => $announcement->id,
-                    ]);
-                }
-
-                // İlk şəkili "main" kolleksiyasına əsas şəkil kimi əlavə edirik
-                if ($isFirstImage) {
-                    $announcement->addMediaFromUrl($media->getUrl())
-                        ->toMediaCollection('main'); // "main" kolleksiyasına əsas şəkil
-
-                    $isFirstImage = false; // Yalnız birinci şəkil əsas olur
-                } else {
-                    // Digər şəkilləri yalnız bir dəfə "image" kolleksiyasına əlavə edirik
-                    if (!$announcement->hasMedia('image')) {
-                        $announcement->addMediaFromUrl($media->getUrl())
-                            ->toMediaCollection('image');
-                    }
-                }
+        foreach ($existingMedia as $media) {
+            if (!in_array($media->id, $incomingMediaIds)) {
+                // Əgər şəkil gələn ID-lərdə yoxdursa, silirik
+                $media->delete();
             }
         }
 
+
+        foreach ($incomingMediaIds as $index => $mediaId) {
+
+            $media = Media::find($mediaId);
+
+            if ($media) {
+                $media->update([
+                    'model_type' => Announcement::class,
+                    'model_id' => $announcement->id
+                ]);
+
+                $media->update([
+                    'order_column' => $index,
+                ]);
+            }
+        }
 
 
         return $this->sendResponse(AnnouncementResource::make($announcement));
