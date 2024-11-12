@@ -50,7 +50,6 @@ Route::prefix('user')->group(function () {
         Route::get('/bonus-progress', [BonusController::class, 'progress']);
         Route::get('/take-bonus', [BonusController::class, 'take']);
 
-
         Route::post('profile-update', [ProfileController::class, 'profileUpdate']);
         Route::post('/update-user-type', [ProfileController::class, 'updateUserType']);
         Route::post('password-update', [ProfileController::class, 'passwordUpdate']);
