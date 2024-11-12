@@ -12,6 +12,7 @@ use App\Http\Requests\LandRequest;
 use App\Http\Requests\OfficeRequest;
 use App\Http\Resources\AnnouncementBaseResource;
 use App\Http\Resources\AnnouncementEditResource;
+use App\Http\Resources\AnnouncementGridResource;
 use App\Http\Resources\AnnouncementResource;
 use App\Http\Resources\MetrostationsResource;
 use App\Http\Resources\SuppliesResource;
@@ -211,7 +212,7 @@ class AnnouncementController extends Controller
                 ->orderBy('id', 'desc')
                 ->paginate(10);
 
-
+        return AnnouncementGridResource::collection($announcements);
         return AnnouncementResource::collection($announcements);
     }
 
