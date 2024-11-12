@@ -32,7 +32,7 @@ class AnnouncementGridResource extends JsonResource
                 'price' => isset($this->price) ? number_format((float) $this->price, 0, ',', ' ') : null,
                 'user_id' => $this->user_id,
                 'address' => AnnouncementAddressResource::make($this->address),
-                'main_image_thumb' => $this->getMedia('image')->sortBy('order_column')->first()?->getUrl('image'),
+                'main_image_thumb' => $this->getMedia('image')->sortBy('order_column')->first()?->getUrl('thumb'),
                 'title' => $this->title(),
                 "formatted_date" => DateHelper::formatCreatedAt($this->created_at),
                 'is_favorite' => Favorite::where('announcement_id', $this->id)->where('user_id', auth('sanctum')->id())->exists(),
