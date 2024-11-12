@@ -322,7 +322,6 @@ class AnnouncementController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        return response()->json($request->all());
 
 
 
