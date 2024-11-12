@@ -100,7 +100,7 @@ class AnnouncementController extends Controller
             'floor_count' => $request->floor_count ? $request->floor_count : null,
             'description' => $request->description,
             'user_id' => $user->id,
-            'price' => $request->price,
+            'price' => str_replace(' ', '', $request->price),
             'is_repaired' => $request->is_repaired,
             'document_id' => $request->property_document,
             'rental_type' => $request->rental_type,
