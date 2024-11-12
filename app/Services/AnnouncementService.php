@@ -32,19 +32,16 @@ class AnnouncementService
                 'user'
             ]);
         Log::error('Search');
-        Log::error($request->all());
-        if ($request->rental_client_types) {
-            Log::error(36);
-            if (!in_array(1, $request->rental_client_types)) {
 
-                Log::error($request->rental_client_types);
+        if ($request->client_types_for_rent) {
+
+            if ($request->client_types_for_rent!=1) {
+
+                Log::error($request->client_types_for_rent);
                 // Əgər "hamı üçün" (1) yoxdursa, seçilmiş dəyərlərə görə süzgəc tətbiq edilir
                 $announcements->whereHas('rental_client_types', function ($query) use ($request) {
-                    $query->whereIn('client_type_for_rent_id', $request->rental_client_types);
+                    $query->where('client_type_for_rent_id', $request->client_types_for_rent);
                 });
-            } else {
-                // Əgər "hamı üçün" (1) varsa, heç bir filtrasiya tətbiq olunmur
-                $announcements->whereHas('rental_client_types');
             }
         }
 
