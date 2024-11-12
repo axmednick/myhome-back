@@ -28,13 +28,15 @@ class AnnouncementService
                         $query->whereIn('village_id', $request->villages);
                     }
                 },
-                'user',
-                'rental_client_types' => function ($query) use ($request) {
-                    if ($request->rental_client_types) {
-                        $query->whereIn('client_type_for_rent_id', $request->rental_client_types);
-                    }
-                }
+                'user'
             ]);
+
+        if ($request->rental_client_types && !in_array(1, $request->rental_client_types)) {
+            $announcements->whereHas('rental_client_types', function ($query) use ($request) {
+                $query->whereIn('client_type_for_rent_id', $request->rental_client_types);
+            });
+        }
+
 
         if ($request->propertyType) {
             $announcements->where('property_type_id', $request->propertyType);
@@ -52,6 +54,8 @@ class AnnouncementService
                 }
             });
         }
+
+
         if ($request->apartmentType) {
             $announcements->where('apartment_type_id', $request->apartmentType);
         }
