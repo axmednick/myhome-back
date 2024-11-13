@@ -133,7 +133,7 @@ class AnnouncementService
         return $announcements;
     }
 
-    public function announcementById($id,$type):Announcement
+    public function announcementById($id,$type=null):Announcement
     {
         $announcement = Announcement::findOrFail($id);
         if ($type=='details'){
@@ -161,6 +161,7 @@ class AnnouncementService
         if ($similarAnnouncements->count() < 5) {
             $announcementTypeMatches = Announcement::where('announcement_type_id', $announcement->announcement_type_id)
                 ->where('id', '!=', $id)
+                ->orderBy('id','desc')
                 ->whereNotIn('id', $similarAnnouncements->pluck('id'))
                 ->take(5 - $similarAnnouncements->count())
                 ->get();
@@ -171,6 +172,7 @@ class AnnouncementService
         if ($similarAnnouncements->count() < 5) {
             $propertyTypeMatches = Announcement::where('property_type_id', $announcement->property_type_id)
                 ->where('id', '!=', $id)
+                ->orderBy('id','desc')
                 ->whereNotIn('id', $similarAnnouncements->pluck('id'))
                 ->take(5 - $similarAnnouncements->count())
                 ->get();
@@ -180,6 +182,7 @@ class AnnouncementService
 
         if ($similarAnnouncements->count() < 5) {
             $randomAnnouncements = Announcement::where('id', '!=', $id)
+                ->orderBy('id','desc')
                 ->whereNotIn('id', $similarAnnouncements->pluck('id'))
                 ->inRandomOrder()
                 ->take(5 - $similarAnnouncements->count())
