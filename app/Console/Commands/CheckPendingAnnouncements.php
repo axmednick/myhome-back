@@ -30,6 +30,11 @@ class CheckPendingAnnouncements extends Command
     {
         $pendingAnnouncements = Announcement::where('status', 0)->get();
 
+        foreach ($pendingAnnouncements as $announcement){
+            $announcement->status=1;
+            $announcement->save();
+        }
+
         if ($pendingAnnouncements->isNotEmpty()) {
             Mail::to(['mr.aghabayli@gmail.com', 'ahmad@rustamov.az'])
                 ->queue(new PendingAnnouncementNotification($pendingAnnouncements));

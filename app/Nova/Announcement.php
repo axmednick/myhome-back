@@ -55,6 +55,8 @@ class Announcement extends Resource
         return [
             ID::make()->sortable(),
             Boolean::make('Status'),
+            BelongsTo::make('User', 'user', User::class)
+                ->searchable(),
 /*
 
             Select::make('Announcement Type', 'announcement_type_id')
@@ -112,8 +114,7 @@ class Announcement extends Resource
             Boolean::make('In Credit', 'in_credit')
                 ->sortable(),
 
-            BelongsTo::make('User', 'user', User::class)
-                ->searchable(),
+
 
             Text::make('Latitude', 'lat')
                 ->nullable(),
