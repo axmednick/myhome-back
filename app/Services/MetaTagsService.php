@@ -63,7 +63,58 @@ class MetaTagsService
             ];
         }
         ///Tags for city
+        elseif (isset($params['villages']) && count((array) $params['villages']) > 0) {
+            $villageId = is_array($params['villages']) ? $params['villages'][0] : $params['villages'];
+            $village = \App\Models\Village::find($villageId);
 
+            if ($village) {
+                $villageName = $village->name;
+
+                // Statik olaraq propertyType-a uyğun meta tag-ları təyin edirik
+                if (isset($params['propertyType']) && $params['propertyType'] == 1) {
+                    $result = [
+                        'title' => "{$villageName} mənzillər 2024",
+                        'description' => "{$villageName} mənzillər. {$villageName} mənzil satışı və kirayəsi elanları. Ən son daşınmaz əmlak elanları myhome.az-da!",
+                    ];
+                } elseif (isset($params['propertyType']) && $params['propertyType'] == 2) {
+                    $result = [
+                        'title' => "{$villageName} həyət evləri 2024",
+                        'description' => "{$villageName} həyət evləri. Həyət evi satışı və kirayəsi elanları. Ən son daşınmaz əmlak elanları myhome.az-da!",
+                    ];
+                } elseif (isset($params['propertyType']) && $params['propertyType'] == 3) {
+                    $result = [
+                        'title' => "{$villageName} villalar 2024",
+                        'description' => "{$villageName} villa elanları. Villa satışı və kirayəsi. Ən son daşınmaz əmlak elanları myhome.az-da!",
+                    ];
+                } elseif (isset($params['propertyType']) && $params['propertyType'] == 4) {
+                    $result = [
+                        'title' => "{$villageName} bağ evləri 2024",
+                        'description' => "{$villageName} bağ evi elanları. Bağ evlərinin satışı və kirayəsi. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
+                    ];
+                } elseif (isset($params['propertyType']) && $params['propertyType'] == 5) {
+                    $result = [
+                        'title' => "{$villageName} torpaq elanları 2024",
+                        'description' => "{$villageName} torpaq elanları. Torpaq satışı və qiymətləri. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
+                    ];
+                } elseif (isset($params['propertyType']) && $params['propertyType'] == 6) {
+                    $result = [
+                        'title' => "{$villageName} ofis elanları 2024",
+                        'description' => "{$villageName} ofis elanları. Ofislərin satışı və kirayəsi. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
+                    ];
+                } elseif (isset($params['propertyType']) && $params['propertyType'] == 7) {
+                    $result = [
+                        'title' => "{$villageName} obyekt elanları 2024",
+                        'description' => "{$villageName} obyekt elanları. Obyektlərin satışı və kirayəsi. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
+                    ];
+                } else {
+                    // Əgər propertyType mövcud deyilsə və ya uyğun gəlmirsə
+                    $result = [
+                        'title' => "{$villageName} ev, torpaq, həyət evi əmlak elanları 2024",
+                        'description' => "{$villageName} həyət evi, torpaq, obyekt satış və kirayə elanları. Ən son daşınmaz əmlak elanları myhome.az-da!",
+                    ];
+                }
+            }
+        }
 
         elseif (isset($params['city']) && count($params) == 1 ) {
             $result = [
@@ -120,58 +171,7 @@ class MetaTagsService
             ];
         }
 
-        elseif (isset($params['villages']) && count((array) $params['villages']) > 0) {
-            $villageId = is_array($params['villages']) ? $params['villages'][0] : $params['villages'];
-            $village = \App\Models\Village::find($villageId);
 
-            if ($village) {
-                $villageName = $village->name;
-
-                // Statik olaraq propertyType-a uyğun meta tag-ları təyin edirik
-                if (isset($params['propertyType']) && $params['propertyType'] == 1) {
-                    $result = [
-                        'title' => "{$villageName} mənzillər 2024",
-                        'description' => "{$villageName} mənzillər. {$villageName} mənzil satışı və kirayəsi elanları. Ən son daşınmaz əmlak elanları myhome.az-da!",
-                    ];
-                } elseif (isset($params['propertyType']) && $params['propertyType'] == 2) {
-                    $result = [
-                        'title' => "{$villageName} həyət evləri 2024",
-                        'description' => "{$villageName} həyət evləri. Həyət evi satışı və kirayəsi elanları. Ən son daşınmaz əmlak elanları myhome.az-da!",
-                    ];
-                } elseif (isset($params['propertyType']) && $params['propertyType'] == 3) {
-                    $result = [
-                        'title' => "{$villageName} villalar 2024",
-                        'description' => "{$villageName} villa elanları. Villa satışı və kirayəsi. Ən son daşınmaz əmlak elanları myhome.az-da!",
-                    ];
-                } elseif (isset($params['propertyType']) && $params['propertyType'] == 4) {
-                    $result = [
-                        'title' => "{$villageName} bağ evləri 2024",
-                        'description' => "{$villageName} bağ evi elanları. Bağ evlərinin satışı və kirayəsi. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
-                    ];
-                } elseif (isset($params['propertyType']) && $params['propertyType'] == 5) {
-                    $result = [
-                        'title' => "{$villageName} torpaq elanları 2024",
-                        'description' => "{$villageName} torpaq elanları. Torpaq satışı və qiymətləri. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
-                    ];
-                } elseif (isset($params['propertyType']) && $params['propertyType'] == 6) {
-                    $result = [
-                        'title' => "{$villageName} ofis elanları 2024",
-                        'description' => "{$villageName} ofis elanları. Ofislərin satışı və kirayəsi. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
-                    ];
-                } elseif (isset($params['propertyType']) && $params['propertyType'] == 7) {
-                    $result = [
-                        'title' => "{$villageName} obyekt elanları 2024",
-                        'description' => "{$villageName} obyekt elanları. Obyektlərin satışı və kirayəsi. Ən yeni daşınmaz əmlak elanları myhome.az-da!",
-                    ];
-                } else {
-                    // Əgər propertyType mövcud deyilsə və ya uyğun gəlmirsə
-                    $result = [
-                        'title' => "{$villageName} ev, torpaq, həyət evi əmlak elanları 2024",
-                        'description' => "{$villageName} həyət evi, torpaq, obyekt satış və kirayə elanları. Ən son daşınmaz əmlak elanları myhome.az-da!",
-                    ];
-                }
-            }
-        }
 
 
 
