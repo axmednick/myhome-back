@@ -22,9 +22,9 @@ class SendWhatsAppMessages extends Command
             return;
         }
 
-        $regId = 920119659;
+        $regId = 147619788;
         $sendSpeed = 1;
-        $bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzE4Mzg4NDIsInVzZXJfaWQiOjI4MjR9.wS-N2FY-Xx2gXlGF4b6GreiBA5tOjkfjAN0mq_alL8I';
+        $bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM0NzU4MTIsInVzZXJfaWQiOjI4MjR9.g0QIoYDXe7HVdAp8qzyChbzS-MdMTzGcjrP3v9J8A90';
 
         $this->output->progressStart(count($contacts));
 

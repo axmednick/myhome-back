@@ -25,8 +25,8 @@ class MetaTagsService
 
 
         $result = [
-            'title' => 'Ən yeni daşınmaz əmlak satışı və kirayəsi elanları 2024',
-            'description' => 'Azərbaycanda ən yeni daşınmaz əmlak satışı və kirayəsi elanları MyHome.az-da! Bakı və rayonlarda ən son mənzil, həyət evi, bağ evi, villa, ofis, obyekt satışı və kirayəsi elanları ilə tanış olmaq üçün veb-sayta keçid edin.',
+            'title' => 'Ev elanları, Ev elanlari sayti Kiraye evler',
+            'description' => 'Azərbaycanda ən yeni daşınmaz əmlak satışı və kirayəsi elanları MyHome.az-da! Bakı və rayonlarda ən son mənzil, həyət evi, bağ evi, villa, ofis, obyekt satışı və kirayəsi elanları',
         ];
 
         // Müxtəlif query şərtlərinə uyğun meta teqləri təyin etmək
