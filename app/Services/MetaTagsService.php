@@ -120,6 +120,22 @@ class MetaTagsService
             ];
         }
 
+        elseif (isset($params['villages']) && count((array) $params['villages']) > 0) {
+            $villageId = is_array($params['villages']) ? $params['villages'][0] : $params['villages'];
+            $village = \App\Models\Village::find($villageId);
+
+            if ($village) {
+                $villageName = $village->name;
+                $result = [
+                    'title' => "{$villageName}  ev,torpaq,həyət evi əmlak elanları 2024",
+                    'description' => "{$villageName} həyət evi, torpaq, obyekt satış və kirayə elanları. Ən son daşınmaz əmlak elanları myhome.az-da!",
+                ];
+            }
+        }
+
+
+
+
         //Tags for city end
         elseif (isset($params['apartment_type']) && $params['apartment_type'] == 1 && count($params) == 1) {
             $result = [
