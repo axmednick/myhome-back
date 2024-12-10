@@ -14,6 +14,19 @@ class AgentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'email_verified_at' => $this->email_verified_at,
+            'user_type' => $this->user_type,
+            'phone' => $this->phone,
+            'image' => $this->avatar,
+            'photo' => $this->getMedia('photo') ? $this->getFirstMediaUrl('photo') : null,
+            'is_verified' => $this->is_verified, // Blue Tick statusu
+            'is_gold_user' => $this->is_gold_user, // Gold User statusu
+            'announcement_count' => $this->announcements_count, // Elan sayı
+
+        ];
     }
 }
