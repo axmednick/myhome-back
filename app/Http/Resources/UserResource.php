@@ -25,6 +25,8 @@ class UserResource extends JsonResource
             'balance'=>$this->balance,
             'bonus_balance'=>$this->bonus_balance,
             'photo'=>$this->getMedia('photo') ? $this->getFirstMediaUrl('photo') : null,
+            'is_verified' => $this->is_verified, // Blue Tick statusu
+            'is_gold_user' => $this->is_gold_user, // Gold User statusu
 
 
         ];

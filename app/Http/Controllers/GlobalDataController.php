@@ -11,6 +11,7 @@ use App\Http\Resources\PropertyTypeResource;
 use App\Http\Resources\RegionsAndVillageResource;
 use App\Http\Resources\RentalClientTypesResource;
 use App\Http\Resources\StaticPageResource;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\VillageResource;
 use App\Models\AnnouncementRentalClientTypes;
 use App\Models\AnnouncementType;
@@ -22,6 +23,7 @@ use App\Models\PopularCategory;
 use App\Models\PropertyType;
 use App\Models\Region;
 use App\Models\StaticPage;
+use App\Models\User;
 use App\Models\Village;
 use App\Services\MetaTagsService;
 use Illuminate\Http\Request;
@@ -87,4 +89,17 @@ class GlobalDataController extends Controller
     public function metaTags($query){
         return $this->metaTagsService->getMetaTags($query);
     }
+
+    public function agents()
+    {
+        $users = User::where('user_type', 'agent')
+            ->withCount('announcements')
+            ->orderByDesc('is_gold_user')
+            ->orderByDesc('is_verified')
+            ->orderByDesc('announcements_count')
+            ->paginate(20);
+
+        return UserResource::collection($users);
+    }
+
 }
