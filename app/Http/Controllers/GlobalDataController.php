@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AgentResource;
 use App\Http\Resources\AnnouncementTypeResource;
 use App\Http\Resources\ApartmentTypeResource;
 use App\Http\Resources\CityResource;
@@ -99,7 +100,7 @@ class GlobalDataController extends Controller
             ->orderByDesc('announcements_count')
             ->paginate(20);
 
-        return UserResource::collection($users);
+        return AgentResource::collection($users);
     }
 
 }
