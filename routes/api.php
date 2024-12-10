@@ -44,7 +44,6 @@ Route::prefix('user')->group(function () {
 
     Route::get('/announcements/{id?}', [AnnouncementController::class, 'userAnnouncements']);
     Route::get('/favorites', [AnnouncementController::class, 'favorites']);
-
     Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/bonus-progress', [BonusController::class, 'progress']);
@@ -97,6 +96,8 @@ Route::get('/popular-categories', [GlobalDataController::class, 'popularCategori
 Route::get('/static-pages', [GlobalDataController::class, 'staticPages']);
 Route::get('/static-page/{slug}', [GlobalDataController::class, 'staticPage']);
 Route::get('/meta-tags/{query}', [GlobalDataController::class, 'metaTags']);
+Route::get('/agents',[GlobalDataController::class,'agents']);
+
 
 Route::prefix('announcement')->group(function () {
     Route::post('/image-upload', [FileUploadController::class, 'temporaryFile']);
