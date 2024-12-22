@@ -76,6 +76,8 @@ Route::prefix('user')->group(function () {
             Route::delete('delete/{id}', [LinkController::class, 'delete']);
         });
 
+        Route::get('/phone/{id}',[UserAuthController::class,'getPhone']);
+
 
     });
 
