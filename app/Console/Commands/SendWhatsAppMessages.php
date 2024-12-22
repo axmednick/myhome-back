@@ -22,9 +22,9 @@ class SendWhatsAppMessages extends Command
             return;
         }
 
-        $regId = 147619788;
+        $regId = 242413935;
         $sendSpeed = 1;
-        $bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM0NzU4MTIsInVzZXJfaWQiOjI4MjR9.g0QIoYDXe7HVdAp8qzyChbzS-MdMTzGcjrP3v9J8A90';
+        $bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzUxMTAxMzIsInVzZXJfaWQiOjI4MjR9.U2BYG8WG_PBamacdDrzgI5ZeFQAjon-8Y09x_Hnqsqs';
 
         $this->output->progressStart(count($contacts));
 
@@ -48,8 +48,8 @@ Hörmətlə, MyHome.az administrasiyası";
                 'send_speed' => $sendSpeed
             ]);
             $contact->wp_response=$response->json();
-            $contact->save();
 
+            $contact->save();
             if ($response->successful() && $response->json('description') == 'Mesaj gönderildi') {
                 $contact->update(['sent' => true]);
                 $this->info("Mesaj {$contact->phone} nömrəsinə göndərildi.");

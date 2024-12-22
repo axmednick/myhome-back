@@ -32,8 +32,8 @@ class FetchBinaLinks extends Command
         $links = [];
 
         // 100 səhifədən məlumatları yükləyən döngü
-        for ($page = 1; $page <= 1000; $page++) {
-            $url = "https://bina.az/alqi-satqi/menziller?page={$page}";
+        for ($page = 1; $page <= 140; $page++) {
+            $url = "https://bina.az/baki/alqi-satqi/torpaq?page={$page}";
             $this->info("Fetching page: {$page}");
 
             // Hər səhifənin HTML məlumatını çəkin

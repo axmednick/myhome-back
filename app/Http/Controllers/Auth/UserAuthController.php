@@ -154,4 +154,10 @@ class UserAuthController extends Controller
         return $this->sendResponse([], 'Otp is sent');
     }
 
+    public function getPhone($id)
+    {
+        $user = User::findOrFail($id);
+        return response()->json(['phone'=>$user->phone]);
+    }
+
 }
