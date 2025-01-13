@@ -2,6 +2,7 @@
 
 use App\Helpers\TelegramHelper;
 use App\Http\Controllers\AdvertController;
+use App\Http\Controllers\AgencyController;
 use App\Http\Controllers\Announcement\AnnouncementController;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\BonusController;
@@ -105,7 +106,6 @@ Route::get('/agents',[GlobalDataController::class,'agents']);
 Route::prefix('announcement')->group(function () {
     Route::post('/image-upload', [FileUploadController::class, 'temporaryFile']);
     Route::post('/store', [AnnouncementController::class, 'store']);
-
     Route::get('/list', [AnnouncementController::class, 'announcements']);
     Route::get('/item/{id}', [AnnouncementController::class, 'detail']);
     Route::get('/nearby-metro-stations', [AnnouncementController::class, 'nearbyMetroStations']);
@@ -115,7 +115,10 @@ Route::prefix('announcement')->group(function () {
     Route::post('/make-premium', [AdvertController::class, 'makePremium']);
     Route::get('/similar/{id}', [AnnouncementController::class, 'similarAnnouncements']);
     Route::get('/link/{code}', [AnnouncementController::class, 'link']);
+});
 
+Route::prefix('agency')->group(function (){
+   Route::post('/update/{id}',[AgencyController::class,'update']);
 });
 
 Route::post('/test', [FileUploadController::class,'test']);
