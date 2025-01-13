@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use GuzzleHttp\Client;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
+use simplehtmldom\HtmlWeb;
 use App\Models\Listing;
 
 class Turbo extends Command
@@ -21,57 +20,75 @@ class Turbo extends Command
      *
      * @var string
      */
-    protected $description = 'Parse listings from saved links and insert into database';
+    protected $description = 'Parse listings directly from turbo.az and insert into the database';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $client = new Client();
-        $linksFile = storage_path('app/links.json');
+        $baseUrl = 'https://turbo.az';
+        $listingsPage = '/autos';
+        $htmlWeb = new HtmlWeb();
 
-        // Mövcud JSON faylını yükləyirik
-        if (!File::exists($linksFile)) {
-            $this->error("Links file not found.");
+        // Əsas səhifənin HTML məzmununu yükləyirik
+        $html = $htmlWeb->load($baseUrl . $listingsPage);
+
+        if (!$html) {
+            $this->error('Failed to load the main page.');
             return;
         }
 
-        $linksData = json_decode(File::get($linksFile), true);
-        $links = $linksData['links'] ?? [];
+        // Elan linklərini seçmək üçün HTML strukturundan istifadə
+        $links = [];
+        foreach ($html->find('.products a') as $element) {
+            if (isset($element->href)) {
+                $links[] = $baseUrl . $element->href;
+            }
+        }
 
         if (empty($links)) {
-            $this->error("No links available in the file.");
+            $this->error('No listings found on the page.');
             return;
         }
 
+
+
+        $this->info('Found ' . count($links) . ' listings. Parsing details...');
+
+        // Hər bir linki parse edirik
         foreach ($links as $link) {
-        
-            $response = $client->get($link);
-            $html = $response->getBody()->getContents();
+            $listingHtml = $htmlWeb->load($link);
 
-            // İstifadəçi adı üçün regex
-            preg_match('/<div class=\"product-owner__info-name\">(.*?)<\/div>/', $html, $nameMatch);
-            $name = $nameMatch[1] ?? null;
+            if (!$listingHtml) {
+                $this->error("Failed to load listing page: $link");
+                continue;
+            }
 
-            // Telefon nömrəsi üçün regex
-            preg_match('/<a class=\"product-gallery__phone-link is-hidden\" href=\"tel:(.*?)\">/', $html, $phoneMatch);
-            $phone = $phoneMatch[1] ?? null;
+            // Sahiblərin adını tapırıq
+            $nameElement = $listingHtml->find('.product-owner__info-name', 0);
+            $name = $nameElement ? trim($nameElement->plaintext) : null;
 
+            // Telefon nömrəsini tapırıq
+            $phoneElement = $listingHtml->find('.product-gallery__phone-link.is-hidden', 0);
+            $phone = $phoneElement ? trim($phoneElement->href) : null;
+
+            // Telefon nömrəsini yoxlayırıq və yeni elan əlavə edirik
             if ($name && $phone) {
-                // Yeni listing yaradılır
+                $phone = str_replace('tel:', '', $phone);
+
                 Listing::create([
                     'name' => $name,
                     'phone' => $phone,
-                    'is_agent' => Listing::where('phone', $phone)->exists(), // Mövcud telefon nömrəsini yoxlayırıq
+                    'is_agent' => Listing::where('phone', $phone)->exists(),
                 ]);
 
                 $this->info("Listing created: Name: $name, Phone: $phone");
             } else {
-                $this->error("Failed to parse listing for link: $link");
+                $this->error("Failed to parse listing details for link: $link");
             }
 
-            sleep(1); // Sorğular arasında kiçik fasilə
+            sleep(1); // Sorğular arasında fasilə
         }
 
         $this->info("Process completed.");
