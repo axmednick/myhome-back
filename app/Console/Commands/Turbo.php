@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\ParsedAnnouncement;
 use Illuminate\Console\Command;
 use simplehtmldom\HtmlWeb;
 use App\Models\Listing;
@@ -58,6 +59,12 @@ class Turbo extends Command
 
         // Hər bir linki parse edirik
         foreach ($links as $link) {
+            // Əgər link artıq parse olunubsa, keç
+            if (ParsedAnnouncement::where('link', $link)->exists()) {
+                $this->info("Link already parsed: $link");
+                continue;
+            }
+
             $listingHtml = $htmlWeb->load($link);
 
             if (!$listingHtml) {
@@ -65,30 +72,34 @@ class Turbo extends Command
                 continue;
             }
 
-            // Sahiblərin adını tapırıq
             $nameElement = $listingHtml->find('.product-owner__info-name', 0);
             $name = $nameElement ? trim($nameElement->plaintext) : null;
 
-            // Telefon nömrəsini tapırıq
             $phoneElement = $listingHtml->find('.product-gallery__phone-link.is-hidden', 0);
             $phone = $phoneElement ? trim($phoneElement->href) : null;
 
-            // Telefon nömrəsini yoxlayırıq və yeni elan əlavə edirik
             if ($name && $phone) {
                 $phone = str_replace('tel:', '', $phone);
 
-                Listing::create([
-                    'name' => $name,
-                    'phone' => $phone,
-                    'is_agent' => Listing::where('phone', $phone)->exists(),
-                ]);
+                $listing = Listing::firstOrCreate(
+                    ['phone' => $phone],
+                    ['name' => $name, 'ads_count' => 1]
+                );
 
-                $this->info("Listing created: Name: $name, Phone: $phone");
+                // Əgər artıq varsa, `ads_count` artır
+                if (!$listing->wasRecentlyCreated) {
+                    $listing->increment('ads_count');
+                }
+
+                $this->info("Listing created or updated: Name: $name, Phone: $phone");
+
+                // Parse edilmiş linki saxla
+                ParsedAnnouncement::create(['link' => $link]);
             } else {
                 $this->error("Failed to parse listing details for link: $link");
             }
 
-            sleep(1); // Sorğular arasında fasilə
+            sleep(1);
         }
 
         $this->info("Process completed.");
