@@ -1,68 +1,72 @@
 <?php
-
 namespace App\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AgencyUserService
 {
-    protected AgencyUserService $agencyUserService;
+    protected UserRepository $repository;
 
-    public function __construct(AgencyUserService $agencyUserService)
+    public function __construct(UserRepository $repository)
     {
-        $this->agencyUserService = $agencyUserService;
+        $this->repository = $repository;
     }
 
-    public function create(Request $request, $agencyId)
+    public function createUser(array $data, $photo = null)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:15',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+        $admin = \auth('sanctum')->user();
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+        if (!$admin->managedAgency) {
+            throw new \Exception('You are not managing any agency');
         }
 
-        try {
-            $user = $this->agencyUserService->createUser($validator->validated(), $agencyId);
-            return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+        $data['agency_id'] = $admin->managedAgency->id;
+        $data['password'] = Hash::make($data['password']);
+        $data['user_type'] = 'agent';
+
+        $user = $this->repository->create($data);
+
+        if ($photo) {
+            $this->repository->updateMedia($user, $photo);
         }
+
+        return $user;
     }
 
-    public function update(Request $request, $id)
+
+    public function updateUser($id, array $data, $photo = null)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|string|max:255',
-            'phone' => 'sometimes|string|max:15',
-            'email' => 'sometimes|email|unique:users,email,' . $id,
-            'password' => 'sometimes|string|min:6|confirmed',
-        ]);
+        $admin = \auth('sanctum')->user();
+        $user = $this->repository->find($id);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+        if (!$user || $user->agency_id !== $admin->managedAgency->id) {
+            throw new \Exception('You are not authorized to update this user');
         }
 
-        try {
-            $user = $this->service->updateUser($id, $validator->validated());
-            return response()->json(['message' => 'User updated successfully', 'user' => $user], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+        if (isset($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
         }
+
+        $this->repository->update($user, $data);
+
+        if ($photo) {
+            $this->repository->updateMedia($user, $photo);
+        }
+
+        return $user;
     }
 
-    public function list($agencyId)
+
+    public function listUsers()
     {
-        try {
-            $users = $this->service->listUsers($agencyId);
-            return response()->json(['users' => $users], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
+        $admin = \auth('sanctum')->user();;
+
+        if (!$admin->managedAgency) {
+            throw new \Exception('You are not managing any agency');
         }
+
+        return $this->repository->findByAgency($admin->managedAgency->id);
     }
 }

@@ -13,8 +13,15 @@ class Agency extends Model implements HasMedia
 
     protected $guarded=['id'];
 
-    public function user()
+
+    public function admin()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Agentliyə aid olan istifadəçilərlə əlaqə
+    public function users()
+    {
+        return $this->hasMany(User::class, 'agency_id');
     }
 }
