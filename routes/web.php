@@ -22,6 +22,6 @@ Route::get('/data',function (){
     $count = count($listings);
     echo "<h4>Cəmi {$count}</h4>";
     foreach ($listings as $listing){
-        echo '<div>' . $listing->name .' '.$listing->phone.'Elan sayı <b>'.$listing->ads_count.'</b></div> ';
+        echo '<div>' . $listing->name .' '.$listing->phone.' Elan sayı <b>'.$listing->ads_count.'</b></div> ';
     }
 });
