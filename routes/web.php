@@ -19,6 +19,8 @@ Route::get('/auth/{driver}/redirect', [App\Http\Controllers\GoogleLoginControlle
 Route::get('/auth/{driver}/callback', [App\Http\Controllers\GoogleLoginController::class, 'handleCallback'])->name('google.callback');
 Route::get('/data',function (){
     $listings = \App\Models\Listing::where('ads_count','>',1)->orderBy('ads_count','desc')->get();
+    $count = count($listings);
+    echo "<h4>Cəmi {$count}</h4>";
     foreach ($listings as $listing){
         echo '<div>' . $listing->name .' '.$listing->phone.'Elan sayı <b>'.$listing->ads_count.'</b></div> ';
     }
