@@ -57,9 +57,7 @@ class Turbo extends Command
 
         $this->info('Found ' . count($links) . ' listings. Parsing details...');
 
-        // Hər bir linki parse edirik
         foreach ($links as $link) {
-            // Əgər link artıq parse olunubsa, keç
             if (ParsedAnnouncement::where('link', $link)->exists()) {
                 $this->info("Link already parsed: $link");
                 continue;
@@ -86,15 +84,14 @@ class Turbo extends Command
                     ['name' => $name, 'ads_count' => 1]
                 );
 
-                // Əgər artıq varsa, `ads_count` artır
                 if (!$listing->wasRecentlyCreated) {
                     $listing->increment('ads_count');
                 }
 
                 $this->info("Listing created or updated: Name: $name, Phone: $phone");
 
-                // Parse edilmiş linki saxla
                 ParsedAnnouncement::create(['link' => $link]);
+
             } else {
                 $this->error("Failed to parse listing details for link: $link");
             }

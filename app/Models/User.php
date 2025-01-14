@@ -23,7 +23,8 @@ class User extends Authenticatable implements HasMedia
         'name',
         'email',
         'password',
-        'phone'
+        'phone',
+        'agency_id'
     ];
 
     /**
@@ -48,5 +49,15 @@ class User extends Authenticatable implements HasMedia
     public function announcements()
     {
         return $this->hasMany(Announcement::class);
+    }
+    public function agency()
+    {
+        return $this->belongsTo(Agency::class, 'agency_id');
+    }
+
+    // Əgər istifadəçi Admindirsə, idarə etdiyi agentlik
+    public function managedAgency()
+    {
+        return $this->hasOne(Agency::class, 'user_id');
     }
 }

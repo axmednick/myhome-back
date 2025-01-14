@@ -3,6 +3,7 @@
 use App\Helpers\TelegramHelper;
 use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\AgencyController;
+use App\Http\Controllers\AgencyUserController;
 use App\Http\Controllers\Announcement\AnnouncementController;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\BonusController;
@@ -119,6 +120,11 @@ Route::prefix('announcement')->group(function () {
 
 Route::prefix('agency')->group(function (){
    Route::post('/update/{id}',[AgencyController::class,'update']);
+    Route::prefix('users')->group(function () {
+        Route::post('/create', [AgencyUserController::class, 'create']);
+        Route::patch('/{id}', [AgencyUserController::class, 'update']);
+        Route::get('/', [AgencyUserController::class, 'list']);
+    });
 });
 
 Route::post('/test', [FileUploadController::class,'test']);

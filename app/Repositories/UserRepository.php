@@ -24,4 +24,11 @@ class UserRepository
     {
         return $user->update($data);
     }
+    public function updateMedia(User $user, $avatar = null): void
+    {
+        if ($avatar) {
+            $user->clearMediaCollection('photo');
+            $user->addMedia($avatar)->toMediaCollection('photo');
+        }
+    }
 }
