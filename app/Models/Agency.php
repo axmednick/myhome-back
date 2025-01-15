@@ -24,4 +24,8 @@ class Agency extends Model implements HasMedia
     {
         return $this->hasMany(User::class, 'agency_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

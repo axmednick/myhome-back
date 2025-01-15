@@ -28,6 +28,7 @@ class UserResource extends JsonResource
             'is_verified' => $this->is_verified, // Blue Tick statusu
             'is_gold_user' => $this->is_gold_user, // Gold User statusu
             'is_agency_admin' => $this->managedAgency ? true : false,
+            'agency' => $this->agency ? new AgencyResource($this->agency) : null,
         ];
     }
 }
