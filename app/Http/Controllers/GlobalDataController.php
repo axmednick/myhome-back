@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AgencyResource;
 use App\Http\Resources\AgentResource;
 use App\Http\Resources\AnnouncementTypeResource;
 use App\Http\Resources\ApartmentTypeResource;
@@ -14,6 +15,7 @@ use App\Http\Resources\RentalClientTypesResource;
 use App\Http\Resources\StaticPageResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\VillageResource;
+use App\Models\Agency;
 use App\Models\AnnouncementRentalClientTypes;
 use App\Models\AnnouncementType;
 use App\Models\ApartmentType;
@@ -102,5 +104,12 @@ class GlobalDataController extends Controller
 
         return AgentResource::collection($users);
     }
+
+    public function agencies()
+    {
+        $agencies = Agency::paginate(20);
+        return AgencyResource::collection($agencies);
+    }
+
 
 }
