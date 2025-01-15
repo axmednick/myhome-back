@@ -45,7 +45,6 @@ class AgencyUserController extends Controller
             'name' => 'sometimes|string|max:255',
             'phone' => 'sometimes|string|max:15',
             'email' => 'sometimes|email|unique:users,email,' . $id,
-            'password' => 'sometimes|string|min:6|confirmed',
             'photo' => 'sometimes|file|mimes:jpg,jpeg,png|max:2048',
 
         ]);

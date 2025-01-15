@@ -55,7 +55,7 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsTo(Agency::class, 'agency_id');
     }
 
-    // Əgər istifadəçi Admindirsə, idarə etdiyi agentlik
+
     public function managedAgency()
     {
         return $this->hasOne(Agency::class, 'user_id');

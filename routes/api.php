@@ -47,21 +47,17 @@ Route::prefix('user')->group(function () {
     Route::get('/announcements/{id?}', [AnnouncementController::class, 'userAnnouncements']);
     Route::get('/favorites', [AnnouncementController::class, 'favorites']);
     Route::middleware('auth:sanctum')->group(function () {
-
         Route::get('/bonus-progress', [BonusController::class, 'progress']);
         Route::get('/take-bonus', [BonusController::class, 'take']);
-
         Route::post('profile-update', [ProfileController::class, 'profileUpdate']);
         Route::post('/update-user-type', [ProfileController::class, 'updateUserType']);
         Route::post('password-update', [ProfileController::class, 'passwordUpdate']);
         Route::get('/statistics', [ProfileController::class, 'statistics']);
-
         Route::prefix('saved-search')->group(function (){
             Route::get('/',[SavedSearchController::class,'index']);
             Route::post('store',[SavedSearchController::class,'store']);
             Route::delete('{id}',[SavedSearchController::class,'delete']);
         });
-
         Route::prefix('announcement')->group(function () {
             Route::get('toggle-is-active/{id}', [UserAnnouncementController::class, 'toggleIsActive']);
             Route::delete('delete/{id}', [UserAnnouncementController::class, 'deleteAnnouncement']);
@@ -70,22 +66,15 @@ Route::prefix('user')->group(function () {
             Route::get('/edit/{id}', [AnnouncementController::class, 'edit']);
             Route::post('/update/{id}', [AnnouncementController::class, 'update']);
         });
-
         Route::prefix('link')->group(function () {
             Route::get('/', [LinkController::class, 'index']);
             Route::get('generate', [LinkController::class, 'generate']);
             Route::post('store', [LinkController::class, 'store']);
             Route::delete('delete/{id}', [LinkController::class, 'delete']);
         });
-
-
-
-
     });
     Route::get('/phone/{id}',[UserAuthController::class,'getPhone']);
-
 });
-
 
 Route::get('announcement-types', [GlobalDataController::class, 'announcementTypes']);
 Route::get('property-types', [GlobalDataController::class, 'propertyTypes']);
@@ -102,6 +91,7 @@ Route::get('/static-pages', [GlobalDataController::class, 'staticPages']);
 Route::get('/static-page/{slug}', [GlobalDataController::class, 'staticPage']);
 Route::get('/meta-tags/{query}', [GlobalDataController::class, 'metaTags']);
 Route::get('/agents',[GlobalDataController::class,'agents']);
+Route::get('/agencies',[GlobalDataController::class,'agencies']);
 
 
 Route::prefix('announcement')->group(function () {
@@ -122,7 +112,7 @@ Route::prefix('agency')->group(function (){
    Route::post('/update/{id}',[AgencyController::class,'update']);
     Route::prefix('users')->group(function () {
         Route::post('/create', [AgencyUserController::class, 'create']);
-        Route::patch('/{id}', [AgencyUserController::class, 'update']);
+        Route::post('/update/{id}', [AgencyUserController::class, 'update']);
         Route::get('/', [AgencyUserController::class, 'list']);
     });
 });
