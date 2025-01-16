@@ -56,6 +56,7 @@ class AgencyController extends Controller
     public function userAgency()
     {
         $user = auth('sanctum')->user();
+
         if ($user->is_agency_admin){
             return AgencyResource::make($user->managedAgency);
         }
