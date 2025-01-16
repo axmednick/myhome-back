@@ -40,7 +40,7 @@ class AnnouncementResource extends JsonResource
                 'images' => ImageResource::collection($this->getMedia('image')),
                 'main_image' => $this->getFirstMediaUrl('main') ?: $this->getFirstMediaUrl('image'),
                 'main_image_thumb' => $this->getMedia('image')->sortBy('order_column')->first()?->getUrl('thumb'),
-                'user' => $this->user,
+                'user' => UserResource::make($this->user),
                 'short_title' => $this->shortTitle(),
                 'title' => $this->title(),
                 'short_details' => $this->shortDetails(),
