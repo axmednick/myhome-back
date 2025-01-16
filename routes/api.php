@@ -72,6 +72,7 @@ Route::prefix('user')->group(function () {
             Route::post('store', [LinkController::class, 'store']);
             Route::delete('delete/{id}', [LinkController::class, 'delete']);
         });
+        Route::get('/agency',[AgencyController::class,'userAgency']);
     });
     Route::get('/phone/{id}',[UserAuthController::class,'getPhone']);
 });
