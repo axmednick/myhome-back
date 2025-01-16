@@ -47,7 +47,7 @@ class AgencyController extends Controller
                 $request->file('cover_photo')
             );
 
-            return $this->sendResponse($agency,'Agency Updated successfully!');
+            return $this->sendResponse(AgencyResource::make(AgencyResource::make($agency)),'Agency Updated successfully!');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage());
         }
