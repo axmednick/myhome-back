@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Resources\AgencyResource;
 use App\Services\AgencyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -49,6 +50,14 @@ class AgencyController extends Controller
             return $this->sendResponse($agency,'Agency Updated successfully!');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage());
+        }
+    }
+
+    public function userAgency()
+    {
+        $user = auth('sanctum')->user();
+        if ($user->is_agency_admin){
+            return AgencyResource::make($user->managedAgency);
         }
     }
 }
