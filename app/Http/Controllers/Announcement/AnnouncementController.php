@@ -109,6 +109,7 @@ class AnnouncementController extends Controller
             'looking_roommate' => $request->looking_roommate,
             'credit_possible' => $request->credit_possible,
             'in_credit' => $request->in_credit,
+            'agency_id' => $user->agency ? $user->agency->id : null,
         ]);
 
 
