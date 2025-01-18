@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -69,4 +70,22 @@ class AgencyUserService
 
         return $this->repository->findByAgency($admin->managedAgency->id);
     }
+
+    public function deleteUser($id)
+    {
+        $user = User::find($id);
+
+        \auth('sanctum')->user();
+        if ($user->agency_id==auth('sanctum')->user()->managedAgency->id){
+            $user->delete();
+        }
+
+        if (!$user) {
+            throw new \Exception('User not found');
+        }
+
+        // İstifadəçini silirik
+
+    }
+
 }
