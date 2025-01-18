@@ -116,6 +116,8 @@ Route::prefix('agency')->group(function (){
         Route::post('/update/{id}', [AgencyUserController::class, 'update']);
         Route::get('/', [AgencyUserController::class, 'list']);
     });
+
+    Route::post('apply',[AgencyController::class,'apply']);
 });
 
 Route::post('/test', [FileUploadController::class,'test']);
