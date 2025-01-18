@@ -81,4 +81,10 @@ class AgencyController extends Controller
             return $this->sendError($e->getMessage());
         }
     }
+
+    public function detail($id)
+    {
+        $agency = $this->agencyService->getAgency($id);
+        return $this->sendResponse(AgencyResource::make($agency));
+    }
 }
