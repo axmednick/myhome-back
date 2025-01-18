@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\AgencyApply;
 use App\Repositories\AgencyRepository;
 
 class AgencyService
@@ -35,6 +36,13 @@ class AgencyService
         }
 
         return $updatedAgency;
+    }
+
+    public function apply($data)
+    {
+        $agencyApply = AgencyApply::create($data);
+
+        return $agencyApply;
     }
 
 }

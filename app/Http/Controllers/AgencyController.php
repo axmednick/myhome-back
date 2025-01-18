@@ -61,4 +61,24 @@ class AgencyController extends Controller
             return AgencyResource::make($user->managedAgency);
 
     }
+
+    public function apply(Request $request){
+        $validator = Validator::make(request()->all(), [
+            'name' => 'required|string|max:255',
+            'agency_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:15',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        try {
+            $this->agencyService->apply($validator->validated());
+            return $this->sendResponse([], 'Apply sent successfully!');
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage());
+        }
+    }
 }
