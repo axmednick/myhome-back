@@ -31,14 +31,16 @@ class AnnouncementService
                 },
                 'user'
             ]);
-        Log::error('Search');
+
+        if ($request->has('agency_id')) {
+            $announcements->where('agency_id', $request -> agency_id);
+        }
 
         if ($request->client_types_for_rent) {
 
             if ($request->client_types_for_rent!=1) {
 
                 Log::error($request->client_types_for_rent);
-                // Əgər "hamı üçün" (1) yoxdursa, seçilmiş dəyərlərə görə süzgəc tətbiq edilir
                 $announcements->whereHas('rental_client_types', function ($query) use ($request) {
                     $query->where('client_type_for_rent_id', $request->client_types_for_rent);
                 });

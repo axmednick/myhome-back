@@ -93,16 +93,20 @@ class GlobalDataController extends Controller
         return $this->metaTagsService->getMetaTags($query);
     }
 
-    public function agents()
+    public function agents(Request $request)
     {
         $users = User::where('user_type', 'agent')
             ->withCount('announcements')
             ->orderByDesc('is_gold_user')
             ->orderByDesc('is_verified')
-            ->orderByDesc('announcements_count')
-            ->paginate(20);
+            ->orderByDesc('announcements_count');
 
-        return AgentResource::collection($users);
+        if ($request->has('agency_id')) {
+            $users->where('agency_id', $request->agency_id);
+        }
+
+
+        return AgentResource::collection($users ->paginate(20));
     }
 
     public function agencies()
