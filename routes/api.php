@@ -111,6 +111,7 @@ Route::prefix('announcement')->group(function () {
 
 Route::prefix('agency')->group(function (){
    Route::post('/update/{id}',[AgencyController::class,'update']);
+   Route::get('detail/{id}',[AgencyController::class,'detail']);
     Route::prefix('users')->group(function () {
         Route::post('/create', [AgencyUserController::class, 'create']);
         Route::post('/update/{id}', [AgencyUserController::class, 'update']);

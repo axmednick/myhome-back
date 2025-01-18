@@ -44,5 +44,18 @@ class AgencyService
 
         return $agencyApply;
     }
+    public function getAgency($id)
+    {
+        $agency = $this->repository->find($id);
+
+        if (!$agency) {
+            throw new \Exception('Agency not found');
+        }
+
+        return $agency;
+    }
+
+
+
 
 }
