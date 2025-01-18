@@ -70,4 +70,17 @@ class AgencyUserController extends Controller
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
+
+    public function delete($id)
+    {
+        try {
+            // İstifadəçini silmək üçün service funksiyasını çağırırıq
+            $this->service->deleteUser($id);
+            return response()->json(['message' => 'User deleted successfully'], 200);
+        } catch (\Exception $e) {
+            // Xəta baş verərsə, cavabda xəta mesajını qaytarırıq
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
 }

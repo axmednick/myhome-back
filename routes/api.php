@@ -115,6 +115,7 @@ Route::prefix('agency')->group(function (){
         Route::post('/create', [AgencyUserController::class, 'create']);
         Route::post('/update/{id}', [AgencyUserController::class, 'update']);
         Route::get('/', [AgencyUserController::class, 'list']);
+        Route::delete('/{id}', [AgencyUserController::class, 'delete']);
     });
 
     Route::post('apply',[AgencyController::class,'apply']);
