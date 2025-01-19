@@ -23,6 +23,7 @@ class AgencyResource extends JsonResource
             'display_as_agency'=> $this->display_as_agency,
             'logo'=> $this->getFirstMediaUrl('logo'),
             'cover_photo'=> $this->getFirstMediaUrl('cover_photo'),
+            'announcement_count'=> $this->announcements->count(),
 
         ];
     }
