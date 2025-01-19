@@ -28,4 +28,9 @@ class Agency extends Model implements HasMedia
     {
         return $this->belongsTo(User::class);
     }
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class);
+    }
 }
