@@ -78,6 +78,7 @@ class Announcement extends Model implements HasMedia
             });
 
         $this->addMediaCollection('main')
+
             ->singleFile() // Ensures only one image is in the "main" collection
             ->registerMediaConversions(function (Media $media) {
                 $this->addMediaConversion('thumb_main')
@@ -96,8 +97,6 @@ class Announcement extends Model implements HasMedia
                     ->watermarkOpacity(20)
                     ->performOnCollections('main');
             });
-
-        $this->addMediaConversion('original')->nonQueued();
     }
 
 
