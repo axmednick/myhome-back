@@ -36,8 +36,7 @@ class CheckPendingAnnouncements extends Command
         }
 
         if ($pendingAnnouncements->isNotEmpty()) {
-            Mail::to(['mr.aghabayli@gmail.com', 'ahmad@rustamov.az'])
-                ->queue(new PendingAnnouncementNotification($pendingAnnouncements));
+
 
             $this->info('Gözləmədə olan elanlarla bağlı mail göndərildi.');
         } else {
