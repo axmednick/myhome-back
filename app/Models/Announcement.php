@@ -57,28 +57,28 @@ class Announcement extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('image')
+            ->doNotKeepOriginals() // Orijinal şəkli saxlamamaq
             ->registerMediaConversions(function (Media $media) {
-                $this
-                    ->addMediaConversion('thumb')
+                $this->addMediaConversion('thumb')
                     ->width(344)
                     ->height(244)
-                    ->fit('crop', 344, 244) // Crop işlemiyle tam boyutlandırma
+                    ->fit('crop', 344, 244)
                     ->optimize()
                     ->performOnCollections('image');
 
-                $this
-                    ->addMediaConversion('watermarked')
+                $this->addMediaConversion('watermarked')
                     ->watermark(public_path('watermark.png'))
                     ->watermarkPosition('center')
-                    ->width(1000) // Watermark ekledikten sonra resmin genişliği
-                    ->height(1000) // Watermark ekledikten sonra resmin yüksekliği
+                    ->watermarkWidth('50%') // Nisbi genişlik
+                    ->watermarkHeight('50%') // Nisbi hündürlük
+                    ->watermarkFit('contain') // Nisbəti saxla
                     ->optimize()
-                    ->watermarkOpacity(20)
                     ->performOnCollections('image');
             });
 
         $this->addMediaCollection('main')
-            ->singleFile() // Ensures only one image is in the "main" collection
+            ->singleFile()
+            ->doNotKeepOriginals() // Orijinal şəkli saxlamamaq
             ->registerMediaConversions(function (Media $media) {
                 $this->addMediaConversion('thumb_main')
                     ->width(344)
@@ -90,15 +90,14 @@ class Announcement extends Model implements HasMedia
                 $this->addMediaConversion('watermarked')
                     ->watermark(public_path('watermark.png'))
                     ->watermarkPosition('center')
-                    ->width(1000)
-                    ->height(1000)
+                    ->watermarkWidth('50%')
+                    ->watermarkHeight('50%')
+                    ->watermarkFit('contain')
                     ->optimize()
-                    ->watermarkOpacity(20)
                     ->performOnCollections('main');
             });
-
-        $this->addMediaConversion('original')->nonQueued();
     }
+
 
 
 
