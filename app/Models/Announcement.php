@@ -97,6 +97,7 @@ class Announcement extends Model implements HasMedia
                     ->watermarkOpacity(20)
                     ->performOnCollections('main');
             });
+
     }
 
 
