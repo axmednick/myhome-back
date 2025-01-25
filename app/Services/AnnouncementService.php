@@ -157,6 +157,8 @@ class AnnouncementService
         $similarAnnouncements = Announcement::where('announcement_type_id', $announcement->announcement_type_id)
             ->where('property_type_id', $announcement->property_type_id)
             ->where('id', '!=', $id)
+            ->orderBy('created_at', 'desc')
+
             ->take(5)
             ->get();
 
