@@ -10,6 +10,7 @@ use App\Http\Controllers\BonusController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\GlobalDataController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\User\LinkController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\SavedSearchController;
@@ -122,4 +123,7 @@ Route::prefix('agency')->group(function (){
     Route::post('apply',[AgencyController::class,'apply']);
 });
 
-Route::post('/test', [FileUploadController::class,'test']);
+Route::prefix('payment')->group(function (){
+   Route::post('/pay',[PaymentController::class,'createOrder']);
+    Route::get('/callback',[PaymentController::class,'callbackTransaction']);
+});
