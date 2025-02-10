@@ -69,13 +69,27 @@ class PaymentController extends Controller {
     {
         DB::beginTransaction();
 
-        \Log::error($request->all());
         try {
-            $payload = $request->input('payload');
-            $orderId = $payload['orderID'];
-            $sessionId = $payload['sessionId'];
+            // Debug üçün request-i loglayaq
+            \Log::error($request->all());
 
-            // API sorğusunu göndəririk
+            // Əgər metod GET-dirsə, birbaşa yönləndirmə et
+            if ($request->isMethod('get')) {
+                return redirect('https://myhome.az/panel/balans?payment=success');
+            }
+
+            // `payload` dəyərini alırıq
+            $payload = $request->input('payload');
+
+            // `orderID` və `sessionId` yoxlayırıq
+            if (!isset($payload['orderId']) || !isset($payload['amount'])) {
+                throw new Exception("orderId və ya amount mövcud deyil.");
+            }
+
+            $orderId = $payload['orderId'];
+            $sessionId = $payload['sessionId'] ?? null; // sessionId bəzi hallarda gəlməyə bilər
+
+            // Payriff API-dən məlumatı çəkirik
             $data = [
                 'body' => [
                     "languageType" => "EN",
@@ -91,38 +105,38 @@ class PaymentController extends Controller {
 
             $responseData = json_decode($response->body(), true);
 
-            if (!isset($responseData['payload']['row'])) {
+            if (!isset($responseData['payload']['transactions'][0])) {
                 throw new Exception("Invalid response structure from Payriff API");
             }
 
-            $transactionData = $responseData['payload']['row'];
+            $transactionData = $responseData['payload']['transactions'][0];
 
             // Log qeydini tapırıq
             $log = PaymentLog::where('transaction_id', $orderId)
                 ->where('status', 'pending')
                 ->firstOrFail();
 
-            // Ödəniş uğurlu olub-olmadığını yoxlayırıq
-            if (isset($transactionData['amount']) && $transactionData['orderstatus'] === self::SUCCESS_PAYMENT) {
-                $amount = $transactionData['amount'];
-
+            // Ödənişin uğurlu olub-olmadığını yoxlayırıq
+            if (isset($transactionData['status']) && $transactionData['status'] === 'APPROVED') {
+                $amount = $payload['amount'];
 
                 $user = User::findOrFail($log->user_id);
 
+                // İstifadəçi balansını artırırıq
                 $user->increment('balance', $amount);
 
+                // Log statusunu yeniləyirik
                 $log->update([
                     'status' => 'success',
                     'response_data' => $transactionData
                 ]);
 
                 DB::commit();
+
                 return response()->json([
                     'message' => 'Payment confirmed successfully',
                     'user_balance' => $user->balance
                 ]);
-
-                return redirect('https://myhome.az/panel/balans?payment=success');
             }
 
             // Əgər ödəniş uğursuz olarsa
@@ -145,4 +159,5 @@ class PaymentController extends Controller {
             ], 500);
         }
     }
+
 }
