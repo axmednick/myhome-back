@@ -26,6 +26,7 @@ class User extends Authenticatable implements HasMedia
         'phone',
         'agency_id',
         'user_type',
+        'balance'
     ];
 
     /**
