@@ -104,6 +104,8 @@ class PaymentController extends Controller {
 
             $responseData = json_decode($response->body(), true);
 
+
+            \Log::error($responseData);
             if (!isset($responseData['payload']['transactions'][0])) {
                 throw new Exception("Invalid response structure from Payriff API");
             }
