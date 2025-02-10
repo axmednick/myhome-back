@@ -79,6 +79,8 @@ class PaymentController extends Controller {
             // `payload` dəyərini alırıq
             $payload = $request->input('payload');
 
+            \Log::error('****');
+            \Log::error($request->all());
             // `orderID` və `sessionId` yoxlayırıq
             if (!isset($payload['orderId']) || !isset($payload['amount'])) {
                 throw new Exception("orderId və ya amount mövcud deyil.");
@@ -98,7 +100,8 @@ class PaymentController extends Controller {
             ];
 
             $response = Http::withHeaders([
-                'Authorization' => '09D204A282514037AA78D244363023E5'
+                'Authorization' => '09D204A282514037AA78D244363023E5',
+                'Content-Type' => 'application/json',
             ])->post('https://api.payriff.com/api/v2/getOrderInformation', $data);
 
 
