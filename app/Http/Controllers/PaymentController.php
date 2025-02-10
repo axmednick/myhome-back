@@ -48,8 +48,8 @@ class PaymentController extends Controller {
             'amount' => $request->amount,
             'status' => $response->successful() ? 'success' : 'failed',
             'transaction_id' => $responseData['transactionId'] ?? null,
-            'description' => "Payment",
-            'response_data' => $responseData,
+
+            'response' => $responseData,
         ]);
 
         if ($response->successful()) {
