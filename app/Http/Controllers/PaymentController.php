@@ -48,7 +48,6 @@ class PaymentController extends Controller {
             'amount' => $request->amount,
             'status' => $response->successful() ? 'success' : 'failed',
             'transaction_id' => $responseData['transactionId'] ?? null,
-            'currency' => "AZN",
             'description' => "Payment",
             'response_data' => $responseData,
         ]);
@@ -105,7 +104,7 @@ class PaymentController extends Controller {
             // Ödəniş uğurlu olub-olmadığını yoxlayırıq
             if (isset($transactionData['amount']) && $transactionData['orderstatus'] === self::SUCCESS_PAYMENT) {
                 $amount = $transactionData['amount'];
-                $currency = $transactionData['currencyType'];
+
 
                 $user = User::findOrFail($log->user_id);
 
@@ -119,8 +118,10 @@ class PaymentController extends Controller {
                 DB::commit();
                 return response()->json([
                     'message' => 'Payment confirmed successfully',
-                    'user_balance' => $user->money
+                    'user_balance' => $user->balance
                 ]);
+
+                return redirect('https://myhome.az/panel/balans?payment=success');
             }
 
             // Əgər ödəniş uğursuz olarsa
