@@ -54,10 +54,10 @@ class PaymentController extends Controller {
 
         if ($response->successful()) {
             return response()->json([
-                'message' => 'Payment created successfully',
-                'data' => $responseData
+                'paymentUrl' => $responseData['payload']['paymentUrl'] ?? null
             ], 200);
-        } else {
+        }
+        else {
             return response()->json([
                 'message' => 'Payment failed',
                 'error' => $responseData
