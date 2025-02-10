@@ -76,7 +76,7 @@ class PaymentController extends Controller {
 
             // `payload` dəyərini alırıq
             $payload = $request->input('payload');
-
+            \Log::error($payload);
 
 
             // Lazım olan məlumatları yoxlayırıq
