@@ -105,7 +105,7 @@ class PaymentController extends Controller {
                 // Log yeniləyirik
                 $log->update([
                     'status' => 'success',
-                    'response_data' => json_encode($payload) // JSON kimi saxlayırıq
+                    'response' => json_encode($payload) // JSON kimi saxlayırıq
                 ]);
 
                 DB::commit();
