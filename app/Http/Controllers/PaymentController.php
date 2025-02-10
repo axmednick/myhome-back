@@ -41,7 +41,7 @@ class PaymentController extends Controller {
 
         // Cavabı JSON formatında alırıq
         $responseData = $response->json();
-
+        dd($responseData);
         // Log qeyd edirik
         $paymentLog = PaymentLog::create([
             'user_id' => $user->id,
