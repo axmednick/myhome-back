@@ -121,6 +121,8 @@ class PaymentController extends Controller {
                 $amount = $payload['amount'];
 
                 $user = User::findOrFail($log->user_id);
+                $user->balance += $log->amount;
+                $user->save();
 
                 // İstifadəçi balansını artırırıq
                 $user->increment('balance', $amount);
