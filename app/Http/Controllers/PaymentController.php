@@ -70,15 +70,14 @@ class PaymentController extends Controller {
 
         try {
             // Əgər metod GET-dirsə, birbaşa yönləndirmə et
-            if ($request->isMethod('get')) {
+/*            if ($request->isMethod('get')) {
                 return redirect('https://myhome.az/panel/balans?payment=success');
-            }
+            }*/
 
             // `payload` dəyərini alırıq
             $payload = $request->input('payload');
 
-            \Log::error('****');
-            \Log::error($payload);
+
 
             // Lazım olan məlumatları yoxlayırıq
             if (!isset($payload['orderId'], $payload['amount'], $payload['currencyType'], $payload['paymentStatus'])) {
@@ -129,6 +128,7 @@ class PaymentController extends Controller {
             ], 400);
 
         } catch (Exception $th) {
+            \Log::error($th->getMessage());
             DB::rollBack();
             return response()->json([
                 'error' => 'Transaction failed',
