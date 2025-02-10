@@ -69,8 +69,6 @@ class PaymentController extends Controller {
         DB::beginTransaction();
 
         try {
-
-
             // Əgər metod GET-dirsə, birbaşa yönləndirmə et
             if ($request->isMethod('get')) {
                 return redirect('https://myhome.az/panel/balans?payment=success');
@@ -80,63 +78,34 @@ class PaymentController extends Controller {
             $payload = $request->input('payload');
 
             \Log::error('****');
-            \Log::error($request->all());
-            // `orderID` və `sessionId` yoxlayırıq
-            if (!isset($payload['orderId']) || !isset($payload['amount'])) {
-                throw new Exception("orderId və ya amount mövcud deyil.");
+            \Log::error($payload);
+
+            // Lazım olan məlumatları yoxlayırıq
+            if (!isset($payload['orderId'], $payload['amount'], $payload['currencyType'], $payload['paymentStatus'])) {
+                throw new Exception("orderId, amount, currencyType və ya paymentStatus mövcud deyil.");
             }
 
             $orderId = $payload['orderId'];
-            $sessionId = $payload['sessionId'] ?? null; // sessionId bəzi hallarda gəlməyə bilər
+            $amount = $payload['amount'];
+            $currency = $payload['currencyType'];
+            $paymentStatus = $payload['paymentStatus'];
 
-            // Payriff API-dən məlumatı çəkirik
-            $data = [
-                'body' => [
-                    "languageType" => "EN",
-                    "orderId" => $orderId,
-                    "sessionId" => $sessionId
-                ],
-                "merchant" => 'ES1094008'
-            ];
-
-            $response = Http::withHeaders([
-                'Authorization' => '09D204A282514037AA78D244363023E5',
-                'Content-Type' => 'application/json',
-            ])->post('https://api.payriff.com/api/v2/getOrderInformation', $data);
-
-
-            $responseData = json_decode($response->body(), true);
-
-
-            \Log::error($responseData);
-            if (!isset($responseData['payload']['transactions'][0])) {
-                throw new Exception("Invalid response structure from Payriff API");
-            }
-
-            $transactionData = $responseData['payload']['transactions'][0];
-
-            // Log qeydini tapırıq
+            // Əməliyyat məlumatlarını tapırıq
             $log = PaymentLog::where('transaction_id', $orderId)
                 ->where('status', 'pending')
                 ->firstOrFail();
 
-            // Ödənişin uğurlu olub-olmadığını yoxlayırıq
-            \Log::error('*******************************');
-            \Log::error(isset($transactionData['status']) && $transactionData['status'] === 'APPROVED');
-            if (isset($transactionData['status']) && $transactionData['status'] === 'APPROVED') {
-                $amount = $payload['amount'];
-
+            // Ödəniş uğurlu olub-olmadığını yoxlayırıq
+            if ($paymentStatus === 'APPROVED') {
                 $user = User::findOrFail($log->user_id);
-                $user->balance += $log->amount;
-                $user->save();
 
-                // İstifadəçi balansını artırırıq
+                // Balansı artırırıq
                 $user->increment('balance', $amount);
 
-                // Log statusunu yeniləyirik
+                // Log yeniləyirik
                 $log->update([
                     'status' => 'success',
-                    'response_data' => $transactionData
+                    'response_data' => json_encode($payload) // JSON kimi saxlayırıq
                 ]);
 
                 DB::commit();
@@ -150,17 +119,16 @@ class PaymentController extends Controller {
             // Əgər ödəniş uğursuz olarsa
             $log->update([
                 'status' => 'failed',
-                'response_data' => $transactionData
+                'response_data' => json_encode($payload)
             ]);
 
             DB::commit();
             return response()->json([
                 'message' => 'Payment failed or was not successful',
-                'data' => $transactionData
+                'data' => $payload
             ], 400);
 
         } catch (Exception $th) {
-            \Log::error($th->getMessage());
             DB::rollBack();
             return response()->json([
                 'error' => 'Transaction failed',
@@ -168,5 +136,6 @@ class PaymentController extends Controller {
             ], 500);
         }
     }
+
 
 }
