@@ -46,7 +46,6 @@ class PaymentController extends Controller {
         $paymentLog = PaymentLog::create([
             'user_id' => $user->id,
             'amount' => $request->amount,
-            'status' => $response->successful() ? 'success' : 'failed',
             'transaction_id' => $responseData['transactionId'] ?? null,
 
             'response' => $responseData,
