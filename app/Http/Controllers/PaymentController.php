@@ -75,8 +75,9 @@ class PaymentController extends Controller {
             }*/
 
             // `payload` dəyərini alırıq
-            $payload = $request->input('payload');
+            $payload = $request->all()['payload'] ?? 'Not Found';
             \Log::error($payload);
+
 
 
             // Lazım olan məlumatları yoxlayırıq
@@ -128,7 +129,7 @@ class PaymentController extends Controller {
             ], 400);
 
         } catch (Exception $th) {
-            \Log::error($th->getMessage());
+
             DB::rollBack();
             return response()->json([
                 'error' => 'Transaction failed',
