@@ -117,6 +117,8 @@ class PaymentController extends Controller {
                 ->firstOrFail();
 
             // Ödənişin uğurlu olub-olmadığını yoxlayırıq
+            \Log::error('*******************************');
+            \Log::error(isset($transactionData['status']) && $transactionData['status'] === 'APPROVED');
             if (isset($transactionData['status']) && $transactionData['status'] === 'APPROVED') {
                 $amount = $payload['amount'];
 
