@@ -69,7 +69,7 @@ class PaymentController extends Controller {
     {
         DB::beginTransaction();
 
-        dd($request->all());
+        \Log::error($request->all());
         try {
             $payload = $request->input('payload');
             $orderId = $payload['orderID'];
