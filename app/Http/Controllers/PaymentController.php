@@ -46,7 +46,7 @@ class PaymentController extends Controller {
         $paymentLog = PaymentLog::create([
             'user_id' => $user->id,
             'amount' => $request->amount,
-            'transaction_id' => $responseData['transactionId'] ?? null,
+            'transaction_id' => $responseData['payload']['orderId'] ?? null,
 
             'response' => $responseData,
         ]);
