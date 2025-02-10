@@ -78,7 +78,13 @@ class PaymentController extends Controller {
             $payload = $request->input('payload');
 
 
+            \Log::error([
+                'order_id' => $payload['orderId'],
+                'amount' => $payload['amount'],
+                'currency' => $payload['currencyType'],
+                'payment_status' => $payload['paymentStatus']
 
+            ]);
             // Lazım olan məlumatları yoxlayırıq
             if (!isset($payload['orderId'], $payload['amount'], $payload['currencyType'], $payload['paymentStatus'])) {
                 throw new Exception("orderId, amount, currencyType və ya paymentStatus mövcud deyil.");
