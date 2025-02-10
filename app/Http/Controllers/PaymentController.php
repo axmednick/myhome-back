@@ -70,9 +70,9 @@ class PaymentController extends Controller {
 
         try {
             // Əgər metod GET-dirsə, birbaşa yönləndirmə et
-/*            if ($request->isMethod('get')) {
+            if ($request->isMethod('get')) {
                 return redirect('https://myhome.az/panel/balans?payment=success');
-            }*/
+            }
 
             // `payload` dəyərini alırıq
             $payload = $request->all()['payload'] ?? 'Not Found';
@@ -80,10 +80,7 @@ class PaymentController extends Controller {
 
 
 
-            // Lazım olan məlumatları yoxlayırıq
-            if (!isset($payload['paymentStatus'])) {
-                throw new Exception("orderId, amount, currencyType və ya paymentStatus mövcud deyil.");
-            }
+
 
             $orderId = $payload['orderId'];
             $amount = $payload['amount'];
