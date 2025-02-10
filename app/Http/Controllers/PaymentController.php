@@ -70,8 +70,7 @@ class PaymentController extends Controller {
         DB::beginTransaction();
 
         try {
-            // Debug üçün request-i loglayaq
-            \Log::error($request->all());
+
 
             // Əgər metod GET-dirsə, birbaşa yönləndirmə et
             if ($request->isMethod('get')) {
@@ -156,6 +155,7 @@ class PaymentController extends Controller {
             ], 400);
 
         } catch (Exception $th) {
+            \Log::error($th->getMessage());
             DB::rollBack();
             return response()->json([
                 'error' => 'Transaction failed',
