@@ -95,12 +95,13 @@ class PaymentController extends Controller {
                     "orderId" => $orderId,
                     "sessionId" => $sessionId
                 ],
-                "merchant" => 'ES1092082'
+                "merchant" => 'ES1094008'
             ];
 
             $response = Http::withHeaders([
-                'Authorization' => '61A491613E834B329287720E6C13EF03'
+                'Authorization' => '09D204A282514037AA78D244363023E5'
             ])->post('https://api.payriff.com/api/v2/getOrderInformation', $data);
+
 
             $responseData = json_decode($response->body(), true);
 
