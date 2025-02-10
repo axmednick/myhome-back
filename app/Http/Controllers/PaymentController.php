@@ -119,7 +119,7 @@ class PaymentController extends Controller {
             // Əgər ödəniş uğursuz olarsa
             $log->update([
                 'status' => 'failed',
-                'response_data' => json_encode($payload)
+                'response' => json_encode($payload)
             ]);
 
             DB::commit();
