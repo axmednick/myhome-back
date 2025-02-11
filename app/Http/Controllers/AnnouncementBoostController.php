@@ -40,7 +40,8 @@ class AnnouncementBoostController extends Controller
             'last_boosted_at' => Carbon::now()
         ]);
 
-        $announcement->touch();
+        $announcement->update(['created_at' => Carbon::now()]);
+
 
         return response()->json([
             'status' => true,
