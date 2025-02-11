@@ -190,25 +190,33 @@ class AnnouncementController extends Controller
         $cacheKey = 'announcements_' . md5(serialize($request->all()));
 
         $announcements = $this->announcementService
-                ->searchAnnouncements($request)
-                ->with([
-                    'announcement_type',
-                    'media',
-                    'property_type',
-                    'apartment_type',
-                    'address.village',
-                    'address.region',
-                    'address.city',
-                    'user',
-                    'supplies',
-                    'rental_client_types',
-                    'metro_stations'
-                ])
-                ->orderBy('id', 'desc')
-                ->paginate(10);
+            ->searchAnnouncements($request)
+            ->with([
+                'announcement_type',
+                'media',
+                'property_type',
+                'apartment_type',
+                'address.village',
+                'address.region',
+                'address.city',
+                'user',
+                'supplies',
+                'rental_client_types',
+                'metro_stations'
+            ])
+            ->orderByRaw("
+                CASE
+                    WHEN updated_at > created_at THEN 1
+                    ELSE 0
+                END,
+                created_at DESC,
+                updated_at DESC
+            ")
+            ->paginate(10);
 
         return AnnouncementGridResource::collection($announcements);
     }
+
 
 
     public function userAnnouncements(Request $request, $id = null)
