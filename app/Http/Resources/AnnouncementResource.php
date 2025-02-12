@@ -59,7 +59,8 @@ class AnnouncementResource extends JsonResource
                 'metro_stations' => AnnouncementMetroStationsResource::collection($this->metro_stations),
                 'status' => $this->status,
                 'document_id' => $this->document_id,
-                'is_repaired' => $this->is_repaired
+                'is_repaired' => $this->is_repaired,
+
             ];
         } catch (\Exception $e) {
             Log::error("Announcement ID {$this->id} has an error: " . $e->getMessage());

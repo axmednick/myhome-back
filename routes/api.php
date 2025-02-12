@@ -6,6 +6,7 @@ use App\Http\Controllers\AgencyController;
 use App\Http\Controllers\AgencyUserController;
 use App\Http\Controllers\Announcement\AnnouncementController;
 use App\Http\Controllers\AnnouncementBoostController;
+use App\Http\Controllers\AnnouncementVipController;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\BonusController;
 use App\Http\Controllers\FavoriteController;
@@ -136,3 +137,5 @@ Route::prefix('paid-services')->group(function () {
 });
 
 Route::post('boost-announcement', [AnnouncementBoostController::class, 'boost']);
+Route::post('/make-vip-premium', [AnnouncementVipController::class, 'makeVipOrPremium']);
+
