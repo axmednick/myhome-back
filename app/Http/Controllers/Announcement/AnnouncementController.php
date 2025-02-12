@@ -44,8 +44,6 @@ class AnnouncementController extends Controller
     public function store(Request $request)
     {
 
-
-
         if ($request->property_type == 1) {
             $validator = Validator::make($request->all(), (new ApartmentRequest)->rules());
         }
@@ -58,7 +56,6 @@ class AnnouncementController extends Controller
         if ($request->property_type == 6 || $request->property_type == 7) {
             $validator = Validator::make($request->all(), (new OfficeRequest)->rules());
         }
-
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -112,7 +109,6 @@ class AnnouncementController extends Controller
             'agency_id' => $user->agency ? $user->agency->id : null,
         ]);
 
-
         $announcement->address()->create([
             'announcement_id' => $announcement->id,
             'city_id' => $request->city,
@@ -124,22 +120,14 @@ class AnnouncementController extends Controller
 
         ]);
 
-
-
-
         if ($request->has('client_types_for_rent') && is_array($request->client_types_for_rent)) {
             foreach ($request->client_types_for_rent as $client_type_for_rent) {
-
-
                 AnnouncementRentalClientTypes::create([
                     'client_type_for_rent_id' => $client_type_for_rent,
                     'announcement_id' => $announcement->id
-
                 ]);
-
             }
         }
-
 
         if ($request->has('supplies') && is_array($request->supplies)) {
             foreach ($request->get('supplies') as $supply) {
@@ -149,21 +137,16 @@ class AnnouncementController extends Controller
             }
         }
 
-
         if ($request->has('metro_stations') && is_array($request->metro_stations)) {
-
             foreach ($request->metro_stations as $metroStation) {
                 $announcement->metro_stations()->create([
                     'metro_station_id' => $metroStation
                 ]);
             }
-
         }
         if ($request->has('media_ids') && is_array($request->media_ids)) {
             foreach ($request->media_ids as $index => $mediaId) {
                 $media = Media::where('model_id', $mediaId)->first();
-
-
                 if ($media) {
                     $media->update([
                         'model_type' => Announcement::class,
@@ -173,14 +156,9 @@ class AnnouncementController extends Controller
                 }
             }
         }
-
-
-
-
         return response()->json([
             'status' => 'success'
         ]);
-
 
     }
 
@@ -267,7 +245,6 @@ class AnnouncementController extends Controller
         $user->phone_view_count = $user->phone_view_count + 1;
         $user->save();
 
-
         return  $user->phone;
     }
 
@@ -290,7 +267,6 @@ class AnnouncementController extends Controller
         return AnnouncementEditResource::make($announcement);
 
     }
-
 
     public function update($id,Request $request)
     {

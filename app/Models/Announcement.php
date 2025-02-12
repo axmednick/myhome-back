@@ -100,6 +100,12 @@ class Announcement extends Model implements HasMedia
 
     }
 
+    public function vipPremium()
+    {
+        return $this->hasMany(AnnouncementVipPremium::class);
+    }
+
+
 
 
 }
