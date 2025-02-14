@@ -22,7 +22,9 @@ class AgentResource extends JsonResource
             'user_type' => $this->user_type,
 
             'image' => $this->avatar,
-            'photo' => $this->getMedia('photo') ? $this->getFirstMediaUrl('photo') : null,
+            'photo' => $this->getMedia('photo')->isNotEmpty()
+                ? $this->getFirstMediaUrl('photo')
+                : asset('images/default-photo.jpg'),
             'is_verified' => $this->is_verified, // Blue Tick statusu
             'is_gold_user' => $this->is_gold_user, // Gold User statusu
             'announcement_count' => $this->announcements_count, // Elan sayı
