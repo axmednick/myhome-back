@@ -105,7 +105,7 @@ class GlobalDataController extends Controller
             $users->where('agency_id', $request->agency_id);
         }
         else {
-            $users->where('announcements_count', '>=', 10)
+            $users->having('announcements_count', '>=', 10)
                 ->orderByDesc('announcements_count');
         }
 

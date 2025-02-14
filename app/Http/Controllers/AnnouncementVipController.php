@@ -17,8 +17,8 @@ class AnnouncementVipController extends Controller
             'option_id' => 'required|exists:paid_service_options,id'
         ]);
 
-        // Ödənişli xidmətin seçim məlumatlarını götür
         $option = PaidServiceOption::find($request->option_id);
+
         $serviceType = $option->service->type;
 
         if (!in_array($serviceType, ['vip', 'premium'])) {
@@ -36,7 +36,7 @@ class AnnouncementVipController extends Controller
                 'type' => $serviceType
             ],
             [
-                'expires_at' => Carbon::now()->addDays($option->duration) // Müddətə əsasən vaxt əlavə olunur
+                'expires_at' => Carbon::now()->addDays($option->duration)
             ]
         );
 

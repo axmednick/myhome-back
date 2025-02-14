@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller {
     public function createOrder(Request $request) {
-        $user = \auth('sanctum')->user();
 
+        $user = \auth('sanctum')->user();
 
         $paymentData = [
             "body" => [
