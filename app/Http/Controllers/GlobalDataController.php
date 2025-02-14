@@ -104,6 +104,10 @@ class GlobalDataController extends Controller
         if ($request->has('agency_id')) {
             $users->where('agency_id', $request->agency_id);
         }
+        else {
+            $users->where('announcements_count', '>=', 10)
+                ->orderByDesc('announcements_count');
+        }
 
 
         return AgentResource::collection($users ->paginate(20));
