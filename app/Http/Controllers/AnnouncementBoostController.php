@@ -42,7 +42,6 @@ class AnnouncementBoostController extends Controller
 
         $announcement->update(['created_at' => Carbon::now()]);
 
-
         return response()->json([
             'status' => true,
             'message' => 'Elan uğurla irəli çəkildi.',

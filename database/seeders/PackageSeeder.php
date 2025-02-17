@@ -43,21 +43,21 @@ class PackageSeeder extends Seeder
                 'price' => 30,
                 'listing_limit' => 20,
                 'bonus' => 10,
-                'type' => 'individual'
+                'type' => 'rieltor'
             ],
             [
                 'name' => 'Standard Realtor',
                 'price' => 60,
                 'listing_limit' => 50,
                 'bonus' => 25,
-                'type' => 'individual'
+                'type' => 'rieltor'
             ],
             [
                 'name' => 'Premium Realtor',
                 'price' => 120,
                 'listing_limit' => 120,
                 'bonus' => 50,
-                'type' => 'individual'
+                'type' => 'rieltor'
             ],
         ];
 
