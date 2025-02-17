@@ -47,7 +47,7 @@ class AgencyController extends Controller
                 $request->file('cover_photo')
             );
 
-            return $this->sendResponse(AgencyResource::make(AgencyResource::make($agency)),'Agency Updated successfully!');
+            return $this->sendResponse(AgencyResource::make(AgencyResource::make($agency)), 'Agency Updated successfully!');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage());
         }
@@ -58,15 +58,17 @@ class AgencyController extends Controller
         $user = auth('sanctum')->user();
 
 
-            return AgencyResource::make($user->managedAgency);
+        return AgencyResource::make($user->managedAgency);
 
     }
 
-    public function apply(Request $request){
+    public function apply(Request $request)
+    {
         $validator = Validator::make(request()->all(), [
             'name' => 'required|string|max:255',
             'agency_name' => 'required|string|max:255',
             'phone' => 'required|string|max:15',
+            'package_id' => 'required|exists:packages,id',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -75,8 +77,11 @@ class AgencyController extends Controller
             ], 422);
         }
         try {
+
             $this->agencyService->apply($validator->validated());
-            return $this->sendResponse([], 'Apply sent successfully!');
+
+            return $this->sendResponse([], 'Müraciətiniz qeydə alındı.Əməkdaşlarımız sizinlə əlaqə saxlayacaq');
+
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage());
         }

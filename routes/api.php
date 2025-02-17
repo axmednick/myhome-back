@@ -97,8 +97,7 @@ Route::get('/static-page/{slug}', [GlobalDataController::class, 'staticPage']);
 Route::get('/meta-tags/{query}', [GlobalDataController::class, 'metaTags']);
 Route::get('/agents',[GlobalDataController::class,'agents']);
 Route::get('/agencies',[GlobalDataController::class,'agencies']);
-
-
+Route::get('/agency-packages',[\App\Http\Controllers\PackageController::class,'agencyPackages']);
 Route::prefix('announcement')->group(function () {
     Route::post('/image-upload', [FileUploadController::class, 'temporaryFile']);
     Route::post('/store', [AnnouncementController::class, 'store']);
@@ -123,7 +122,7 @@ Route::prefix('agency')->group(function (){
         Route::delete('/{id}', [AgencyUserController::class, 'delete']);
     });
 
-    Route::post('apply',[AgencyController::class,'apply']);
+    Route::post('apply',[AgencyController::class,'apply'])->middleware('auth:sanctum');
 });
 
 Route::prefix('payment')->group(function (){

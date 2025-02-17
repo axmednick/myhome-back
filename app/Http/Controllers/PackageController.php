@@ -20,7 +20,7 @@ class PackageController extends Controller
      */
     public function realtorPackages(): AnonymousResourceCollection
     {
-        $packages = Package::where('type', 'individual')->get();
+        $packages = Package::where('type', 'realtor')->get();
         return PackageResource::collection($packages);
     }
 }

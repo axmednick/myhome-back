@@ -66,6 +66,7 @@ class Agency extends Resource
 
             Boolean::make('Display As Agency', 'display_as_agency')
                 ->sortable(),
+            BelongsTo::make('Package'),
 
 
         ];

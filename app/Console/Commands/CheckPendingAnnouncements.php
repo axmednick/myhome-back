@@ -26,6 +26,7 @@ class CheckPendingAnnouncements extends Command
     /**
      * Execute the console command.
      */
+
     public function handle()
     {
         $pendingAnnouncements = Announcement::where('status', 0)->get();
