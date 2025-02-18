@@ -60,6 +60,8 @@ class AnnouncementResource extends JsonResource
                 'status' => $this->status,
                 'document_id' => $this->document_id,
                 'is_repaired' => $this->is_repaired,
+                'is_vip'=> $this->is_vip,
+                'is_premium'=> $this->is_premium,
 
             ];
         } catch (\Exception $e) {
