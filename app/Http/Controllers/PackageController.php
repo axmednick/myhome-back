@@ -18,7 +18,7 @@ class PackageController extends Controller
     /**
      * Rieltorlar üçün paketləri qaytarır.
      */
-    public function realtorPackages(): AnonymousResourceCollection
+    public function rieltorPackages(): AnonymousResourceCollection
     {
         $packages = Package::where('type', 'realtor')->get();
         return PackageResource::collection($packages);

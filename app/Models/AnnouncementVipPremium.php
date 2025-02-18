@@ -10,6 +10,7 @@ class AnnouncementVipPremium extends Model
 {
     use HasFactory;
 
+    protected $table='announcement_vip_premium';
     protected $guarded=[];
 
     public function announcement()

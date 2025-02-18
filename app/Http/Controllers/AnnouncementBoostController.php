@@ -6,12 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Announcement;
 use App\Models\AnnouncementBoost;
 use App\Models\PaidServiceOption;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class AnnouncementBoostController extends Controller
 {
+
+    public function __construct(protected UserService $userService)
+    {
+    }
+
     /**
      * Elanı irəli çək.
      */
@@ -21,6 +27,8 @@ class AnnouncementBoostController extends Controller
             'announcement_id' => 'required|exists:announcements,id',
             'option_id' => 'required|exists:paid_service_options,id'
         ]);
+
+        $user = auth('sanctum')->user();
 
         $option = PaidServiceOption::find($request->option_id);
 
@@ -32,6 +40,8 @@ class AnnouncementBoostController extends Controller
         }
 
         $announcement = Announcement::find($request->announcement_id);
+
+        $this->userService->deductBalance($option->price);
 
         $boost = AnnouncementBoost::create([
             'announcement_id' => $announcement->id,
