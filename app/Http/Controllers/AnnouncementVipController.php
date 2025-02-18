@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Announcement;
 use App\Models\AnnouncementVipPremium;
 use App\Models\PaidServiceOption;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class AnnouncementVipController extends Controller
 {
+
+    public function __construct(protected UserService $userService)
+    {
+    }
+
     public function makeVipOrPremium(Request $request)
     {
         $request->validate([
@@ -30,6 +36,8 @@ class AnnouncementVipController extends Controller
 
         $announcement = Announcement::find($request->announcement_id);
 
+        $this->userService->deductBalance($option->price);
+
         $vipPremium = AnnouncementVipPremium::updateOrCreate(
             [
                 'announcement_id' => $announcement->id,
@@ -39,6 +47,17 @@ class AnnouncementVipController extends Controller
                 'expires_at' => Carbon::now()->addDays($option->duration)
             ]
         );
+
+        if ($serviceType === 'vip') {
+            $announcement->update([
+                'is_vip' => true
+            ]);
+        } elseif ($serviceType === 'premium') {
+            $announcement->update([
+                'is_vip' => true,
+                'is_premium' => true
+            ]);
+        }
 
         return response()->json([
             'status' => true,

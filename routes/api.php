@@ -98,6 +98,8 @@ Route::get('/meta-tags/{query}', [GlobalDataController::class, 'metaTags']);
 Route::get('/agents',[GlobalDataController::class,'agents']);
 Route::get('/agencies',[GlobalDataController::class,'agencies']);
 Route::get('/agency-packages',[\App\Http\Controllers\PackageController::class,'agencyPackages']);
+Route::get('/rieltor-packages',[\App\Http\Controllers\PackageController::class,'rieltorPackages']);
+
 Route::prefix('announcement')->group(function () {
     Route::post('/image-upload', [FileUploadController::class, 'temporaryFile']);
     Route::post('/store', [AnnouncementController::class, 'store']);
@@ -135,6 +137,9 @@ Route::prefix('paid-services')->group(function () {
     Route::get('/{id}', [PaidServiceController::class, 'show']);
 });
 
-Route::post('boost-announcement', [AnnouncementBoostController::class, 'boost']);
-Route::post('/make-vip-premium', [AnnouncementVipController::class, 'makeVipOrPremium']);
+Route::middleware('auth:sanctum')->group(function (){
+    Route::post('boost-announcement', [AnnouncementBoostController::class, 'boost']);
+    Route::post('/make-vip-premium', [AnnouncementVipController::class, 'makeVipOrPremium']);
+});
+
 

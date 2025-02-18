@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('announcement_vip_premia', function (Blueprint $table) {
+        Schema::create('announcement_vip_premium', function (Blueprint $table) {
             $table->id();
             $table->foreignId('announcement_id')->constrained('announcements')->onDelete('cascade');
             $table->enum('type', ['vip', 'premium']);
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('announcement_vip_premia');
+        Schema::dropIfExists('announcement_vip_premium');
     }
 };
