@@ -54,4 +54,9 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasOne(Agency::class, 'user_id');
     }
+
+   /* public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }*/
 }
