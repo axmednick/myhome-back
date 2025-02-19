@@ -12,6 +12,7 @@ use App\Http\Controllers\BonusController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\File\FileUploadController;
 use App\Http\Controllers\GlobalDataController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PaidServiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\User\LinkController;
@@ -47,7 +48,7 @@ Route::controller(UserAuthController::class)->prefix('auth')->group(function () 
 
 
 Route::prefix('user')->group(function () {
-
+    Route::get('/check-exists', [UserAuthController::class, 'checkExists']);
     Route::get('/announcements/{id?}', [AnnouncementController::class, 'userAnnouncements']);
     Route::get('/favorites', [AnnouncementController::class, 'favorites']);
     Route::middleware('auth:sanctum')->group(function () {
@@ -77,6 +78,7 @@ Route::prefix('user')->group(function () {
             Route::delete('delete/{id}', [LinkController::class, 'delete']);
         });
         Route::get('/agency',[AgencyController::class,'userAgency']);
+        Route::get('package-info',[PackageController::class,'userPackageInfo']);
     });
     Route::get('/phone/{id}',[UserAuthController::class,'getPhone']);
 });
@@ -97,8 +99,8 @@ Route::get('/static-page/{slug}', [GlobalDataController::class, 'staticPage']);
 Route::get('/meta-tags/{query}', [GlobalDataController::class, 'metaTags']);
 Route::get('/agents',[GlobalDataController::class,'agents']);
 Route::get('/agencies',[GlobalDataController::class,'agencies']);
-Route::get('/agency-packages',[\App\Http\Controllers\PackageController::class,'agencyPackages']);
-Route::get('/rieltor-packages',[\App\Http\Controllers\PackageController::class,'rieltorPackages']);
+Route::get('/agency-packages',[PackageController::class,'agencyPackages']);
+Route::get('/rieltor-packages',[PackageController::class,'rieltorPackages']);
 
 Route::prefix('announcement')->group(function () {
     Route::post('/image-upload', [FileUploadController::class, 'temporaryFile']);

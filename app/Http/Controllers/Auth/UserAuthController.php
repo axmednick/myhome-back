@@ -160,4 +160,13 @@ class UserAuthController extends Controller
         return response()->json(['phone'=>$user->phone]);
     }
 
+    public function checkExists(Request $request)
+    {
+        $user = User::where('email', $request->email)->orWhere('phone',$request->phone)->first();
+        if ($user) {
+            return response()->json(['exists' => true]);
+        } else {
+            return response()->json(['exists' => false]);
+        }
+    }
 }
