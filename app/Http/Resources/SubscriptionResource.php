@@ -30,7 +30,6 @@ class SubscriptionResource extends JsonResource
                     'name' => $this->agency->name,
                 ];
             }),
-            'package' => new PackageResource($this->whenLoaded('package')),
             'start_date' => $this->start_date->toDateTimeString(),
             'end_date' => $this->end_date->toDateTimeString(),
             'is_active' => (bool) $this->is_active,
