@@ -23,7 +23,6 @@ class PackageResource extends JsonResource
             'bonus' => $this->bonus,
             'type' => $this->type,
             'features' => $this->features->pluck('feature_name'), // Xüsusiyyətləri qaytarır
-            'created_at' => $this->created_at->toDateTimeString(),
         ];
     }
 }

@@ -15,6 +15,7 @@ use App\Http\Controllers\GlobalDataController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PaidServiceController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\User\LinkController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\SavedSearchController;
@@ -78,7 +79,7 @@ Route::prefix('user')->group(function () {
             Route::delete('delete/{id}', [LinkController::class, 'delete']);
         });
         Route::get('/agency',[AgencyController::class,'userAgency']);
-        Route::get('package-info',[PackageController::class,'userPackageInfo']);
+        Route::get('subscription-info',[SubscriptionController::class,'getSubscriptionInfo']);
     });
     Route::get('/phone/{id}',[UserAuthController::class,'getPhone']);
 });
