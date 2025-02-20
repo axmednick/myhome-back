@@ -27,7 +27,7 @@ class SubscriptionController extends Controller
         return response()->json([
             'status' => true,
             'subscription' => $data['subscription'] ? SubscriptionResource::make($data['subscription']) : null,
-      //      'package' => PackageResource::make($data['package']),
+            'package' => $data['package'] ? PackageResource::make($data['package']) : null,
             'used_listing_count' => $data['used_listing_count'],
             'remaining_listing_count' => $data['remaining_listing_count'],
             'is_active' => $data['is_active'],
