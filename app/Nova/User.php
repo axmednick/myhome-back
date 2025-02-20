@@ -2,12 +2,15 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\AssignPackageToSelectedUsers;
+use App\Nova\Filters\UserTypeFilter;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 
 class User extends Resource
@@ -47,6 +50,13 @@ class User extends Resource
             ID::make()->sortable(),
 
             Gravatar::make()->maxWidth(50),
+            Select::make('User Type', 'user_type')
+                ->options([
+                    'user' => 'User',
+                    'agent' => 'Agent',
+                ])
+                ->sortable()
+                ->rules('required'),
 
             Images::make('Photo'),
             Text::make('Name')
@@ -88,7 +98,9 @@ class User extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            new UserTypeFilter(),
+        ];
     }
 
     /**
@@ -110,6 +122,8 @@ class User extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            new AssignPackageToSelectedUsers(),
+        ];
     }
 }

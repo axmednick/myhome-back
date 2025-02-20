@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Helpers\SlackHelper;
 use App\Helpers\TelegramHelper;
 use App\Models\Announcement;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Models\UserBonus;
 use App\Observers\AnnouncementObserver;
+use App\Observers\SubscriptionObserver;
 use App\Observers\UserBonusObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
@@ -35,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
         Announcement::observe(AnnouncementObserver::class);
         UserBonus::observe(UserBonusObserver::class);
         User::observe(UserObserver::class);
+        Subscription::observe(SubscriptionObserver::class);
+
 
     }
 }
