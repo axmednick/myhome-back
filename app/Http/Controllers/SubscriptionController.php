@@ -29,8 +29,8 @@ class SubscriptionController extends Controller
             'status' => true,
             'subscription' => $data['subscription'] ? SubscriptionResource::make($data['subscription']) : null,
             'package' => $data['package'] ? PackageResource::make($data['package']) : null,
-            'used_listing_count' => 9,
-            'remaining_listing_count' => 1,
+            'used_listing_count' => 10,
+            'remaining_listing_count' => 0,
             'is_active' => $data['is_active'],
             'user_type' => $user->user_type,
         ]);
