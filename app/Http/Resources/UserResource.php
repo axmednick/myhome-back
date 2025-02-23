@@ -29,7 +29,7 @@ class UserResource extends JsonResource
             'is_gold_user' => $this->is_gold_user, // Gold User statusu
             'is_agency_admin' => $this->managedAgency ? true : false,
             'agency' => $this->agency ? new AgencyResource($this->agency) : null,
-            'has_subscription' =>$this->activeSubscription()->exists(),
+            'has_subscription' => $this->activeSubscription() ? $this->activeSubscription()->exists() : false,
         ];
     }
 }

@@ -67,9 +67,12 @@ class User extends Authenticatable implements HasMedia
 
     public function activeSubscription()
     {
-        return $this->user_type === 'agent'
-            ? ($this->agency_id ? $this->agencySubscription() : $this->subscription())
-            : null;
+        if ($this->user_type !== 'agent') {
+            return false;
+        }
+
+        return $this->agency_id ? $this->agencySubscription() : $this->subscription();
     }
+
 
 }
