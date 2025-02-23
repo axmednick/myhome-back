@@ -122,7 +122,7 @@ class AnnouncementService
             $announcements->where('looking_roommate', 1);
         }
 
-        return $announcements;
+        return $announcements->orderByRaw('is_premium DESC, is_vip DESC, created_at DESC');
     }
 
 
