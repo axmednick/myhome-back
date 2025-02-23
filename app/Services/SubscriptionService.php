@@ -111,6 +111,7 @@ class SubscriptionService
         $finalPrice = DiscountCalculatorHelper::calculateDiscountedPrice($package->price, $durationDays);
 
 
+        dd($finalPrice);
         $this->userService->deductBalance($user, $finalPrice);
 
 
