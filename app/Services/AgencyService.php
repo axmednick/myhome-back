@@ -46,13 +46,6 @@ class AgencyService
         $package = Package::find($data['package_id']);
 
 
-        if ($user->balance < $package->price) {
-            throw new \Exception('Insufficient balance',402);
-        }
-
-        $user->balance -= $package->price;
-
-        $user->save();
 
         $agencyApply = AgencyApply::create($data);
 
