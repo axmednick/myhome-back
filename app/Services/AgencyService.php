@@ -45,8 +45,6 @@ class AgencyService
 
         $package = Package::find($data['package_id']);
 
-
-
         $agencyApply = AgencyApply::create($data);
 
         return $agencyApply;
