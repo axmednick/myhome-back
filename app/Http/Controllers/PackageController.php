@@ -19,7 +19,7 @@ class PackageController extends Controller
 
     public function rieltorPackages(): AnonymousResourceCollection
     {
-        $packages = Package::where('type', 'rieltor')->get();
+        $packages = Package::all();
         return PackageResource::collection($packages);
     }
 
