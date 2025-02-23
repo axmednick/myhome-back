@@ -182,7 +182,7 @@ class AnnouncementController extends Controller
                     'rental_client_types',
                     'metro_stations'
                 ])
-                ->orderBy('created_at', 'desc')
+            ->orderByRaw('is_premium DESC, is_vip DESC, created_at DESC')
                 ->paginate(10);
 
         return AnnouncementGridResource::collection($announcements);
