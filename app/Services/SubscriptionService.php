@@ -2,12 +2,18 @@
 
 namespace App\Services;
 
+use App\Helpers\DiscountCalculatorHelper;
+use App\Models\Package;
 use App\Models\Subscription;
 use App\Models\Announcement;
 use Carbon\Carbon;
 
 class SubscriptionService
 {
+    public function __construct(protected UserService $userService)
+    {
+    }
+
     /**
      * İstifadəçinin və ya agentliyin aktiv abunəliyini qaytarır
      */
@@ -98,4 +104,45 @@ class SubscriptionService
             ->where('is_active', true)
             ->update(['is_active' => false]);
     }
+    public function subscribePackage($user, $packageId, $durationDays)
+    {
+        $package = Package::findOrFail($packageId);
+
+        $finalPrice = DiscountCalculatorHelper::calculateDiscountedPrice($package->price, $durationDays);
+
+
+        $this->userService->deductBalance($user, $finalPrice);
+
+
+        if ($user->user_type === 'agent' && $user->agency_id) {
+            return Subscription::updateOrCreate(
+                ['agency_id' => $user->agency_id],
+                [
+                    'package_id' => $package->id,
+                    'start_date' => Carbon::now(),
+                    'end_date' => Carbon::now()->addDays($durationDays),
+                    'is_active' => true,
+                    'user_id' => null
+                ]
+            );
+        }
+
+        if ($user->user_type === 'agent' && is_null($user->agency_id)) {
+            return Subscription::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'package_id' => $package->id,
+                    'start_date' => Carbon::now(),
+                    'end_date' => Carbon::now()->addDays($durationDays),
+                    'is_active' => true,
+                    'agency_id' => null
+                ]
+            );
+        }
+
+        return null;
+    }
+
+
+
 }

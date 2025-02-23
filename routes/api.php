@@ -80,6 +80,7 @@ Route::prefix('user')->group(function () {
         });
         Route::get('/agency',[AgencyController::class,'userAgency']);
         Route::get('subscription-info',[SubscriptionController::class,'getSubscriptionInfo']);
+        Route::post('subscribe-package',[SubscriptionController::class,'subscribePackage']);
     });
     Route::get('/phone/{id}',[UserAuthController::class,'getPhone']);
 });
