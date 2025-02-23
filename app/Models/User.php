@@ -55,8 +55,21 @@ class User extends Authenticatable implements HasMedia
         return $this->hasOne(Agency::class, 'user_id');
     }
 
-   /* public function package()
+    public function subscription()
     {
-        return $this->belongsTo(Package::class);
-    }*/
+        return $this->hasOne(Subscription::class, 'user_id')->where('is_active', true);
+    }
+
+    public function agencySubscription()
+    {
+        return $this->hasOne(Subscription::class, 'agency_id', 'agency_id')->where('is_active', true);
+    }
+
+    public function activeSubscription()
+    {
+        return $this->user_type === 'agent'
+            ? ($this->agency_id ? $this->agencySubscription() : $this->subscription())
+            : null;
+    }
+
 }
