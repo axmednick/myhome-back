@@ -11,7 +11,7 @@ class DiscountCalculatorHelper
      * @param int $durationDays Davam etmə müddəti (günlər)
      * @return float
      */
-    public static function calculateDiscountedPrice($basePrice, $durationDays):float
+    public static function calculateDiscountedPrice($basePrice, $durationDays)
     {
         $discountRate = 0; // Standart endirim 0%
 
