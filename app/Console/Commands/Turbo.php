@@ -76,12 +76,26 @@ class Turbo extends Command
             $phoneElement = $listingHtml->find('.product-gallery__phone-link.is-hidden', 0);
             $phone = $phoneElement ? trim($phoneElement->href) : null;
 
+            // Yürüş məlumatını əldə etmək
+            $mileageElement = $listingHtml->find('.product-properties__i-value', 0);
+            $mileage = $mileageElement ? trim($mileageElement->plaintext) : null;
+
+            if ($mileage !== null) {
+                $mileage = intval(str_replace(' km', '', $mileage)); // "0 km" şəklində olduğu üçün " km" hissəsini silirik
+            }
+
+            if ($mileage==0){
+
+            }
+
+
+
             if ($name && $phone) {
                 $phone = str_replace('tel:', '', $phone);
 
                 $listing = Listing::firstOrCreate(
                     ['phone' => $phone],
-                    ['name' => $name, 'ads_count' => 1]
+                    ['name' => $name, 'ads_count' => $mileage==0 ? 2 : 1]
                 );
 
                 if (!$listing->wasRecentlyCreated) {
