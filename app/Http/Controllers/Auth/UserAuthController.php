@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\Otp;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Services\AuthService;
+use Carbon\Carbon;
 use Google_Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +50,16 @@ class UserAuthController extends Controller
 
 
         $this->authService->sendOtpToEmail($user);
+
+        if ($user->user_type == 'agent') {
+            Subscription::create([
+                'user_id' => $user->id,
+                'package_id' => 4,
+                'start_date' => Carbon::now(),
+                'end_date' => Carbon::now()->addDays(30),
+                'is_active' => true,
+            ]);
+        }
 
         return $this->sendResponse($success, 'User register successfully.');
     }
