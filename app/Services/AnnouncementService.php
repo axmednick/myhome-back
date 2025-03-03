@@ -36,6 +36,13 @@ class AnnouncementService
             $announcements->where('agency_id', $request -> agency_id);
         }
 
+        if ($request->has('is_premium') && $request->is_premium) {
+            $announcements->where('is_premium', 1);
+        }
+        if ($request->has('is_vip') && $request->is_vip) {
+            $announcements->where('is_vip', 1);
+        }
+
         if ($request->client_types_for_rent) {
 
             if ($request->client_types_for_rent!=1) {
