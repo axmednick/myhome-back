@@ -17,7 +17,6 @@ class UserService
         } elseif ($user->balance >= $amount) {
             $user->decrement('balance', $amount);
         } else {
-            throw new Exception('Insufficient balance', 402);
-        }
+            abort(402, 'Insufficient balance');        }
     }
 }
