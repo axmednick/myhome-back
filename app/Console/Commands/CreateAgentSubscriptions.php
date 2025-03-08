@@ -47,6 +47,7 @@ class CreateAgentSubscriptions extends Command
             ]);
         }
 
+
         $this->info("{$agents->count()} agent üçün subscription yaradıldı.");
         return 0;
     }
