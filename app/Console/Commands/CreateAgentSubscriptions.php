@@ -30,6 +30,7 @@ class CreateAgentSubscriptions extends Command
      */
     public function handle()
     {
+
         $packageId = $this->argument('package_id');
         $durationDays = $this->argument('duration_days');
 
