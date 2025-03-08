@@ -14,7 +14,7 @@ class CreateAgentSubscriptions extends Command
      *
      * @var string
      */
-    protected $signature = 'create:agent-subscriptions {package_id} {duration_days}';
+    protected $signature = 'create:agent';
 
     /**
      * The console command description.
@@ -31,8 +31,8 @@ class CreateAgentSubscriptions extends Command
     public function handle()
     {
 
-        $packageId = $this->argument('package_id');
-        $durationDays = $this->argument('duration_days');
+        $packageId = 4;
+        $durationDays = 30;
 
         // Agent tipli istifadəçiləri əldə edirik
         $agents = User::where('user_type', 'agent')->get();
