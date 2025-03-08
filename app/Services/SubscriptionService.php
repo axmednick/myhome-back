@@ -110,9 +110,7 @@ class SubscriptionService
 
         $finalPrice = DiscountCalculatorHelper::calculateDiscountedPrice($package->price, $durationDays);
 
-
-
-        $this->userService->deductBalance($finalPrice,$user);
+        $this->userService->deductBalance($finalPrice,false,$user);
 
 
         if ($user->user_type === 'agent' && $user->agency_id) {
