@@ -14,6 +14,7 @@ class SubscriptionService
     {
     }
 
+
     /**
      * İstifadəçinin və ya agentliyin aktiv abunəliyini qaytarır
      */

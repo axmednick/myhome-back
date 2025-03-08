@@ -9,6 +9,7 @@ use Carbon\Carbon;
 
 class CreateAgentSubscriptions extends Command
 {
+
     /**
      * The name and signature of the console command.
      *
