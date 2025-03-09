@@ -44,6 +44,8 @@ class ScrapeTapAz extends Command
 
         $client = new HtmlWeb();
         $listingHtml = $client->load($listingUrl);
+
+        dd($listingHtml);
         echo $listingHtml;
 
 
