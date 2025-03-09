@@ -43,10 +43,12 @@ class ScrapeTapAz extends Command
         $listingUrl = $baseUrl . '/elanlar/dasinmaz-emlak';
 
         $client = new HtmlWeb();
-        $listingHtml = $client->load($listingUrl);
-
-        dd($listingHtml);
-        echo $listingHtml;
+        try {
+            $listingHtml = $client->load($listingUrl);
+        } catch (\Exception $e) {
+            $this->error("Səhifə yüklənərkən xəta: " . $e->getMessage());
+            return 1;
+        }
 
 
         if (!$listingHtml) {
