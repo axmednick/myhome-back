@@ -15,7 +15,7 @@ class ScrapeTapAz extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:tap.az';
+    protected $signature = 'tap-az';
 
     /**
      * The console command description.
