@@ -44,6 +44,8 @@ class ScrapeTapAz extends Command
 
         $client = new HtmlWeb();
         $listingHtml = $client->load($listingUrl);
+        echo $listingHtml;
+
 
         if (!$listingHtml) {
             $this->error("Listing səhifəsi əldə oluna bilmədi: {$listingUrl}");
@@ -133,7 +135,6 @@ Sualınız olarsa, bizə yaza bilərsiniz.";
 
     function localToInternational(string $phone): string
     {
-        // Nömrədən rəqəmləri çıxarırıq
         $digits = preg_replace('/\D/', '', $phone); // Nəticə: "0704373343"
 
         // Əgər nömrə "0" ilə başlayırsa, bu "0" çıxarılır
