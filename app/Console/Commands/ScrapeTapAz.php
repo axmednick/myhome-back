@@ -7,6 +7,7 @@ use App\Services\WhatsappService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Cookie\CookieJar;
 use simplehtmldom\HtmlDomParser;
 
 class ScrapeTapAz extends Command
@@ -35,16 +36,25 @@ class ScrapeTapAz extends Command
         $baseUrl = 'https://tap.az';
         $listingUrl = $baseUrl . '/elanlar/dasinmaz-emlak';
 
-        // Guzzle client ilə HTTP sorğusu aparırıq
+        // Cookie dəstəyi üçün cookie jar yaradılır
+        $jar = new CookieJar();
+
+        // Guzzle client: əlavə header-lər və cookie dəstəyi ilə real brauzer kimi görünməyə çalışırıq
         $guzzle = new GuzzleClient([
-            'verify'  => false, // Test məqsədilə SSL doğrulamasını deaktiv edirik
+            'verify'  => false, // SSL doğrulamasını test üçün deaktiv edirik (istehsat mühitində bunu aktiv saxlayın)
+            'cookies' => $jar,
             'headers' => [
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36',
+                'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                'Accept-Language' => 'en-US,en;q=0.9',
+                'Referer' => 'https://google.com',
+                'Connection' => 'keep-alive',
+                'Upgrade-Insecure-Requests' => '1'
             ],
             'timeout' => 30,
         ]);
 
-        // Listing səhifəsini əldə edirik
+        // Listing səhifəsini yükləyirik
         try {
             $response = $guzzle->get($listingUrl);
             $htmlContent = $response->getBody()->getContents();
@@ -59,7 +69,7 @@ class ScrapeTapAz extends Command
             return 1;
         }
 
-        // Elan linklərini tapırıq: href atributunda elan linki var.
+        // Elan linklərini tapırıq (href atributunda elan linki var)
         $links = $listingHtml->find('a.products-link[data-stat="ad-card-link"]');
         if (!$links) {
             $this->info("Elan linkləri tapılmadı.");
@@ -71,7 +81,6 @@ class ScrapeTapAz extends Command
             $fullLink = $baseUrl . $relativeLink;
             $this->info("Emal edilir: {$fullLink}");
 
-            // Elanın səhifəsini yükləyirik
             try {
                 $adResponse = $guzzle->get($fullLink);
                 $adHtmlContent = $adResponse->getBody()->getContents();
@@ -151,7 +160,7 @@ class ScrapeTapAz extends Command
      */
     private function localToInternational(string $phone): string
     {
-        $digits = preg_replace('/\D/', '', $phone); // Yalnız rəqəmləri saxlayır
+        $digits = preg_replace('/\D/', '', $phone);
         if (substr($digits, 0, 1) === '0') {
             $digits = substr($digits, 1);
         }
