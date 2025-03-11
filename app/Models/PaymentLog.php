@@ -14,4 +14,8 @@ class PaymentLog extends Model
     protected $casts=[
       'response'=>'array'
     ];
+
+    public function user(){
+      return $this->belongsTo(User::class);
+    }
 }
