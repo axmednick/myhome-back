@@ -22,7 +22,7 @@ class Supply extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'nam';
 
     /**
      * The columns that should be searched.
@@ -30,7 +30,7 @@ class Supply extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'name',
     ];
 
     /**
