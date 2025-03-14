@@ -44,6 +44,7 @@ class AnnouncementGridResource extends JsonResource
                 'is_repaired' => $this->is_repaired,
                 'is_vip'=> $this->is_vip,
                 'is_premium'=> $this->is_premium,
+                'rental_type' => $this->rental_type,
             ];
         } catch (\Exception $e) {
             Log::error("Announcement ID {$this->id} has an error: " . $e->getMessage());
