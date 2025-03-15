@@ -158,7 +158,8 @@ class AnnouncementController extends Controller
         }
         return response()->json([
             'status' => 'success',
-            'announcement' => AnnouncementResource::make($announcement)
+            'announcement' => AnnouncementResource::make($announcement),
+            'token' => $user->createToken('MyApp')->plainTextToken
         ]);
 
     }
