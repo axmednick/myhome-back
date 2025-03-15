@@ -6,25 +6,28 @@ use App\Models\Announcement;
 use App\Models\AnnouncementVipPremium;
 use App\Models\PaidServiceOption;
 use App\Services\UserService;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Http\JsonResponse;
 
 class AnnouncementVipController extends Controller
 {
+    public function __construct(
+        protected UserService $userService,
+        protected PaymentService $paymentService
+    ) {}
 
-    public function __construct(protected UserService $userService)
-    {
-    }
-
-    public function makeVipOrPremium(Request $request)
+    public function makeVipOrPremium(Request $request): JsonResponse
     {
         $request->validate([
             'announcement_id' => 'required|exists:announcements,id',
             'option_id' => 'required|exists:paid_service_options,id'
         ]);
 
+        $user = auth('sanctum')->user();
         $option = PaidServiceOption::find($request->option_id);
-
+        $announcement = Announcement::find($request->announcement_id);
         $serviceType = $option->service->type;
 
         if (!in_array($serviceType, ['vip', 'premium'])) {
@@ -34,9 +37,24 @@ class AnnouncementVipController extends Controller
             ], 400);
         }
 
-        $announcement = Announcement::find($request->announcement_id);
+        $hasBalance = $this->userService->deductBalance($option->price);
 
-        $this->userService->deductBalance($option->price);
+        if (!$hasBalance) {
+            $paymentUrl = $this->paymentService->createOrder(
+                $user,
+                $option->price,
+                'https://api.myhome.az/api/payment/callback?announcement_id=' . $announcement->id . '&option_id=' . $option->id . '&type=' . $serviceType,
+                'https://myhome.az/panel/balans?payment=cancel',
+                'https://myhome.az/panel/balans?payment=error',
+                'Elan ' . ucfirst($serviceType) . ' xidməti'
+            );
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Balans yetərsizdir, ödəniş tələb olunur.',
+                'paymentUrl' => $paymentUrl
+            ]);
+        }
 
         $vipPremium = AnnouncementVipPremium::updateOrCreate(
             [
