@@ -39,6 +39,8 @@ class PaymentController extends Controller
         if ($request->isMethod('get')) {
             return redirect('https://myhome.az/panel/balans?payment=success');
         }
+        \Log::error($request->all());
+        \Log::error($request->all());
 
         $payload = $request->all()['payload'] ?? null;
         if (!$payload) {
