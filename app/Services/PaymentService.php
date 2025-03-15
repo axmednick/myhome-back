@@ -11,6 +11,10 @@ use Exception;
 
 class PaymentService
 {
+    public function __construct(protected AnnouncementService $announcementService)
+    {
+    }
+
     protected $merchant = "ES1094008";
     protected $authToken = "09D204A282514037AA78D244363023E5";
     protected $paymentApiUrl = "https://api.payriff.com/api/v2/createOrder";
@@ -72,26 +76,51 @@ class PaymentService
                 throw new Exception("Invalid callback payload");
             }
 
+            // Log-u tapırıq
             $log = PaymentLog::where('transaction_id', $orderId)
                 ->where('status', 'pending')
                 ->firstOrFail();
 
             $user = User::findOrFail($log->user_id);
 
+            // Callback URL-dən parametrləri alırıq
+            parse_str(parse_url($log->approve_url, PHP_URL_QUERY), $params);
+            $announcementId = $params['announcement_id'] ?? null;
+            $paidServiceId = $params['option_id'] ?? null;
+            $serviceType = $params['type'] ?? null;
+
             if ($paymentStatus === 'APPROVED') {
 
-                $user->increment('balance', $amount);
+                // Elan növünü və xidməti yoxlayırıq və uyğun əməliyyatı icra edirik
+                if ($serviceType === 'boost') {
+                    $boost = $this->announcementService->boostAnnouncement($announcementId, $paidServiceId, $user);
+                    if (!$boost) {
+                        return ['success' => false, 'message' => 'Payment confirmed but insufficient balance for boost'];
+                    }
+                    $message = 'Elan uğurla irəli çəkildi.';
+                } elseif (in_array($serviceType, ['vip', 'premium'])) {
+                    $vipPremium = $this->announcementService->makeVipOrPremiumAnnouncement($announcementId, $paidServiceId, $user);
+                    if (!$vipPremium) {
+                        return ['success' => false, 'message' => 'Payment confirmed but insufficient balance for VIP/Premium'];
+                    }
+                    $message = "Elan uğurla $serviceType oldu.";
+                } else {
+                    // Adi balans artırma
+                    $user->increment('balance', $amount);
+                    $message = 'Balance updated successfully';
+                }
 
+                // Log-u yeniləyirik
                 $log->update([
                     'status' => 'success',
                     'response' => json_encode($payload)
                 ]);
 
                 DB::commit();
-                return ['success' => true, 'message' => 'Payment confirmed successfully', 'user_balance' => $user->balance];
+                return ['success' => true, 'message' => $message, 'user_balance' => $user->balance];
             }
 
-
+            // Əgər ödəniş uğursuz olubsa
             $log->update([
                 'status' => 'failed',
                 'response' => json_encode($payload)
@@ -105,4 +134,7 @@ class PaymentService
             return ['success' => false, 'error' => 'Transaction failed', 'message' => $e->getMessage()];
         }
     }
+
+
+
 }

@@ -4,8 +4,12 @@ namespace App\Services;
 
 use App\Http\Resources\AnnouncementResource;
 use App\Models\Announcement;
+use App\Models\AnnouncementBoost;
+use App\Models\AnnouncementVipPremium;
 use App\Models\Link;
+use App\Models\PaidServiceOption;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
 
@@ -213,6 +217,59 @@ class AnnouncementService
 
         return Announcement::whereIn('id', $announcementIds)->paginate(20);
     }
+
+    public function boostAnnouncement($announcementId, $optionId, $user)
+    {
+        $announcement = Announcement::findOrFail($announcementId);
+        $option = PaidServiceOption::findOrFail($optionId);
+
+
+        $boost = AnnouncementBoost::create([
+            'announcement_id' => $announcement->id,
+            'total_boosts' => $option->duration,
+            'remaining_boosts' => $option->duration - 1,
+            'last_boosted_at' => now()
+        ]);
+
+        $announcement->update(['created_at' => now()]);
+
+        return $boost;
+    }
+    public function makeVipOrPremiumAnnouncement($announcementId, $optionId, $user)
+    {
+        $announcement = Announcement::findOrFail($announcementId);
+        $option = PaidServiceOption::findOrFail($optionId);
+        $serviceType = $option->service->type;
+
+        if (!in_array($serviceType, ['vip', 'premium'])) {
+            return null; // Seçilmiş xidmət doğru növdə deyil
+        }
+
+
+        $vipPremium = AnnouncementVipPremium::updateOrCreate(
+            [
+                'announcement_id' => $announcement->id,
+                'type' => $serviceType
+            ],
+            [
+                'expires_at' => Carbon::now()->addDays($option->duration)
+            ]
+        );
+
+        if ($serviceType === 'vip') {
+            $announcement->update([
+                'is_vip' => true
+            ]);
+        } elseif ($serviceType === 'premium') {
+            $announcement->update([
+                'is_vip' => true,
+                'is_premium' => true
+            ]);
+        }
+
+        return $vipPremium;
+    }
+
 
 }
 
