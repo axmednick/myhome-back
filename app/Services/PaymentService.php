@@ -72,7 +72,7 @@ class PaymentService
             $orderId = $payload['orderId'] ?? null;
             $amount = $payload['amount'] ?? null;
             $paymentStatus = $payload['paymentStatus'] ?? null;
-            \Log::error($orderId, $amount, $paymentStatus);
+
 
             if (!$orderId || !$amount || !$paymentStatus) {
                 throw new Exception("Invalid callback payload");

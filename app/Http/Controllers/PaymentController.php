@@ -36,8 +36,7 @@ class PaymentController extends Controller
 
     public function callbackTransaction(Request $request)
     {
-        \Log::error($request->all());
-        \Log::error($request->all());
+
 
         if ($request->isMethod('get')) {
             return redirect('https://myhome.az/panel/balans?payment=success');
@@ -45,6 +44,7 @@ class PaymentController extends Controller
 
 
         $payload = $request->all()['payload'] ?? null;
+        \Log::error($payload);
         if (!$payload) {
             return response()->json(['error' => 'Invalid payload'], 400);
         }
