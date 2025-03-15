@@ -59,7 +59,7 @@ class AnnouncementBoostController extends Controller
                 'status' => false,
                 'message' => 'Balans yetərsizdir, ödəniş tələb olunur.',
                 'paymentUrl' => $paymentUrl
-            ]);
+            ],400);
         }
 
         // Əgər balans yetərlidirsə, boost-u icra edirik
