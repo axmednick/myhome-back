@@ -157,7 +157,8 @@ class AnnouncementController extends Controller
             }
         }
         return response()->json([
-            'status' => 'success'
+            'status' => 'success',
+            'announcement' => AnnouncementBaseResource::make($announcement)
         ]);
 
     }
