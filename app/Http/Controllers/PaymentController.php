@@ -36,11 +36,13 @@ class PaymentController extends Controller
 
     public function callbackTransaction(Request $request)
     {
+        \Log::error($request->all());
+        \Log::error($request->all());
+
         if ($request->isMethod('get')) {
             return redirect('https://myhome.az/panel/balans?payment=success');
         }
-        \Log::error($request->all());
-        \Log::error($request->all());
+
 
         $payload = $request->all()['payload'] ?? null;
         if (!$payload) {
@@ -48,7 +50,7 @@ class PaymentController extends Controller
         }
 
         $result = $this->paymentService->handleCallback($payload, $request);
-        dd($result);
+
 
         return response()->json($result, $result['success'] ? 200 : 400);
     }
