@@ -45,7 +45,7 @@ class PaymentController extends Controller
             return response()->json(['error' => 'Invalid payload'], 400);
         }
 
-        $result = $this->paymentService->handleCallback($payload);
+        $result = $this->paymentService->handleCallback($payload, $request);
 
         return response()->json($result, $result['success'] ? 200 : 400);
     }
