@@ -96,6 +96,7 @@ class SubscriptionService
         return $subscription ? $subscription->is_active : false;
     }
 
+
     /**
      * Paketin vaxtı bitdikdə avtomatik deaktiv etmək
      */
