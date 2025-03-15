@@ -63,7 +63,7 @@ class PaymentService
     /**
      * Ödəniş callback-i işləyir
      */
-    public function handleCallback($payload)
+    public function handleCallback($payload, Request $request)
     {
         DB::beginTransaction();
 
@@ -83,11 +83,10 @@ class PaymentService
 
             $user = User::findOrFail($log->user_id);
 
-            // Callback URL-dən parametrləri alırıq
-            parse_str(parse_url($log->approve_url, PHP_URL_QUERY), $params);
-            $announcementId = $params['announcement_id'] ?? null;
-            $paidServiceId = $params['option_id'] ?? null;
-            $serviceType = $params['type'] ?? null;
+            // Callback URL parametrlərini request-dən alırıq
+            $announcementId = $request->query('announcement_id');  // Request-də 'announcement_id' parametri
+            $paidServiceId = $request->query('option_id');          // Request-də 'option_id' parametri
+            $serviceType = $request->query('type');                 // Request-də 'type' parametri
 
             if ($paymentStatus === 'APPROVED') {
 
@@ -130,10 +129,12 @@ class PaymentService
             return ['success' => false, 'message' => 'Payment failed or was not successful'];
 
         } catch (Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             return ['success' => false, 'error' => 'Transaction failed', 'message' => $e->getMessage()];
         }
     }
+
 
 
 
