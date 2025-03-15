@@ -57,6 +57,7 @@ class AnnouncementBoostController extends Controller
                 'Elan Boost xidməti'
             );
 
+
             return response()->json([
                 'status' => false,
                 'message' => 'Balans yetərsizdir, ödəniş tələb olunur.',
