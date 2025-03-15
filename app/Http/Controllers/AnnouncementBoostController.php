@@ -48,7 +48,10 @@ class AnnouncementBoostController extends Controller
             $paymentUrl = $this->paymentService->createOrder(
                 $user,
                 $option->price,
-                'https://api.myhome.az/api/payment/callback',
+                route('payment.callback', [
+                    'announcement_id' => $announcement->id,
+                    'paid_service_id' => $option->id
+                ]),
                 'https://myhome.az/panel/balans?payment=cancel',
                 'https://myhome.az/panel/balans?payment=error',
                 'Elan Boost xidməti'

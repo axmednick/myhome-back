@@ -133,7 +133,7 @@ Route::prefix('agency')->group(function (){
 
 Route::prefix('payment')->group(function (){
    Route::post('/pay',[PaymentController::class,'createOrder']);
-    Route::match(['get', 'post'],'/callback',[PaymentController::class,'callbackTransaction']);
+    Route::match(['get', 'post'],'/callback',[PaymentController::class,'callbackTransaction'])->name('payment.callback');
 });
 
 Route::prefix('paid-services')->group(function () {
