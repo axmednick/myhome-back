@@ -2,138 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Exception;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
-use App\Models\PaymentLog;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
-class PaymentController extends Controller {
-    public function createOrder(Request $request) {
+class PaymentController extends Controller
+{
+    protected $paymentService;
 
-        $user = \auth('sanctum')->user();
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
 
-        $paymentData = [
-            "body" => [
-                "amount" => number_format($request->amount, 2, '.', ''),
-                "approveURL" => "https://api.myhome.az/api/payment/callback",
-                "cancelURL" => 'https://myhome.az/panel/balans?payment=cancel',
-                "cardUuid" => "string",
-                "currencyType" => "AZN",
-                "declineURL" => 'https://myhome.az/panel/balans?payment=error',
-                "description" => "Payment",
-                "language" => "AZ",
-                "operation" => "PURCHASE",
-                "directPay" => false,
-                "installmentPeriod" => 0,
-                "installmentProductType" => "BIRKART",
-                "senderCardUID" => "string"
-            ],
-            "merchant" => "ES1094008"
-        ];
+    public function createOrder(Request $request)
+    {
+        $user = Auth::guard('sanctum')->user();
 
-        $response = Http::withHeaders([
-            'Authorization' => '09D204A282514037AA78D244363023E5',
-            'Content-Type' => 'application/json',
-        ])->post('https://api.payriff.com/api/v2/createOrder', $paymentData);
+        $paymentUrl = $this->paymentService->createOrder(
+            $user,
+            $request->amount,
+            "https://api.myhome.az/api/payment/callback",
+            'https://myhome.az/panel/balans?payment=cancel',
+            'https://myhome.az/panel/balans?payment=error'
+        );
 
-        // Cavabı JSON formatında alırıq
-        $responseData = $response->json();
-
-        // Log qeyd edirik
-        $paymentLog = PaymentLog::create([
-            'user_id' => $user->id,
-            'amount' => $request->amount,
-            'transaction_id' => $responseData['payload']['orderId'] ?? null,
-
-            'response' => $responseData,
-        ]);
-
-        if ($response->successful()) {
-            return response()->json([
-                'paymentUrl' => $responseData['payload']['paymentUrl'] ?? null
-            ], 200);
+        if ($paymentUrl) {
+            return response()->json(['paymentUrl' => $paymentUrl], 200);
         }
-        else {
-            return response()->json([
-                'message' => 'Payment failed',
-                'error' => $responseData
-            ], 400);
-        }
+
+        return response()->json(['message' => 'Payment failed'], 400);
     }
 
     public function callbackTransaction(Request $request)
     {
-        DB::beginTransaction();
-
-        try {
-            // Əgər metod GET-dirsə, birbaşa yönləndirmə et
-            if ($request->isMethod('get')) {
-                return redirect('https://myhome.az/panel/balans?payment=success');
-            }
-
-            // `payload` dəyərini alırıq
-            $payload = $request->all()['payload'] ?? 'Not Found';
-            \Log::error($payload);
-
-
-
-
-
-            $orderId = $payload['orderId'];
-            $amount = $payload['amount'];
-            $currency = $payload['currencyType'];
-            $paymentStatus = $payload['paymentStatus'];
-
-            // Əməliyyat məlumatlarını tapırıq
-            $log = PaymentLog::where('transaction_id', $orderId)
-                ->where('status', 'pending')
-                ->firstOrFail();
-
-            // Ödəniş uğurlu olub-olmadığını yoxlayırıq
-            if ($paymentStatus === 'APPROVED') {
-                $user = User::findOrFail($log->user_id);
-
-                // Balansı artırırıq
-                $user->increment('balance', $amount);
-
-                // Log yeniləyirik
-                $log->update([
-                    'status' => 'success',
-                    'response' => json_encode($payload) // JSON kimi saxlayırıq
-                ]);
-
-                DB::commit();
-
-                return response()->json([
-                    'message' => 'Payment confirmed successfully',
-                    'user_balance' => $user->balance
-                ]);
-            }
-
-            // Əgər ödəniş uğursuz olarsa
-            $log->update([
-                'status' => 'failed',
-                'response' => json_encode($payload)
-            ]);
-
-            DB::commit();
-            return response()->json([
-                'message' => 'Payment failed or was not successful',
-                'data' => $payload
-            ], 400);
-
-        } catch (Exception $th) {
-
-            DB::rollBack();
-            return response()->json([
-                'error' => 'Transaction failed',
-                'message' => $th->getMessage()
-            ], 500);
+        if ($request->isMethod('get')) {
+            return redirect('https://myhome.az/panel/balans?payment=success');
         }
+
+        $payload = $request->all()['payload'] ?? null;
+        if (!$payload) {
+            return response()->json(['error' => 'Invalid payload'], 400);
+        }
+
+        $result = $this->paymentService->handleCallback($payload);
+
+        return response()->json($result, $result['success'] ? 200 : 400);
     }
-
-
 }
