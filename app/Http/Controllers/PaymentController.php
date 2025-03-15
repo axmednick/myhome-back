@@ -46,6 +46,7 @@ class PaymentController extends Controller
         }
 
         $result = $this->paymentService->handleCallback($payload, $request);
+        dd($result);
 
         return response()->json($result, $result['success'] ? 200 : 400);
     }
