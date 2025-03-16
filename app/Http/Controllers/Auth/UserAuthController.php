@@ -124,6 +124,10 @@ class UserAuthController extends Controller
                 'register_type' => 'google'
             ]);
 
+
+
+
+
             if ($googleUser['picture']) {
                 $user->addMediaFromUrl($googleUser['picture'])->toMediaCollection('photo');
             }
