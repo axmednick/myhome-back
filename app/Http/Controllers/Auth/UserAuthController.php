@@ -185,4 +185,12 @@ class UserAuthController extends Controller
             return response()->json(['exists' => false]);
         }
     }
+    public function switchToAgent()
+    {
+        $user = auth('sanctum')->user();
+        $user->user_type = 'agent';
+        $user->save();
+
+        return  $this->sendResponse([], 'User type is changed to agent');
+    }
 }

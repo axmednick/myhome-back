@@ -14,14 +14,14 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class User extends Authenticatable implements HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable,InteractsWithMedia;
+    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $guarded=['id'];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -46,6 +46,7 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Announcement::class);
     }
+
     public function agency()
     {
         return $this->belongsTo(Agency::class, 'agency_id');
@@ -81,15 +82,20 @@ class User extends Authenticatable implements HasMedia
         parent::boot();
 
         static::updating(function ($user) {
-            if (is_null($user->getOriginal('user_type')) && $user->user_type == 'agent') {
-                Subscription::create([
-                    'user_id' => $user->id,
-                    'package_id' => 4,
-                    'start_date' => Carbon::now(),
-                    'end_date' => Carbon::now()->addDays(30),
-                    'is_active' => true,
-                ]);
-                Log::info("Subscription created for user_id: {$user->id}");
+            if ((is_null($user->getOriginal('user_type')) || $user->getOriginal('user_type') == 'user') && $user->user_type == 'agent') {
+                $existingSubscription = Subscription::where('user_id', $user->id)
+                    ->where('is_active', true)
+                    ->first();
+                if (!$existingSubscription) {
+                    Subscription::create([
+                        'user_id' => $user->id,
+                        'package_id' => 4,
+                        'start_date' => Carbon::now(),
+                        'end_date' => Carbon::now()->addDays(30),
+                        'is_active' => true,
+                    ]);
+                    Log::info("Subscription created for user_id: {$user->id}");
+                }
             }
         });
     }

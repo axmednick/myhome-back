@@ -50,6 +50,7 @@ Route::controller(UserAuthController::class)->prefix('auth')->group(function () 
 
 Route::prefix('user')->group(function () {
     Route::post('/check-exists', [UserAuthController::class, 'checkExists']);
+    Route::post('/switch-to-agent', [UserAuthController::class, 'switchToAgent']);
     Route::get('/announcements/{id?}', [AnnouncementController::class, 'userAnnouncements']);
     Route::get('/favorites', [AnnouncementController::class, 'favorites']);
     Route::middleware('auth:sanctum')->group(function () {
