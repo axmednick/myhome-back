@@ -21,10 +21,12 @@ use App\Models\AnnouncementRentalClientTypes;
 use App\Models\Favorite;
 use App\Models\MetroStation;
 use App\Models\Region;
+use App\Models\Subscription;
 use App\Models\Supply;
 use App\Models\User;
 use App\Services\AnnouncementService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -83,6 +85,16 @@ class AnnouncementController extends Controller
                 'user_type'=>$request->user_type,
                 'register_type'=>'announcement',
             ]);
+
+            if ($request->user_type == 'agent') {
+                Subscription::create([
+                    'user_id' => $user->id,
+                    'package_id' => 4,
+                    'start_date' => Carbon::now(),
+                    'end_date' => Carbon::now()->addDays(30),
+                    'is_active' => true,
+                ]);
+            }
         } else {
 
             $user = auth('sanctum')->user();
