@@ -156,8 +156,8 @@ class AnnouncementService
             // Parametri array-ə çeviririk
             $villages = is_array($request->query('villages')) ? $request->query('villages') : [$request->query('villages')];
 
-            $announcements->where(function ($query) use ($villages) {
-                // Məsələn, yalnız müəyyən villages üçün axtarış etmək istəyirsinizsə
+            $announcements->whereHas('address',function ($query) use ($villages) {
+
                 $query->whereIn('village_id', $villages);
             });
         }
