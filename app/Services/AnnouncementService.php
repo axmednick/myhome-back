@@ -153,7 +153,7 @@ class AnnouncementService
             });
         }
         if ($request->has('villages')) {
-            $villages = (array) $request->villages; // URL parametrini array-ə çeviririk
+            $villages = $request->villages; // Bu, [2, 1, 20] kimi bir array olacaq
             $announcements->whereHas('address', function ($query) use ($villages) {
                 $query->whereIn('village_id', $villages); // village_id-lərə görə axtarış
             });
