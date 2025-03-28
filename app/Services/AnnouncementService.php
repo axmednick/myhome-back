@@ -152,12 +152,16 @@ class AnnouncementService
                 $query->where('city_id', $request->city);
             });
         }
-/*        if ($request->has('villages')) {
-            $villages = $request->villages; // Bu, [2, 1, 20] kimi bir array olacaq
-            $announcements->whereHas('address', function ($query) use ($villages) {
-                $query->whereIn('village_id', $villages); // village_id-lərə görə axtarış
+        if ($request->has('villages')) {
+            // Parametri array-ə çeviririk
+            $villages = is_array($request->query('villages')) ? $request->query('villages') : [$request->query('villages')];
+
+            $announcements->where(function ($query) use ($villages) {
+                // Məsələn, yalnız müəyyən villages üçün axtarış etmək istəyirsinizsə
+                $query->whereIn('village_id', $villages);
             });
-        }*/
+        }
+
 
 
 
