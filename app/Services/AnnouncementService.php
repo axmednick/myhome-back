@@ -117,6 +117,17 @@ class AnnouncementService
         if ($request->minFloor) {
             $announcements->where('floor', '>=', $request->minFloor);
         }
+        if ($request->only_last) {
+            $announcements->whereColumn('floor', '=', 'floor_count');
+        }
+        if ($request->dont_be_first) {
+            $announcements->where('floor', '>', 1);
+        }
+        if ($request->dont_be_last) {
+            $announcements->whereColumn('floor', '<', 'floor_count');
+        }
+
+
         if ($request->is_repaired) {
             $announcements->where('is_repaired', $request->is_repaired);
         }
