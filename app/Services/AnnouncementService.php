@@ -68,8 +68,8 @@ class AnnouncementService
         if ($request->has('room_ids')) {
             $roomIds = is_array($request->query('room_ids')) ? $request->query('room_ids') : [$request->query('room_ids')];
             $announcements->where(function ($query) use ($roomIds) {
-                if (in_array("more", $roomIds)) {
-                    $query->where('room_count', '>', 5);
+                if (in_array(5, $roomIds)) {
+                    $query->where('room_count', '>=', 5);
                 } else {
                     $query->whereIn('room_count', $roomIds);
                 }
