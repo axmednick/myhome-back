@@ -48,7 +48,7 @@ class AnnouncementService
 
 
 
-        return $announcements->orderByRaw('is_premium DESC, is_vip DESC, created_at DESC');
+        return $announcements;
     }
 
 
