@@ -111,12 +111,15 @@ class AnnouncementService
                 $query->where('user_type', $request->user_type);
             });
         }
+
         if ($request->maxFloor) {
-            $announcements->where('floor', '<=', $request->maxFloor);
+            $announcements->where('floor', '<=', (int) $request->maxFloor);
         }
         if ($request->minFloor) {
-            $announcements->where('floor', '>=', $request->minFloor);
+            $announcements->where('floor', '>=', (int) $request->minFloor);
         }
+
+
         if ($request->only_last) {
             $announcements->whereColumn('floor', '=', 'floor_count');
         }
