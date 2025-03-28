@@ -36,7 +36,81 @@ class AnnouncementService
                 'user'
             ]);
 
+        if ($request->has('agency_id')) {
+            $announcements->where('agency_id', $request -> agency_id);
+        }
 
+        if ($request->has('is_premium') && $request->is_premium) {
+            $announcements->where('is_premium', 1);
+        }
+        if ($request->has('is_vip') && $request->is_vip) {
+            $announcements->where('is_vip', 1);
+        }
+
+        if ($request->client_types_for_rent) {
+
+            if ($request->client_types_for_rent!=1) {
+
+                Log::error($request->client_types_for_rent);
+                $announcements->whereHas('rental_client_types', function ($query) use ($request) {
+                    $query->where('client_type_for_rent_id', $request->client_types_for_rent);
+                });
+            }
+        }
+
+
+        if ($request->propertyType) {
+            $announcements->where('property_type_id', $request->propertyType);
+        }
+        if ($request->announcementType) {
+            $announcements->where('announcement_type_id', $request->announcementType);
+        }
+        if ($request->has('room_ids')) {
+            $roomIds = is_array($request->query('room_ids')) ? $request->query('room_ids') : [$request->query('room_ids')];
+            $announcements->where(function ($query) use ($roomIds) {
+                if (in_array(5, $roomIds)) {
+                    $query->where('room_count', '>=', 5);
+                } else {
+                    $query->whereIn('room_count', $roomIds);
+                }
+            });
+        }
+
+
+        if ($request->apartmentType) {
+            $announcements->where('apartment_type_id', $request->apartmentType);
+        }
+        if ($request->minPrice) {
+            $announcements->where('price', '>=', $request->minPrice);
+        }
+        if ($request->maxPrice) {
+            $announcements->where('price', '<=', $request->maxPrice);
+        }
+        if ($request->minArea) {
+            $announcements->where('house_area', '>=', $request->minArea);
+        }
+        if ($request->maxArea) {
+            $announcements->where('house_area', '<=', $request->maxArea);
+        }
+        if ($request->has('metro')) {
+            $metroStations = (array) $request->query('metro'); // Array kimi çevirmək
+
+            $announcements->whereHas('address', function ($query) use ($metroStations) {
+                $query->whereIn('metro_station_id', $metroStations);
+            });
+        }
+
+        if ($request->search) {
+            $announcements->where(function ($query) use ($request) {
+                $query->where('id', $request->search)
+                    ->orWhere('description', 'like', '%' . $request->search . '%');
+            });
+        }
+        if ($request->user_type) {
+            $announcements->whereHas('user', function ($query) use ($request) {
+                $query->where('user_type', $request->user_type);
+            });
+        }
 
         if ($request->maxFloor) {
             $announcements->where('floor', '<=', (int) $request->maxFloor);
@@ -46,9 +120,34 @@ class AnnouncementService
         }
 
 
+        if ($request->only_last) {
+            $announcements->whereColumn('floor', '=', 'floor_count');
+        }
+        if ($request->dont_be_first) {
+            $announcements->where('floor', '>', 1);
+        }
+        if ($request->dont_be_last) {
+            $announcements->whereColumn('floor', '<', 'floor_count');
+        }
 
 
-        return $announcements;
+        if ($request->is_repaired) {
+            $announcements->where('is_repaired', $request->is_repaired);
+        }
+        if ($request->property_document) {
+            $announcements->where('document_id', 1);
+        }
+        if ($request->credit_possible) {
+            $announcements->where('credit_possible', 1);
+        }
+        if ($request->in_credit) {
+            $announcements->where('in_credit', 1);
+        }
+        if ($request->looking_roommate) {
+            $announcements->where('looking_roommate', 1);
+        }
+
+        return $announcements->orderByRaw('is_premium DESC, is_vip DESC, created_at DESC');
     }
 
 
