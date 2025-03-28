@@ -113,10 +113,10 @@ class AnnouncementService
         }
 
         if ($request->maxFloor) {
-            $announcements->where('floor', '<=', (int) $request->maxFloor);
+            $announcements->where('floor', '<', (int) $request->maxFloor);
         }
         if ($request->minFloor) {
-            $announcements->where('floor', '>=', (int) $request->minFloor);
+            $announcements->where('floor', '>', (int) $request->minFloor);
         }
 
 
