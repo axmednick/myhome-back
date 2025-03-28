@@ -100,10 +100,10 @@ class AnnouncementService
             });
         }
 
-        if ($request->keyword) {
+        if ($request->search) {
             $announcements->where(function ($query) use ($request) {
-                $query->where('id', $request->keyword)
-                    ->orWhere('description', 'like', '%' . $request->keyword . '%');
+                $query->where('id', $request->search)
+                    ->orWhere('description', 'like', '%' . $request->search . '%');
             });
         }
         if ($request->user_type) {
