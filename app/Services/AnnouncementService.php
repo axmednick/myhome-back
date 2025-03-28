@@ -147,6 +147,13 @@ class AnnouncementService
             $announcements->where('looking_roommate', 1);
         }
 
+        if ($request->has('city')) {
+            $announcements->whereHas('address', function ($query) use ($request) {
+                $query->where('city_id', $request->city);
+            });
+        }
+
+
         return $announcements->orderByRaw('is_premium DESC, is_vip DESC, created_at DESC');
     }
 
