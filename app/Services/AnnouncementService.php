@@ -152,6 +152,13 @@ class AnnouncementService
                 $query->where('city_id', $request->city);
             });
         }
+        if ($request->has('villages')) {
+            $villages = (array) $request->villages; // URL parametrini array-ə çeviririk
+            $announcements->whereHas('address', function ($query) use ($villages) {
+                $query->whereIn('village_id', $villages); // village_id-lərə görə axtarış
+            });
+        }
+
 
 
         return $announcements->orderByRaw('is_premium DESC, is_vip DESC, created_at DESC');
