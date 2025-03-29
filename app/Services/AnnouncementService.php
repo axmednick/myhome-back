@@ -152,7 +152,7 @@ class AnnouncementService
                 $query->where('city_id', $request->city);
             });
         }
-   /*     if ($request->has('villages')) {
+        if ($request->has('villages')) {
 
             $villages = is_array($request->query('villages')) ? $request->query('villages') : [$request->query('villages')];
 
@@ -160,7 +160,7 @@ class AnnouncementService
 
                 $query->whereIn('village_id', $villages);
             });
-        }*/
+        }
 
 
 
