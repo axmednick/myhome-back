@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AnnouncementController extends Controller
@@ -362,4 +363,31 @@ class AnnouncementController extends Controller
         return $this->sendResponse(AnnouncementResource::make($announcement));
 
     }
+
+    public function changeStatus(Request $request, Announcement $announcement)
+    {
+        $request->validate([
+            'status' => ['required', 'integer', Rule::in([2, 4])],
+        ]);
+
+        $newStatus = $request->status;
+        $currentStatus = $announcement->status;
+
+        if ($announcement->user_id !== auth('sanctum')->id()) {
+            return $this->sendError('You are not authorized to update this announcement!', 'Unauthorized', 403);
+        }
+
+        if ($currentStatus === 4 && $newStatus !== 2) {
+            return $this->sendError('Only status Active can be set when the current status is Deactive', 'Validation Error', 422);
+        }
+
+        if ($currentStatus !== 4 && $newStatus !== 4) {
+            return $this->sendError('Only status Deactive can be set when the current status is Active', 'Validation Error', 422);
+        }
+
+        $announcement->update(['status' => $newStatus]);
+
+        return $this->sendResponse(new AnnouncementResource($announcement), 'Announcement status updated successfully!', 200);
+    }
+
 }

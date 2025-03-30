@@ -84,6 +84,7 @@ Route::prefix('user')->group(function () {
         Route::post('subscribe-package',[SubscriptionController::class,'subscribePackage']);
     });
     Route::get('/phone/{id}',[UserAuthController::class,'getPhone']);
+    Route::patch('/announcement/{announcement}/status', [AnnouncementController::class, 'changeStatus']);
 });
 
 Route::get('announcement-types', [GlobalDataController::class, 'announcementTypes']);
