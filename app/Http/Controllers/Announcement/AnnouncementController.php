@@ -376,14 +376,13 @@ class AnnouncementController extends Controller
         if ($announcement->user_id !== auth('sanctum')->id()) {
             return $this->sendError('You are not authorized to update this announcement!', 'Unauthorized', 403);
         }
-
-        if ($currentStatus === 4 && $newStatus !== 2) {
-            return $this->sendError('Only status Active can be set when the current status is Deactive', 'Validation Error', 422);
+        if (!(
+            ($currentStatus === AnnouncementStatus::Active && $newStatus === AnnouncementStatus::Deactive) ||
+            ($currentStatus === AnnouncementStatus::Deactive  && $newStatus === AnnouncementStatus::Active)
+        )) {
+            return $this->sendError('Invalid status transition!', 'You can only toggle between Active (1) and Deactive (2).', 422);
         }
 
-        if ($currentStatus !== 4 && $newStatus !== 4) {
-            return $this->sendError('Only status Deactive can be set when the current status is Active', 'Validation Error', 422);
-        }
 
         $announcement->update(['status' => $newStatus]);
 
