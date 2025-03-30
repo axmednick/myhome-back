@@ -367,7 +367,7 @@ class AnnouncementController extends Controller
     public function changeStatus(Request $request, Announcement $announcement)
     {
         $validate = Validator::make( $request->all(),[
-            'status' => ['required', 'integer', Rule::in([2, 4])],
+            'status' => ['required', 'integer', Rule::in([1, 2])],
         ]);
 
         if ($validate->fails()) {
