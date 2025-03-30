@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\AnnouncementStatus;
 use App\Http\Resources\AnnouncementResource;
 use App\Models\Announcement;
 use App\Models\AnnouncementBoost;
@@ -19,7 +20,7 @@ class AnnouncementService
 
     public function searchAnnouncements($request): Builder
     {
-        $announcements = Announcement::query()->where('status',2)
+        $announcements = Announcement::query()->where('status',AnnouncementStatus::Active)
 
             ->with([
                 'address' => function ($query) use ($request) {

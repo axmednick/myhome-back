@@ -4,9 +4,9 @@ namespace App\Enums;
 
 enum AnnouncementStatus: int
 {
-    case Pending  = 1;
-    case Active   = 2;
-    case Expired  = 3;
-    case Deactive = 4;
-    case Rejected = 5;
+    case Pending  = 0;
+    case Active   = 1;
+    case Expired  = 4;
+    case Deactive = 2;
+    case Rejected = 3;
 }
