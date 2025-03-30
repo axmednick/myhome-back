@@ -387,7 +387,7 @@ class AnnouncementController extends Controller
 
 
 
-        return $this->sendResponse(new AnnouncementResource($announcement), 'Announcement status updated successfully!', 200);
+        return $this->sendResponse($newStatus, 'Announcement status updated successfully!', 200);
     }
 
 }
