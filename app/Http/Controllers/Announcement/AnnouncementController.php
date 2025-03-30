@@ -376,15 +376,16 @@ class AnnouncementController extends Controller
         if ($announcement->user_id !== auth('sanctum')->id()) {
             return $this->sendError('You are not authorized to update this announcement!', 'Unauthorized', 403);
         }
-        if (!(
-            ($currentStatus === AnnouncementStatus::Active && $newStatus === AnnouncementStatus::Deactive) ||
-            ($currentStatus === AnnouncementStatus::Deactive  && $newStatus === AnnouncementStatus::Active)
-        )) {
-            return $this->sendError('Invalid status transition!', 'You can only toggle between Active (1) and Deactive (2).', 422);
+
+        if ($newStatus==AnnouncementStatus::Active && $currentStatus==AnnouncementStatus::Expired){
+            $announcement->created_at=Carbon::now();
+            $announcement->save();
         }
 
 
         $announcement->update(['status' => $newStatus]);
+
+
 
         return $this->sendResponse(new AnnouncementResource($announcement), 'Announcement status updated successfully!', 200);
     }
