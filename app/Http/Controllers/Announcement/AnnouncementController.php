@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Announcement;
 
+use App\Enums\AnnouncementStatus;
 use App\Helpers\SlackHelper;
 use App\Helpers\TelegramHelper;
 use App\Http\Controllers\Controller;
@@ -119,6 +120,7 @@ class AnnouncementController extends Controller
             'credit_possible' => $request->credit_possible,
             'in_credit' => $request->in_credit,
             'agency_id' => $user->agency ? $user->agency->id : null,
+            'status' => AnnouncementStatus::Pending,
         ]);
 
         $announcement->address()->create([

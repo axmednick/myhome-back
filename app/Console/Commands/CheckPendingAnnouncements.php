@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Console\Commands;
+use App\Enums\AnnouncementStatus;
 use Illuminate\Console\Command;
 use App\Models\Announcement;
 use App\Mail\PendingAnnouncementNotification;
@@ -29,10 +30,10 @@ class CheckPendingAnnouncements extends Command
 
     public function handle()
     {
-        $pendingAnnouncements = Announcement::where('status', 0)->get();
+        $pendingAnnouncements = Announcement::where('status', 1)->get();
 
         foreach ($pendingAnnouncements as $announcement){
-            $announcement->status=1;
+            $announcement->status=AnnouncementStatus::Active;
             $announcement->save();
         }
 
