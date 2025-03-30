@@ -366,10 +366,13 @@ class AnnouncementController extends Controller
 
     public function changeStatus(Request $request, Announcement $announcement)
     {
-        $request->validate([
+        $validate = Validator::make( $request->all(),[
             'status' => ['required', 'integer', Rule::in([2, 4])],
         ]);
 
+        if ($validate->fails()) {
+            return $this->sendError($validate->errors(), 'Validation Error', 422);
+        }
         $newStatus = $request->status;
         $currentStatus = $announcement->status;
 
