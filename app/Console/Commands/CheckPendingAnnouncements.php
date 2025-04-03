@@ -30,7 +30,7 @@ class CheckPendingAnnouncements extends Command
 
     public function handle()
     {
-        $pendingAnnouncements = Announcement::where('status', 1)->get();
+        $pendingAnnouncements = Announcement::where('status', 0)->get();
 
         foreach ($pendingAnnouncements as $announcement){
             $announcement->status=AnnouncementStatus::Active;
