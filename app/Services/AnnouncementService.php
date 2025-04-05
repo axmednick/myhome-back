@@ -170,9 +170,11 @@ class AnnouncementService
 
         if ($request->has('metro')) {
 
+
             $metroStations = is_array($request->query('metro')) ? $request->query('metro') : [$request->query('metro')];
 
-            $announcements->whereHas('address',function ($query) use ($metroStations) {
+
+            $announcements->whereHas('metro_stations',function ($query) use ($metroStations) {
 
                 $query->whereIn('metro_station_id', $metroStations);
             });
