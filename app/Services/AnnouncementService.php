@@ -86,12 +86,13 @@ class AnnouncementService
         if ($request->apartmentType) {
             $announcements->where('apartment_type_id', $request->apartmentType);
         }
-        if ($request->minPrice) {
-            $announcements->where('price', '>=', $request->minPrice);
+        if ($request->query('minPrice')) {
+            $announcements->whereRaw('CAST(price AS UNSIGNED) >= ?', [(int) $request->query('minPrice')]);
         }
-        if ($request->maxPrice) {
-            $announcements->where('price', '<=', $request->maxPrice);
+        if ($request->query('maxPrice')) {
+            $announcements->whereRaw('CAST(price AS UNSIGNED) <= ?', [(int) $request->query('maxPrice')]);
         }
+
         if ($request->minArea) {
             $announcements->where('house_area', '>=', $request->minArea);
         }
