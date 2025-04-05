@@ -62,14 +62,7 @@ class Package extends Resource
                 ->sortable()
                 ->rules('required', 'min:0'),
 
-            Select::make('Type')
-                ->options([
-                    'agency' => 'Agency',
-                    'individual' => 'Individual',
-                ])
-                ->sortable()
-                ->displayUsingLabels()
-                ->rules('required'),
+
 
             HasMany::make('Features', 'features', PackageFeature::class), // Əlavə olundu
 
