@@ -63,7 +63,6 @@ class Package extends Resource
                 ->rules('required', 'min:0'),
 
 
-
             HasMany::make('Features', 'features', PackageFeature::class), // Əlavə olundu
 
         ];
