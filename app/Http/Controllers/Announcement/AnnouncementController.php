@@ -24,6 +24,7 @@ use App\Models\MetroStation;
 use App\Models\Region;
 use App\Models\Subscription;
 use App\Models\Supply;
+use App\Models\TemporaryFile;
 use App\Models\User;
 use App\Services\AnnouncementService;
 use Illuminate\Http\Request;
@@ -161,7 +162,9 @@ class AnnouncementController extends Controller
         }
         if ($request->has('media_ids') && is_array($request->media_ids)) {
             foreach ($request->media_ids as $index => $mediaId) {
-                $media = Media::where('model_id', $mediaId)->first();
+                $media = Media::where('model_id', $mediaId)
+                    ->where('model_type', TemporaryFile::class)
+                    ->first();
                 if ($media) {
                     $media->update([
                         'model_type' => Announcement::class,
