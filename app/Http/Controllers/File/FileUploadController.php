@@ -11,11 +11,9 @@ class FileUploadController extends Controller
 {
     public function temporaryFile(Request $request){
 
-
-
         $temporaryFile=TemporaryFile::create([]);
 
-        $temporaryFile->addMediaFromRequest('file')->toMediaCollection('image');
+        $temporaryFile->addMediaFromRequest('file')->toMediaCollection('image',config('media-library.disk_name'));
         return response()->json([
             'id'=>$temporaryFile->id,
             'url'=>$temporaryFile->getFirstMediaUrl('image')
