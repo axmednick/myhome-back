@@ -37,6 +37,11 @@ class AnnouncementService
                 'user'
             ]);
 
+
+        if ($request->has('rental_type') && $request->rental_type) {
+            $announcements->where('rental_type', $request->rental_type);
+        }
+
         if ($request->has('agency_id')) {
             $announcements->where('agency_id', $request -> agency_id);
         }
