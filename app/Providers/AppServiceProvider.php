@@ -26,11 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(\Elastic\Elasticsearch\Client::class, function () {
-            return ClientBuilder::create()
-                ->setHosts([config('scout.elasticsearch.hosts')[0]])
-                ->build();
-        });
+
 
     }
 
