@@ -125,9 +125,8 @@ return [
     'elasticsearch' => [
         'index' => env('ELASTICSEARCH_INDEX', 'announcements'),
         'hosts' => [
-            env('ELASTICSEARCH_HOST'), // artıq hazır URL-dir
+            env('ELASTICSEARCH_HOST'), // Bu artıq bütün məlumatı daşıyır
         ],
-
     ],
 
 
