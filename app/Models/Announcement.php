@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\Conversions\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -14,10 +15,18 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Announcement extends Model implements HasMedia
 {
-    use HasFactory,InteractsWithMedia,SoftDeletes;
+    use HasFactory,InteractsWithMedia,SoftDeletes,Searchable;
     protected $dates = ['deleted_at'];
 
     protected $guarded = ['id'];
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'description' => strip_tags($this->description),
+        ];
+    }
 
     public function announcement_type()
     {
