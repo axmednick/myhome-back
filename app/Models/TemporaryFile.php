@@ -18,6 +18,7 @@ class TemporaryFile extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('image')
+            ->useDisk('s3')
             ->registerMediaConversions(function (Media $media) {
                 $this
                     ->addMediaConversion('thumb')
