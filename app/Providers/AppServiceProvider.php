@@ -14,6 +14,7 @@ use App\Observers\PaymentLogObserver;
 use App\Observers\SubscriptionObserver;
 use App\Observers\UserBonusObserver;
 use App\Observers\UserObserver;
+use Elastic\Elasticsearch\ClientBuilder;
 use Illuminate\Support\ServiceProvider;
 use App\Notifications\TelegramMessageNotification;
 use Illuminate\Support\Facades\Notification;
@@ -25,7 +26,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(\Elastic\Elasticsearch\Client::class, function () {
+            return ClientBuilder::create()
+                ->setHosts([config('scout.elasticsearch.hosts')[0]])
+                ->build();
+        });
     }
 
     /**
