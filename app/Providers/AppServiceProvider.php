@@ -29,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(\Elastic\Elasticsearch\Client::class, function () {
             return ClientBuilder::create()
                 ->setHosts([config('scout.elasticsearch.hosts')[0]])
+                ->setSSLVerification(false) // << BU SƏTİR PROBLEMİ HƏLL EDİR
                 ->build();
         });
 
