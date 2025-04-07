@@ -31,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
                 ->setHosts([config('scout.elasticsearch.hosts')[0]])
                 ->build();
         });
+
     }
 
     /**
