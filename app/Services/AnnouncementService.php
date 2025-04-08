@@ -27,14 +27,12 @@ class AnnouncementService
             $announcementIds = Announcement::search($request->search)->get()->pluck('id');
 
             if ($announcementIds->isEmpty()) {
-                return Announcement::query()->whereRaw('1=0');
+                return Announcement::query();
             }
         }
 
         $announcements = Announcement::query()->where('status',AnnouncementStatus::Active)
-            ->when($announcementIds, function ($query) use ($announcementIds) {
-                $query->whereIn('id', $announcementIds);
-            })
+
             ->with([
                 'address' => function ($query) use ($request) {
                     if ($request->cities) {
@@ -121,12 +119,12 @@ class AnnouncementService
         }
 
 
-        /*if ($request->search) {
+        if ($request->search) {
             $announcements->where(function ($query) use ($request) {
                 $query->where('id', $request->search)
                     ->orWhere('description', 'like', '%' . $request->search . '%');
             });
-        }*/
+        }
         if ($request->user_type) {
             $announcements->whereHas('user', function ($query) use ($request) {
                 $query->where('user_type', $request->user_type);

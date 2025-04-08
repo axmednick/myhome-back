@@ -16,6 +16,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Announcement extends Model implements HasMedia
 {
     use HasFactory,InteractsWithMedia,SoftDeletes,Searchable;
+
     protected $dates = ['deleted_at'];
 
     protected $guarded = ['id'];

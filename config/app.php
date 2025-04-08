@@ -171,6 +171,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Matchish\ScoutElasticSearch\ScoutElasticSearchServiceProvider::class,
+
 
     ])->toArray(),
 
