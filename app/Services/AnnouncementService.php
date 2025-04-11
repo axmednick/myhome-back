@@ -23,13 +23,7 @@ class AnnouncementService
         $announcementIds = null;
 
 
-        if ($request->filled('search')) {
-            $announcementIds = Announcement::search($request->search)->get()->pluck('id');
 
-            if ($announcementIds->isEmpty()) {
-                return Announcement::query();
-            }
-        }
 
         $announcements = Announcement::query()->where('status',AnnouncementStatus::Active)
 
