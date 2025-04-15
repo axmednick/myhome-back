@@ -43,11 +43,11 @@ class AnnouncementService
             ]);
 
 
-        if (!$request->has('city_id') || !$request->city_id) {
+      /*  if (!$request->has('city_id') || !$request->city_id) {
             $announcements->whereHas('address', function ($query) {
                 $query->where('city_id', 1);
             });
-        }
+        }*/
 
 
         if ($request->has('rental_type') && $request->rental_type) {
