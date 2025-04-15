@@ -45,8 +45,6 @@ class ScrapeTapAz extends Command
         $client = new HtmlWeb();
         $listingHtml = $client->load($listingUrl);
 
-        \Log::error("Command Running");
-
 
         if (!$listingHtml) {
             $this->error("Listing səhifəsi əldə oluna bilmədi: {$listingUrl}");
@@ -67,14 +65,12 @@ class ScrapeTapAz extends Command
             $fullLink = $baseUrl . $relativeLink;
             $this->info("Emal edilir: {$fullLink}");
 
-            // Elanın səhifəsini yükləyirik
             $adHtml = $client->load($fullLink);
             if (!$adHtml) {
                 $this->error("Elan səhifəsi əldə oluna bilmədi: {$fullLink}");
                 continue;
             }
 
-            // Elan sahibinin adını çıxarırıq
             $ownerDiv = $adHtml->find('div.product-owner__info-name', 0);
             if (!$ownerDiv) {
                 $this->error("Elan sahibinin adı tapılmadı: {$fullLink}");
@@ -82,18 +78,19 @@ class ScrapeTapAz extends Command
             }
             $ownerName = trim($ownerDiv->plaintext);
 
-            // URL-dən elanın ID-sini çıxarırıq. Məsələn: /elanlar/dasinmaz-emlak/torpaq-sahesi/41838338
             $parts = explode('/', trim($relativeLink, '/'));
+
             $adId = end($parts);
+
             if (empty($adId)) {
                 $this->error("Elan ID tapılmadı: {$fullLink}");
                 continue;
             }
 
-            // API URL: elanın id-sinə əsaslanır
+
             $apiUrl = $baseUrl . "/ads/{$adId}/phones";
 
-            // API-ə POST request göndəririk
+
             $phoneResponse = Http::post($apiUrl);
             if (!$phoneResponse->successful()) {
                 $this->error("Elan ID {$adId} üçün telefon məlumatı əldə oluna bilmədi.");

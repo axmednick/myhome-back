@@ -25,7 +25,7 @@ class AnnouncementService
 
 
 
-        $announcements = Announcement::query()->where('status',AnnouncementStatus::Active)
+        $announcements = Announcement::query()->where('status')
 
             ->with([
                 'address' => function ($query) use ($request) {
